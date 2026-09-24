@@ -133,8 +133,7 @@ export const itemCommand: Command = {
     }
 
     if (!name && !owner && !slot) {
-      const embed = baseEmbed(
-        'Items',
+      const embed = baseEmbed('Items',
         `${items.length} items across the roster.\n\n` +
           '`/item eternal: slot:` — browse, e.g. Dahla + Crown, or Echo + Weapon\n' +
           '`/item name:` — search by item or ability, with autocomplete\n\n' +
