@@ -19,10 +19,7 @@ const keys = ({ item, eternal }: OwnedItem) =>
 const SLOTS = ['Crown', 'Amulet', 'Weapon', 'Anchor', 'Consumable'] as const;
 
 function abilityField(ability: ItemAbility) {
-  // Each ability gets its own field here, so the name goes in the field header.
-  // Field names take no markdown, hence the plain prefix.
   const prefix = ability.input ? `${ability.input === 'primary' ? 'Primary' : 'Secondary'} · ` : '';
-  // Discord caps a field value at 1024 characters.
   return { name: `${prefix}${ability.name}`, value: truncate(abilityBlock(ability, { heading: false }), 1024) };
 }
 
@@ -36,20 +33,13 @@ function itemUrl({ item, eternal }: OwnedItem): string | undefined {
 }
 
 function statLine(stats: Stats): string {
-  return Object.entries(stats)
-    .map(([label, value]) => `${label} ${value}`)
-    .join(' · ');
+  return Object.entries(stats).map(([label, value]) => `${label} ${value}`).join(' · ');
 }
 
 function detailEmbed(owned: OwnedItem) {
   const { item, eternal } = owned;
-  // Anchors and consumables stand alone; the wiki calls the other ownerless items Echo.
-  const standalone = item.slot === 'Anchor' || item.slot === 'Consumable';
-  const subtitle = eternal
-    ? `${item.slot} · **${eternal.name}**, ${eternal.title}`
-    : standalone
-      ? item.slot
-      : `${item.slot} · Echo`;
+
+  const subtitle = eternal ? `${item.slot} · **${eternal.name}**, ${eternal.title}` : item.slot;
   const body = [subtitle, item.description].filter(Boolean).join('\n\n');
 
   const embed = baseEmbed(item.name, body);
@@ -68,43 +58,34 @@ function detailEmbed(owned: OwnedItem) {
     embed.addFields({ name: 'Stats', value: statLine(item.stats) });
   }
 
-  return eternal ? 
-    embed.setFooter({ text: `/eternals name:${eternal.id} for the rest of the set` }) : 
-    embed;
+  return eternal ? embed.setFooter({ text: `/eternals name:${eternal.id} for the rest of the set` }) : embed;
 }
 
 function listEmbed(label: string, matches: OwnedItem[]) {
-  const options = matches
-    .map(({ item, eternal }) => `\`${item.slot}\` ${item.name}${eternal ? ` — *${eternal.name}*` : ''}`)
-    .join('\n');
+  const options = matches.map(({ item, eternal }) => `\`${item.slot}\` ${item.name}${eternal ? ` — *${eternal.name}*` : ''}`).join('\n');
+  
   return baseEmbed(label, `${matches.length} items:\n\n${options}`).setFooter({
     text: 'Narrow it with the eternal and slot options.',
   });
 }
 
 export const itemCommand: Command = {
-  data: new SlashCommandBuilder()
-    .setName('item')
+  data: new SlashCommandBuilder().setName('item')
     .setDescription('Shows an item and the abilities it grants.')
     .addStringOption((option) =>
-      option
-        .setName('eternal')
+      option.setName('eternal')
         .setDescription('Whose item, or Echo for the ones tied to no eternal')
         .addChoices(
-          { name: 'Echo Item', value: 'echo' },
+          { name: 'Echo', value: 'echo' },
           ...eternals.map((eternal) => ({ name: eternal.name, value: eternal.id })),
         ),
-    )
-    .addStringOption((option) =>
-      option
-        .setName('slot')
+    ).addStringOption((option) =>
+      option.setName('slot')
         .setDescription('Which slot')
         .addChoices(...SLOTS.map((slot) => ({ name: slot, value: slot.toLowerCase() }))),
-    )
-    .addStringOption((option) =>
+    ).addStringOption((option) =>
       option.setName('name').setDescription('Item or ability name').setAutocomplete(true),
-    )
-    .toJSON(),
+    ).toJSON(),
   usage: '/item [eternal] [slot] [name]',
   examples: ['/item eternal:dahla slot:crown', '/item eternal:rynshi slot:weapon', '/item name:ringblade'],
 
@@ -117,7 +98,7 @@ export const itemCommand: Command = {
     const owner = interaction.options.getString('eternal');
     const slot = interaction.options.getString('slot');
 
-    // "echo" is a choice on the option, not an eternal, so it never becomes an eternalId.
+    // no eternalId for echo
     const echoOnly = owner === 'echo';
     const eternalId = echoOnly ? null : owner;
 
@@ -137,13 +118,15 @@ export const itemCommand: Command = {
       const found = findAllBest(name, matches, keys);
       if (!found.length) {
         const suggestions = findSuggestions(name, matches, keys);
-        const hint = suggestions.length
-          ? `Did you mean: ${suggestions.map(({ item }) => `**${item.name}**`).join(', ')}?`
-          : 'Try /eternals to browse the roster.';
+        const hint = suggestions.length ? 
+          `Did you mean: ${suggestions.map(({ item }) => `**${item.name}**`).join(', ')}?` : 
+          'Try /eternals to browse the roster.';
+
         await interaction.reply({
           embeds: [errorEmbed('No such item', `Nothing matched \`${name}\`. ${hint}`)],
           flags: MessageFlags.Ephemeral,
         });
+
         return;
       }
       matches = found;
@@ -159,28 +142,29 @@ export const itemCommand: Command = {
           'Anchors and consumables are under `slot:`.',
       );
       await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+
       return;
     }
 
-    // Show the abilities outright when the set is small enough to fit — both of an
-    // eternal's weapons, or all four of their items. A broad filter like slot:crown
-    // blows the budget, so that falls back to a list.
+    // Show details if the embeds fit, otherwise a list
     if (matches.length <= MAX_EMBEDS) {
       const embeds = matches.map(detailEmbed);
       const total = embeds.reduce((sum, embed) => sum + embedLength(embed), 0);
+
       if (total <= MAX_MESSAGE_CHARS) {
         // One closing hint rather than the same footer on every embed.
         for (const embed of embeds.slice(0, -1)) {
           embed.setFooter(null);
         }
         await interaction.reply({ embeds });
+
         return;
       }
     }
 
-    const ownerName = echoOnly ? 'Echo' : eternals.find((e) => e.id === eternalId)?.name;
-    const label = [ownerName, slot ? `${slot[0]?.toUpperCase()}${slot.slice(1)}s` : null]      .filter(Boolean)
-      .join(' · ');
+    const ownerName = eternalId === 'echo' ? 'Echo' : eternals.find((e) => e.id === eternalId)?.name;
+    const label = [ownerName, slot ? `${slot[0]?.toUpperCase()}${slot.slice(1)}s` : null].filter(Boolean).join(' · ');
+    
     await interaction.reply({ embeds: [listEmbed(label || 'Matching items', matches)] });
   },
 };
