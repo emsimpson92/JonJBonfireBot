@@ -1,0 +1,1227 @@
+[
+  {
+    "id": "dahlas-vanish-crown",
+    "name": "Dahla's Vanish Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Crown.png/100px-Dahla_Crown.png",
+    "abilities": [
+      {
+        "name": "Vanish",
+        "description": "Transform into an invulnerable fast-moving orb that is invisible to enemies.",
+        "tags": ["Phased", "Movement Increase", "Invisible", "Invulnerable"],
+        "stats": { "Cooldown": "15s", "Duration": "1.5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "When leaving Vanish, you are invulnerable to damage for 1 second" }]
+      }
+    ]
+  },
+  {
+    "id": "dahlas-petal-dance-amulet",
+    "name": "Dahla's Petal Dance Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Amulet.png/62px-Dahla_Amulet.png",
+    "abilities": [
+      {
+        "name": "Petal Dance",
+        "description": "Heals you and your teammates over time.",
+        "tags": ["Heal", "AoE", "Channeled Ability"],
+        "stats": { "Healing": "5 per 0.5s", "Cooldown": "16s", "Duration": "5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "14s" } }, { "tier": "III", "changes": { "Healing": "7.5 per 0.5s" }, "effect": "Healing amount increased to 75" }]
+      }
+    ]
+  },
+  {
+    "id": "dahlas-dancing-blade",
+    "name": "Dahla's Dancing Blade",
+    "slot": "Weapon (Melee)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Weapon_Sword.png/60px-Dahla_Weapon_Sword.png",
+    "abilities": [
+      { "name": "Slashing Variation", "input": "primary", "stats": { "Melee Damage": "15 / 15 / 10+10" } },
+      {
+        "name": "Twisting Thorn",
+        "input": "secondary",
+        "description": "A lunging stab that Pierces your target.",
+        "tags": ["Piercing", "Stun", "Reset on Kill"],
+        "stats": { "Melee Damage": "10/40", "Cooldown": "15s", "Stun Duration": "1.5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Eliminations reset cooldown" }]
+      }
+    ]
+  },
+  {
+    "id": "dahlas-throwing-knives",
+    "name": "Dahla's Throwing Knives",
+    "slot": "Weapon (Ranged)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Weapon_Knives.png/55px-Dahla_Weapon_Knives.png",
+    "abilities": [
+      {
+        "name": "Pirouette Throw",
+        "input": "primary",
+        "tags": ["Continuous-Shot"],
+        "stats": { "Ranged Damage": "14", "Ammo": "6" },
+        "upgrades": [{ "tier": "III", "changes": { "Ranged Damage": "9 / 9", "Ammo": "12" }, "effect": "Pirouette flings 2 knives every rotation" }]
+      },
+      {
+        "name": "Blade Barrier",
+        "input": "secondary",
+        "description": "Surround yourself with knives. Each blade damages on impact.",
+        "tags": ["Aura"],
+        "stats": { "Ranged Damage": "5", "Cooldown": "15s", "Duration": "8s", "Ammo": "12" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }]
+      }
+    ]
+  },
+  {
+    "id": "edanis-outburst-crown",
+    "name": "Edani's Outburst Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Edani_Crown.png/100px-Edani_Crown.png",
+    "abilities": [
+      {
+        "name": "Creative Outburst",
+        "description": "A shriek that pushes enemies away.",
+        "tags": ["Displacement", "AoE", "Exhaust"],
+        "stats": { "Damage": "20", "Cooldown": "15s", "AoE Range": "9m", "Exhaust Duration": "1.5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "AoE Range": "12m" }, "effect": "Outburst Radius increased" }]
+      }
+    ]
+  },
+  {
+    "id": "edanis-suffering-amulet",
+    "name": "Edani's Suffering Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Edani_Amulet.png/50px-Edani_Amulet.png",
+    "abilities": [
+      {
+        "name": "More the Merrier",
+        "description": "Increase your damage based on the number of nearby enemies.",
+        "tags": ["Aura", "Damage Increase"],
+        "stats": { "Cooldown": "14s", "Duration": "6s", "Aura Range": "5m", "Damage Increase": "15%" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Cooldown": "12s" } },
+          { "tier": "III", "changes": { "Damage Increase": "20%" }, "effect": "Damage Amplification increased to 20% per nearby enemy" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "edanis-lunging-hook",
+    "name": "Edani's Lunging Hook",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Edani_Weapon_Hook.png/49px-Edani_Weapon_Hook.png",
+    "abilities": [
+      {
+        "name": "Thin Skinned Thrash",
+        "input": "primary",
+        "tags": ["AoE"],
+        "stats": { "Melee Damage": "14" },
+        "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "12" } }]
+      },
+      {
+        "name": "Startling Lunge",
+        "input": "secondary",
+        "description": "Throw a hook at on enemy or object, pulling yourself towards them.",
+        "tags": ["Stun", "Invulnerable"],
+        "stats": { "Melee Damage": "25", "Cooldown": "14s", "Stun Duration": "1s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "After a successful lunge, you are invulnerable to damage for 1 second" }]
+      }
+    ]
+  },
+  {
+    "id": "edanis-pulling-claws",
+    "name": "Edani's Pulling Claws",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Edani_Weapon_Claws.png/76px-Edani_Weapon_Claws.png",
+    "abilities": [
+      {
+        "name": "Scratch and Shred",
+        "input": "primary",
+        "stats": { "Melee Damage": "16" },
+        "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "16 / 18" } }]
+      },
+      {
+        "name": "Irresistible Pull",
+        "input": "secondary",
+        "description": "Launch both claws towards a target and pull them back to you.",
+        "tags": ["Exhaust", "Stun"],
+        "stats": { "Melee Damage": "20", "Cooldown": "15s", "Exhaust Duration": "1.5s", "Stun Duration": "0.5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Eliminations reset cooldown" }]
+      }
+    ]
+  },
+  {
+    "id": "irennas-frost-armor-crown",
+    "name": "Irenna's Frost Armor Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Crown.png/100px-Irenna_Crown.png",
+    "abilities": [
+      {
+        "name": "Frost Armor",
+        "description": "Grants an additional health bar that negates piercing and crushing damage.",
+        "tags": ["Armor", "Channeled Ability", "Negates Piercing", "Negates Crushing"],
+        "stats": { "Cooldown": "25s", "Durability": "100hp", "Cast Time": "3s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "20s" } }, { "tier": "III", "changes": { "Cast Time": "2.25s" }, "effect": "Frost Armor Channels 25% faster" }]
+      }
+    ]
+  },
+  {
+    "id": "irennas-north-wind-amulet",
+    "name": "Irenna's North Wind Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Amulet.png/80px-Irenna_Amulet.png",
+    "abilities": [
+      {
+        "name": "Northern Wind",
+        "description": "An aura that slows the movement of enemies.",
+        "tags": ["Slow", "Aura"],
+        "stats": { "Cooldown": "16s", "Aura Range": "3m", "Duration": "4s", "Speed Decrease": "50%" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "14s" } }, { "tier": "III", "changes": { "Aura Range": "4m" }, "effect": "Aura size increased" }]
+      }
+    ]
+  },
+  {
+    "id": "irennas-icebreaker-mace",
+    "name": "Irenna's Icebreaker Mace",
+    "slot": "Weapon (Mace)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Weapon_Mace.png/64px-Irenna_Weapon_Mace.png",
+    "abilities": [
+      { "name": "Callous Swipes", "input": "primary", "stats": { "Melee Damage": "26 / 26" } },
+      {
+        "name": "Icebreaker",
+        "input": "secondary",
+        "description": "A cone of ice that slows and damages enemies.",
+        "tags": ["Slow", "Cone Attack", "Root"],
+        "stats": { "Damage": "28", "Cooldown": "14s", "Slow Duration": "1.5s", "Speed Decrease": "50%", "Max Distance": "11.5m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Enemies in the center of the cone are rooted in place for 2 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "irennas-sword-caretaker",
+    "name": "Irenna's Sword \"Caretaker\"",
+    "slot": "Weapon (Sword)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Weapon_Sword1.png/64px-Irenna_Weapon_Sword1.png",
+    "abilities": [
+      {
+        "name": "Pragmatic Slashes",
+        "input": "primary",
+        "stats": { "Melee Damage": "20 / 20" },
+        "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "26" } }]
+      },
+      {
+        "name": "Krurian Handshake",
+        "input": "secondary",
+        "description": "Thrust forward and pierce a target.",
+        "tags": ["Stun", "Piercing"],
+        "stats": { "Melee Damage": "50", "Cooldown": "15s", "Stun Duration": "0.5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Stun Duration": "0.75s" }, "effect": "Stun duration increased to 0.75s" }]
+      }
+    ]
+  },
+  {
+    "id": "ravahs-shadowsmoke-crown",
+    "name": "Ravah's Shadowsmoke Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Ravah_Crown.png/100px-Ravah_Crown.png",
+    "abilities": [
+      {
+        "name": "Shadowsmoke",
+        "description": "A cloud of smoke that makes you and your teammates invisible.",
+        "tags": ["Invisible", "AoE"],
+        "stats": { "Cooldown": "18s", "Area of Effect Range": "8m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "16s" } }, { "tier": "III", "effect": "You and your teammates gain 1.5 seconds of invisibility when leaving smoke." }]
+      }
+    ]
+  },
+  {
+    "id": "ravahs-stalking-amulet",
+    "name": "Ravah's Stalking Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Ravah_Amulet.png/55px-Ravah_Amulet.png",
+    "abilities": [
+      {
+        "name": "Stalking",
+        "description": "Become Stealthed. After a brief period, your damage is increased.",
+        "tags": ["Damage Increase", "Stealth", "Reset on Kill"],
+        "stats": { "Cooldown": "16s", "Duration": "3s", "Damage Increase": "30%", "Speed Increase": "50%" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "13s" } }, { "tier": "III", "effect": "Eliminations reset cooldown" }]
+      }
+    ]
+  },
+  {
+    "id": "ravahs-talonflight-crossbow",
+    "name": "Ravah's Talonflight Crossbow",
+    "slot": "Weapon (Crossbow)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Ravah_Weapon_Crossbow.png/82px-Ravah_Weapon_Crossbow.png",
+    "abilities": [
+      {
+        "name": "Piercing Shot",
+        "input": "primary",
+        "description": "A bolt that pierces through enemy armor when charged and fired at long range.",
+        "tags": ["Charged Attack", "Piercing", "Pass Through"],
+        "stats": { "Ranged Damage": "20 - 40" },
+        "upgrades": [{ "tier": "III", "effect": "Charged Attack has Pass Through" }]
+      },
+      {
+        "name": "Unload",
+        "input": "secondary",
+        "description": "A close-range burst of damage that pushes you and your enemies apart.",
+        "tags": ["Cone Attack", "Knockback", "Stun"],
+        "stats": { "Ranged Damage": "25", "Cooldown": "15s", "Stun Duration": "1s", "AoE Range": "3.5m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }]
+      }
+    ]
+  },
+  {
+    "id": "ravahs-ringblade",
+    "name": "Ravah's Ringblade",
+    "slot": "Weapon (Ringblade)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Ravah_Weapon_Ringblade.png/97px-Ravah_Weapon_Ringblade.png",
+    "abilities": [
+      {
+        "name": "Embedding Throw",
+        "input": "primary",
+        "description": "A ranged weapon that can embed in enemies or the environment.",
+        "tags": ["Single-Shot", "Embed"],
+        "stats": { "Ranged Damage": "20" }
+      },
+      {
+        "name": "Take Flight",
+        "input": "secondary",
+        "description": "Teleport to your ringblade.",
+        "tags": ["Teleport", "Reset on Kill"],
+        "stats": { "Ranged Damage": "24", "Cooldown": "12s", "Activation Time Window": "5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }, { "tier": "III", "effect": "Eliminations reset cooldown" }]
+      }
+    ]
+  },
+  {
+    "id": "hollows-companion-crown",
+    "name": "Hollow's Companion Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Hollow_Crown.png/100px-Hollow_Crown.png",
+    "abilities": [
+      {
+        "name": "Gloomy Groundlings",
+        "description": "Summon Gloomies that attack nearby enemies and heal you and your teammates.",
+        "tags": ["Heal", "Summon"],
+        "stats": { "Cooldown": "16s", "Damage": "7.0 per 0.5s per Gloomy", "Duration": "5s", "Healing": "1.25 per 0.5s per Gloomy", "Aura Range": "2m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "14s" } }, { "tier": "III", "effect": "Summon a third Gloomy" }]
+      }
+    ]
+  },
+  {
+    "id": "hollows-outcast-amulet",
+    "name": "Hollow's Outcast Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Hollow_Amulet.png/53px-Hollow_Amulet.png",
+    "abilities": [
+      {
+        "name": "Mark the Outcast",
+        "description": "Mark an enemy, causing them to take increased damage. Damage dealt to the marked target is shared with their nearby allies.",
+        "tags": ["Single Target", "Vulnerable"],
+        "stats": { "Ranged Damage": "10", "Cooldown": "15s", "Area of Effect Range": "5.5m", "Damage Increase": "20%", "Duration": "4s", "Damage Shared": "75%" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Cooldown": "12s" } },
+          { "tier": "III", "changes": { "Damage Shared": "100%" }, "effect": "Marked opponent shares up to 100% of damage with nearby teammates" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hollows-sneklan",
+    "name": "Hollow's Sneklan",
+    "slot": "Weapon (Sneklan)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Hollow_Weapon_Sneklan.png/100px-Hollow_Weapon_Sneklan.png",
+    "abilities": [
+      {
+        "name": "Ground Shark",
+        "input": "primary",
+        "description": "This gloomy can burrow under obstacles and inflict damage with its spines.",
+        "tags": ["Underground Attack", "Pass Through"],
+        "stats": { "Ranged Damage": "18", "Max Distance": "6.5m" },
+        "upgrades": [{ "tier": "III", "changes": { "Max Distance": "8.5m" }, "effect": "Ground Shark range is increased" }]
+      },
+      {
+        "name": "Gloomy Trap",
+        "input": "secondary",
+        "description": "Root enemies in the targeted area.",
+        "tags": ["Root", "Airborne Attack"],
+        "stats": { "Ranged Damage": "20", "Cooldown": "15s", "Root Duration": "1.5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }]
+      }
+    ]
+  },
+  {
+    "id": "hollows-darkling-staff",
+    "name": "Hollow's Darkling Staff",
+    "slot": "Weapon (Staff)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Hollow_Weapon_Staff.png/51px-Hollow_Weapon_Staff.png",
+    "abilities": [
+      {
+        "name": "Dav's Darts",
+        "input": "primary",
+        "description": "Ranged attack that fires in a burst.",
+        "tags": ["Burst-Fire", "Homing"],
+        "stats": { "Ranged Damage": "9 / 9 / 9", "Ammo": "9" },
+        "upgrades": [{ "tier": "III", "effect": "Dav's Darts have Homing" }]
+      },
+      {
+        "name": "Wall",
+        "input": "secondary",
+        "description": "Create a destructible wall.",
+        "tags": ["Build"],
+        "stats": { "Cooldown": "14s", "Health": "150 hp", "Duration": "5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }]
+      }
+    ]
+  },
+  {
+    "id": "leodins-radiant-crown",
+    "name": "Leodin's Radiant Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Leodin_Crown.png/100px-Leodin_Crown.png",
+    "abilities": [
+      {
+        "name": "Radiant Shield",
+        "description": "Enter an invulnerable state. Exiting creates a lifestealing explosion.",
+        "tags": ["Invulnerable", "Lifesteal", "AoE", "Crushing"],
+        "stats": { "Damage": "15-30", "Lifesteal (Self)": "7.5-15", "Cooldown": "20s", "AoE Range": "6m", "Activation Time Window": "3s", "Lifesteal": "50%" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Cooldown": "15s" } },
+          { "tier": "III", "changes": { "Lifesteal (Self)": "15-30", "Lifesteal": "100%" }, "effect": "Damage dealt on Radiant Shield exit now heals for 100%" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "leodins-sanctuary-amulet",
+    "name": "Leodin's Sanctuary Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Leodin_Amulet.png/76px-Leodin_Amulet.png",
+    "abilities": [
+      {
+        "name": "Sanctuary",
+        "description": "Sanctify an area. While inside it, all teammates are Steadfast.",
+        "tags": ["AoE", "Steadfast"],
+        "stats": { "Cooldown": "14s", "Area of Effect Range": "6m", "Duration": "6s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Area of Effect Range": "8m" }, "effect": "Radius increased" }]
+      }
+    ]
+  },
+  {
+    "id": "leodins-eclipse-hammer",
+    "name": "Leodin's Eclipse Hammer",
+    "slot": "Weapon (Hammer)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Leodin_Weapon_Hammer.png/70px-Leodin_Weapon_Hammer.png",
+    "abilities": [
+      {
+        "name": "Joyous Pummelling",
+        "input": "primary",
+        "tags": ["AoE"],
+        "stats": { "Melee Damage": "20/20/30/30", "AoE Range": "1.3m" },
+        "upgrades": [{ "tier": "III", "changes": { "AoE Range": "3m" }, "effect": "Last strike of Joyous Pummelling area of effect increased" }]
+      },
+      {
+        "name": "Righteous Swing",
+        "input": "secondary",
+        "description": "A two-handed swing that knocks enemies back.",
+        "tags": ["Stun", "Knockback", "Crushing"],
+        "stats": { "Melee Damage": "35", "Cooldown": "12s", "Stun Duration": "1s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }]
+      }
+    ]
+  },
+  {
+    "id": "leodins-glint-spear",
+    "name": "Leodin's Glint Spear",
+    "slot": "Weapon (Spear)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Leodin_Weapon_Spear.png/55px-Leodin_Weapon_Spear.png",
+    "abilities": [
+      {
+        "name": "Divine Thrust",
+        "input": "primary",
+        "description": "A spear stab that can pierce through enemy armor when charged.",
+        "tags": ["Piercing"],
+        "stats": { "Melee Damage": "20-45" },
+        "upgrades": [{ "tier": "III", "effect": "Reach of Divine Thrust increased when charged" }]
+      },
+      {
+        "name": "Reflect",
+        "input": "secondary",
+        "description": "Reflect projectiles and block melee damage.",
+        "tags": ["Channeled Attack", "Damage Reflect", "Block"],
+        "stats": { "Cooldown": "16s", "Channel Time": "4s", "Reflect Damage": "100%" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }]
+      }
+    ]
+  },
+  {
+    "id": "karrivs-forgefire-crown",
+    "name": "Karriv's Forgefire Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Crown.png/100px-Karriv_Crown.png",
+    "abilities": [
+      {
+        "name": "Forgefire",
+        "description": "Place a protective totem that gives you and your teammates damage mitigation.",
+        "tags": ["AoE", "Damage Mitigation", "Summon"],
+        "stats": { "Cooldown": "18s", "Duration": "5s", "AoE Range": "5m", "Damage Mitigation": "40%", "Health": "100 hp" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "16s" } }, { "tier": "III", "changes": { "Duration": "7s" }, "effect": "Duration increased to 7 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "karrivs-flamepath-amulet",
+    "name": "Karriv's Flamepath Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Amulet.png/74px-Karriv_Amulet.png",
+    "abilities": [
+      {
+        "name": "Flamepath",
+        "description": "Summon a path of fire.",
+        "tags": ["Damage over Time", "AoE"],
+        "stats": { "Damage": "12 per 0.5s + 15 DoT", "Cooldown": "15s", "Max Distance": "7m", "Duration": "5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "13s" } }, { "tier": "III", "changes": { "Duration": "10s" }, "effect": "Duration increased to 10 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "karrivs-flaming-lantern",
+    "name": "Karriv's Flaming Lantern",
+    "slot": "Weapon (Lantern)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Weapon_Lantern.png/44px-Karriv_Weapon_Lantern.png",
+    "abilities": [
+      { "name": "Strike the Anvil", "input": "primary", "tags": ["Damage over Time"], "stats": { "Melee Damage": "20 / 20 / 20 / 20 / 25 + 15 DoT" } },
+      {
+        "name": "Ember Toss",
+        "input": "secondary",
+        "description": "A lobbed projectile that explodes and catches enemies on fire.",
+        "tags": ["Damage over Time", "Airborne Attack", "AoE"],
+        "stats": { "Ranged Damage": "25 + 15 DoT", "Cooldown": "15s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }, { "tier": "III", "effect": "Ember Toss lingers on the ground for 3 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "karrivs-searing-shovel",
+    "name": "Karriv's Searing Shovel",
+    "slot": "Weapon (Shovel)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Weapon_Shovel.png/66px-Karriv_Weapon_Shovel.png",
+    "abilities": [
+      { "name": "Shovel Swing", "input": "primary", "tags": ["Damage over Time"], "stats": { "Melee Damage": "23 / 23 / 30 + 15 DoT" } },
+      {
+        "name": "Searing Blast",
+        "input": "secondary",
+        "description": "A wave of flame that passes through targets and sets them on fire.",
+        "tags": ["Damage over Time", "Pass Through", "Exploding"],
+        "stats": { "Ranged Damage": "20 + 15 DoT", "Cooldown": "15s", "Max Distance": "12m" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Cooldown": "12s" } },
+          { "tier": "III", "changes": { "Ranged Damage": "20 / 10" }, "effect": "Searing Blast explodes when the wave passes through a target" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rynshis-blinding-rage-crown",
+    "name": "Rynshi's Blinding Rage Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Rynshi_Crown.png/100px-Rynshi_Crown.png",
+    "abilities": [
+      {
+        "name": "Blinding Roar",
+        "description": "A battlecry that blinds nearby enemies.",
+        "tags": ["Blind", "AoE"],
+        "stats": { "Damage": "20", "Cooldown": "16s", "Blind Duration": "4s", "AoE Range": "6m" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Cooldown": "12s" } },
+          { "tier": "III", "changes": { "Blind Duration": "6s" }, "effect": "Blind duration increased to 6 seconds" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rynshis-vortex-amulet",
+    "name": "Rynshi's Vortex Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Rynshi_Amulet.png/54px-Rynshi_Amulet.png",
+    "abilities": [
+      {
+        "name": "Vortex",
+        "description": "A vortex that pulls enemies to its center, stunning them on impact.",
+        "tags": ["AoE", "Stun", "Airborne Attack"],
+        "stats": { "Damage": "15", "Cooldown": "15s", "Stun Duration": "0.5s", "Area of Effect Range": "3.3m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Stun Duration": "1s" }, "effect": "Stun duration increased to 1 second" }]
+      }
+    ]
+  },
+  {
+    "id": "rynshis-wrath-cleaver",
+    "name": "Rynshi's Wrath Cleaver",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Rynshi_Weapon_Cleaver.png/68px-Rynshi_Weapon_Cleaver.png",
+    "abilities": [
+      {
+        "name": "Cleave",
+        "input": "primary",
+        "stats": { "Melee Damage": "20" },
+        "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "23" } }, { "tier": "IV", "changes": { "Melee Damage": "25" } }]
+      },
+      {
+        "name": "Savage Leap",
+        "input": "secondary",
+        "description": "Jump into the air and over obstacles. Slam down with crushing force.",
+        "tags": ["Airborne Attack", "Crushing", "Stun", "AoE"],
+        "stats": { "Melee Damage": "45", "Cooldown": "15s", "Stun Duration": "0.5s", "Area of Effect Range": "1.5m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }, { "tier": "III", "changes": { "Stun Duration": "1s" }, "effect": "Hit now stuns players for 1 second" }]
+      }
+    ]
+  },
+  {
+    "id": "rynshis-fury-bracers",
+    "name": "Rynshi's Fury Bracers",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Rynshi_Weapon_Bracers.png/69px-Rynshi_Weapon_Bracers.png",
+    "abilities": [
+      {
+        "name": "Fury Punches",
+        "input": "primary",
+        "stats": { "Melee Damage": "16" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Melee Damage": "18" } },
+          { "tier": "IV", "changes": { "Melee Damage": "20" } },
+          { "tier": "V", "changes": { "Melee Damage": "23" } }
+        ]
+      },
+      {
+        "name": "Sadistic Throw",
+        "input": "secondary",
+        "description": "Grab a nearby enemy and hurl them away.",
+        "tags": ["Piercing", "Grab", "Throw", "Vulnerable"],
+        "stats": { "Melee Damage": "10/30", "Cooldown": "15s", "Activation Time Window": "3s", "Stun Duration": "1s" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Cooldown": "12s" } },
+          { "tier": "III", "effect": "Throwing an opponent marks them and they take an additional 25% more damage for 5 seconds" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vatons-payback-crown",
+    "name": "Vaton's Payback Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Crown.png/100px-Vaton_Crown.png",
+    "abilities": [
+      {
+        "name": "Payback",
+        "description": "Reflect all damage types.",
+        "tags": ["Damage Reflect"],
+        "stats": { "Cooldown": "15s", "Reflect Damage": "100%", "Duration": "3s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Duration": "5s" }, "effect": "Duration increased to 5 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "vatons-audacity-amulet",
+    "name": "Vaton's Audacity Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Amulet.png/47px-Vaton_Amulet.png",
+    "abilities": [
+      {
+        "name": "Audacity",
+        "description": "Increase damage dealt and become vulnerable.",
+        "tags": ["Vulnerable", "Damage Increase"],
+        "stats": { "Cooldown": "14s", "Damage Increase": "50%", "Vulnerability": "35%", "Duration": "5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Vulnerability": "20%" }, "effect": "Take 20% more damage instead of 35%" }]
+      }
+    ],
+    "aliases": ["Vaton's Imbalanced Scales Amulet", "imbalanced scales"]
+  },
+  {
+    "id": "vatons-seeing-eye",
+    "name": "Vaton's Seeing Eye",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Weapon_Eye.png/93px-Vaton_Weapon_Eye.png",
+    "abilities": [
+      {
+        "name": "Shattering Sphere",
+        "input": "primary",
+        "description": "A slow moving projectile that explodes on impact.",
+        "tags": ["Exploding"],
+        "stats": { "Ranged Damage": "8 + 15 AoE", "AoE Range": "2.5m" }
+      },
+      {
+        "name": "Ruinous Downfall",
+        "input": "secondary",
+        "description": "Slow all enemies in the targeted area.",
+        "tags": ["Single-Shot", "Slow", "AoE"],
+        "stats": { "Ranged Damage": "20", "Cooldown": "13s", "Slow Duration": "2s" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Cooldown": "10s" } },
+          { "tier": "III", "changes": { "Slow Duration": "3s" }, "effect": "Ruinous Downfall slow duration increased to 3 seconds" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vatons-serpent-staff",
+    "name": "Vaton's Serpent Staff",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Weapon_Staff.png/56px-Vaton_Weapon_Staff.png",
+    "abilities": [
+      { "name": "Serpent Lash", "input": "primary", "stats": { "Melee Damage": "20" }, "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "18" } }] },
+      {
+        "name": "The Pillars",
+        "input": "secondary",
+        "description": "Create 3 destructible stalagmites.",
+        "tags": ["Build", "Knockback"],
+        "stats": { "Damage": "20", "Cooldown": "15s", "Stun Duration": "0.45s", "Duration": "3s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Duration": "5s" }, "effect": "Pillars last 2 seconds longer" }]
+      }
+    ]
+  },
+  {
+    "id": "grimwolds-oscillating-regeneration-crown",
+    "name": "Grimwold's Oscillating Regeneration Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Grimwold_Crown.png/100px-Grimwold_Crown.png",
+    "abilities": [
+      {
+        "name": "Oscillating Regeneration",
+        "description": "Create a portal. Casting again returns to the portal and heals you.",
+        "tags": ["Teleport", "Heal"],
+        "stats": { "Cooldown": "18s", "Healing": "50hp", "Duration": "10s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "15s" } }, { "tier": "III", "changes": { "Healing": "65hp" }, "effect": "Heal increased to 65" }]
+      }
+    ]
+  },
+  {
+    "id": "grimwolds-voltaic-barrier-amulet",
+    "name": "Grimwold's Voltaic Barrier Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Grimwold_Amulet.png/65px-Grimwold_Amulet.png",
+    "abilities": [
+      {
+        "name": "Voltaic Barrier",
+        "description": "A barrier that blocks enemy projectiles and allows teammates to shoot through it.",
+        "tags": ["Build", "Block"],
+        "stats": { "Cooldown": "14s", "Duration": "5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Duration": "7s" }, "effect": "Duration increased to 7 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "grimwolds-strange-device",
+    "name": "Grimwold's Strange Device",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Grimwold_Weapon_Device.png/91px-Grimwold_Weapon_Device.png",
+    "abilities": [
+      {
+        "name": "Shock",
+        "input": "primary",
+        "description": "Hold to damage a single nearby target. DPS increases the longer a target is shocked.",
+        "tags": ["Channeled Attack", "Soft Target"],
+        "stats": { "Ranged Damage": "4-11 per 0.3s", "Max Range": "7m" }
+      },
+      {
+        "name": "Static Turret",
+        "input": "secondary",
+        "description": "A stationary turret that targets the closest enemy.",
+        "tags": ["Soft Target", "Summon", "Exploding"],
+        "stats": { "Damage": "12", "Cooldown": "15s", "Duration": "8s", "Health": "50hp" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Static Turret detonates (30 damage) when destroyed or after 8 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "grimwolds-charged-rings",
+    "name": "Grimwold's Charged Rings",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Grimwold_Weapon_Rings.png/68px-Grimwold_Weapon_Rings.png",
+    "abilities": [
+      {
+        "name": "Particle Shot",
+        "input": "primary",
+        "description": "Charged shots push targets back and apply a mini-stun.",
+        "tags": ["Single-Shot", "Charged Attack", "Displacement"],
+        "stats": { "Ranged Damage": "23-38", "Stun Duration": "0.5s" }
+      },
+      {
+        "name": "Chain Reaction",
+        "input": "secondary",
+        "description": "A projectile that bounces between targets.",
+        "tags": ["Bounce"],
+        "stats": { "Ranged Damage": "12", "Cooldown": "15s", "Bounce": "6" },
+        "upgrades": [
+          { "tier": "II", "changes": { "Cooldown": "10s" } },
+          { "tier": "III", "changes": { "Bounce": "8" }, "effect": "Chain Reaction will bounce up to 8 times between targets." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "penelopes-sparkle-crown",
+    "name": "Penelope's Sparkle Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Penelope_Crown.png/100px-Penelope_Crown.png",
+    "abilities": [
+      {
+        "name": "Sparkle",
+        "description": "A projectile that bursts and forms a hazy bubble. Enemies inside the bubble are blinded.",
+        "tags": ["AoE", "Blind", "Airborne Ability"],
+        "stats": { "Damage": "15", "Cooldown": "15s", "AoE Range": "4m", "Duration": "5s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Duration": "7s" }, "effect": "Blind duration Increased to 7 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "penelopes-correction-amulet",
+    "name": "Penelope's Correction Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Penelope_Amulet.png/56px-Penelope_Amulet.png",
+    "abilities": [
+      {
+        "name": "Lock the Door",
+        "description": "A sparkling wave that tethers enemies in place. The tether can be broken by straining against it.",
+        "tags": ["AoE", "Tether"],
+        "stats": { "Ranged Damage": "15", "Cooldown": "15s", "Duration": "4s", "AoE Range": "3m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "AoE Range": "1.5m" }, "effect": "Tether radius decreased" }]
+      }
+    ]
+  },
+  {
+    "id": "penelopes-looking-glass",
+    "name": "Penelope's Looking Glass",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Penelope_Weapon_Mirror.png/68px-Penelope_Weapon_Mirror.png",
+    "abilities": [
+      {
+        "name": "Flying Shards",
+        "input": "primary",
+        "description": "A ranged attack that can embed in enemies or the environment. Hitting an enemy will reduce cooldown time for Light Up the Sky.",
+        "tags": ["Continuous-Shot", "Cooldown Reduction"],
+        "stats": { "Ranged Damage": "5" },
+        "upgrades": [{ "tier": "III", "effect": "2 Extra Shards" }]
+      },
+      {
+        "name": "Light Up the Sky",
+        "input": "secondary",
+        "description": "Detonate your Flying Shards.",
+        "tags": ["AoE"],
+        "stats": { "Ranged Damage": "15", "Cooldown": "12s", "AoE Range": "1m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }]
+      }
+    ]
+  },
+  {
+    "id": "penelopes-porcelain-parasol",
+    "name": "Penelope's Porcelain Parasol",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Penelope_Weapon_Parasol.png/76px-Penelope_Weapon_Parasol.png",
+    "abilities": [
+      {
+        "name": "Sharp Burst",
+        "input": "primary",
+        "stats": { "Ranged Damage": "5", "Ammo": "2", "Max Range": "4m" },
+        "upgrades": [{ "tier": "III", "changes": { "Ammo": "3" }, "effect": "Ammo count increased to 3" }]
+      },
+      {
+        "name": "Under the Weather",
+        "input": "secondary",
+        "description": "A directional dodge with an invulnerable state. Reloads the Parasol.",
+        "tags": ["Pass Through", "Invulnerable"],
+        "stats": { "Cooldown": "15s", "Duration": "0.4s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }]
+      }
+    ]
+  },
+  {
+    "id": "tsubos-forefather-crown",
+    "name": "Tsu'bo's Forefather Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Tsu%27bo_Crown.png/100px-Tsu%27bo_Crown.png",
+    "abilities": [
+      {
+        "name": "Yah'towa",
+        "description": "Summon a companion to fight beside you. He will chase pinged targets.",
+        "tags": ["Summon", "Damage over Time"],
+        "stats": { "Damage": "5 + 10 DoT", "Cooldown": "18s", "Duration": "8s", "Health": "75 hp" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "15s" } }, { "tier": "III", "changes": { "Health": "100 hp" }, "effect": "Hound's health is increased to 100" }]
+      }
+    ]
+  },
+  {
+    "id": "tsubos-run-free-amulet",
+    "name": "Tsu'bo's Run Free Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Tsu%27bo_Amulet.png/49px-Tsu%27bo_Amulet.png",
+    "abilities": [
+      {
+        "name": "Run Free",
+        "description": "Surge forward, damaging enemies that you pass through.",
+        "tags": ["Phased", "Lifesteal", "Pass Through", "Steadfast"],
+        "stats": { "Damage": "20", "Cooldown": "15s", "Duration": "0.45s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Lifesteal": "100%" }, "effect": "Run Free gains Lifesteal" }]
+      }
+    ]
+  },
+  {
+    "id": "tsubos-ripper-blades",
+    "name": "Tsu'bo's Ripper Blades",
+    "slot": "Weapon (Arm Blades)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Tsu%27bo_Weapon_ArmBlades.png/83px-Tsu%27bo_Weapon_ArmBlades.png",
+    "abilities": [
+      { "name": "Slash and Smash", "input": "primary", "stats": { "Melee Damage": "10" }, "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "30" } }] },
+      {
+        "name": "Make Them Prey",
+        "input": "secondary",
+        "description": "A cone shaped attack that makes enemy attacks less effective.",
+        "tags": ["Cone Attack", "Weaken"],
+        "stats": { "Melee Damage": "25", "Cooldown": "14s", "Weaken Duration": "3s", "Weaken Percentage": "50%", "Max Distance": "3m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Weaken Duration": "4s" }, "effect": "Duration increased to 4 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "tsubos-boom-chakas",
+    "name": "Tsu'bo's Boom-Chakas",
+    "slot": "Weapon (Bolas)",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Tsu%27bo_Weapon_Bolas.png/77px-Tsu%27bo_Weapon_Bolas.png",
+    "abilities": [
+      {
+        "name": "Boom-Crack",
+        "input": "primary",
+        "description": "A ranged attack that can be charged to explode on hit.",
+        "tags": ["Charged Attack", "Exploding"],
+        "stats": { "Ranged Damage": "15" },
+        "upgrades": [{ "tier": "II", "changes": { "Ranged Damage": "10" } }]
+      },
+      {
+        "name": "Bind",
+        "input": "secondary",
+        "description": "A ranged attack that Binds the target, limiting their ability to sprint or dodge.",
+        "tags": ["Bind", "Stun"],
+        "stats": { "Ranged Damage": "20", "Cooldown": "15s", "Stun Duration": "0.5s", "Duration": "2s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Duration": "3s" }, "effect": "Duration increased to 5 seconds" }]
+      }
+    ]
+  },
+  {
+    "id": "essence-crown",
+    "name": "Essence Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Essence_VFX.png/100px-Echo_Crown_Essence_VFX.png",
+    "abilities": [
+      {
+        "name": "Replenish",
+        "description": "Recover your Health over time. Damage will interrupt recovery.",
+        "tags": ["Heal"],
+        "stats": { "Healing": "25 per 1s", "Cooldown": "14s", "Duration": "3s" }
+      }
+    ]
+  },
+  {
+    "id": "fortitude-crown",
+    "name": "Fortitude Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Fortitude_VFX.png/100px-Echo_Crown_Fortitude_VFX.png",
+    "abilities": [
+      {
+        "name": "Repair",
+        "description": "Recover your Fortitude over time. Damage will interrupt recovery.",
+        "tags": ["Heal"],
+        "stats": { "Healing": "12.5 per 1s", "Cooldown": "14s", "Duration": "4s" }
+      }
+    ]
+  },
+  {
+    "id": "reset-crown",
+    "name": "Reset Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Reset_VFX.png/100px-Echo_Crown_Reset_VFX.png",
+    "abilities": [{ "name": "Reset", "description": "Refresh the cooldowns of Weapon Abilities, Stamina, and Endurance", "tags": ["Reset"], "stats": { "Cooldown": "14s" } }]
+  },
+  {
+    "id": "resilience-crown",
+    "name": "Resilience Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Resilience_VFX.png/100px-Echo_Crown_Resilience_VFX.png",
+    "abilities": [
+      {
+        "name": "Resilience",
+        "description": "Reduce incoming damage.",
+        "tags": ["Damage Mitigation"],
+        "stats": { "Cooldown": "15s", "Duration": "3s", "Damage Mitigation": "70%" }
+      }
+    ]
+  },
+  {
+    "id": "elusive-crown",
+    "name": "Elusive Crown",
+    "slot": "Crown",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Steadfast_VFX.png/100px-Echo_Crown_Steadfast_VFX.png",
+    "abilities": [
+      {
+        "name": "Elusive",
+        "description": "Become Steadfast and increase movement speed.",
+        "tags": ["Steadfast", "Movement Increase"],
+        "stats": { "Cooldown": "14s", "Duration": "3s" }
+      }
+    ]
+  },
+  {
+    "id": "barrage-amulet",
+    "name": "Barrage Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Amulet_Barrage.png/65px-Echo_Amulet_Barrage.png",
+    "abilities": [
+      {
+        "name": "Barrage",
+        "description": "A cascade of projectiles that deal damage in a straight line.",
+        "tags": ["Pass Through", "Slow"],
+        "stats": { "Ranged Damage": "40", "Cooldown": "10s", "Slow Duration": "0.5s" }
+      }
+    ]
+  },
+  {
+    "id": "cluster-amulet",
+    "name": "Cluster Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Amulet_Cluster.png/64px-Echo_Amulet_Cluster.png",
+    "abilities": [
+      {
+        "name": "Clusterbomb",
+        "description": "Explosive orbs that form a triangle and then detonate.",
+        "tags": ["AoE"],
+        "stats": { "Damage": "20", "Cooldown": "10s" }
+      }
+    ]
+  },
+  {
+    "id": "invulnerable-amulet",
+    "name": "Invulnerable Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Amulet_Shield.png/64px-Echo_Amulet_Shield.png",
+    "abilities": [
+      {
+        "name": "Invulnerable",
+        "description": "Become immune to damage.",
+        "tags": ["Invulnerable"],
+        "stats": { "Target": "Self", "Cooldown": "13s", "Duration": "2s" }
+      }
+    ]
+  },
+  {
+    "id": "slide-amulet",
+    "name": "Slide Amulet",
+    "slot": "Amulet",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Amulet_Slide.png/64px-Echo_Amulet_Slide.png",
+    "abilities": [
+      {
+        "name": "Slide",
+        "description": "Slide along the ground. This ability does not interrupt sprinting.",
+        "tags": ["Pass Through"],
+        "stats": { "Melee Damage": "15", "Cooldown": "10s", "Distance": "7m" }
+      }
+    ]
+  },
+  {
+    "id": "bashing-shield",
+    "name": "Bashing Shield",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_BashingShield.png/79px-Echo_Weapon_BashingShield.png",
+    "abilities": [
+      { "name": "Bashing Combo", "input": "primary", "stats": { "Melee Damage": "25 / 25 / 28" } },
+      {
+        "name": "Block & Bash",
+        "input": "secondary",
+        "description": "Raise your shield to block damage. Attack while blocking to bash.",
+        "tags": ["Block", "Displacement"],
+        "stats": { "Melee Damage": "30", "Cooldown": "10s", "Durability": "300 hp" }
+      }
+    ]
+  },
+  {
+    "id": "dual-axes",
+    "name": "Dual Axes",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_DualAxes.png/87px-Echo_Weapon_DualAxes.png",
+    "abilities": [
+      { "name": "Axe Combo", "input": "primary", "stats": { "Melee Damage": "13 / 13 / 15 / 15" } },
+      {
+        "name": "Bull Rush",
+        "input": "secondary",
+        "description": "Barrel forward, dealing damage and knocking back enemies in your path.",
+        "tags": ["Steadfast", "Displacement", "Pass Through"],
+        "stats": { "Melee Damage": "30", "Cooldown": "13s", "Distance": "12.5m" }
+      }
+    ]
+  },
+  {
+    "id": "great-sword",
+    "name": "Great Sword",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Greatsword.png/56px-Echo_Weapon_Greatsword.png",
+    "abilities": [
+      { "name": "Heavy Combo", "input": "primary", "stats": { "Melee Damage": "32 / 32" } },
+      {
+        "name": "Charging Slam",
+        "input": "secondary",
+        "description": "Rush forward and slam down with a crushing blow.",
+        "tags": ["Crushing", "Charged Attack"],
+        "stats": { "Melee Damage": "40-60", "Cooldown": "13s" }
+      }
+    ]
+  },
+  {
+    "id": "bow",
+    "name": "Bow",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Longbow.png/59px-Echo_Weapon_Longbow.png",
+    "abilities": [
+      {
+        "name": "Bow Shot",
+        "input": "primary",
+        "description": "Fire a single arrow.",
+        "tags": ["Single-Shot"],
+        "stats": { "Ranged Damage": "22", "Max Distance": "12m" }
+      },
+      {
+        "name": "Wave Shot",
+        "input": "secondary",
+        "description": "Fire a wave of force that hits every target in its path.",
+        "tags": ["Pass Through"],
+        "stats": { "Ranged Damage": "30", "Cooldown": "12s", "Max Distance": "12m" }
+      }
+    ]
+  },
+  {
+    "id": "scimitar",
+    "name": "Scimitar",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Scimitar.png/47px-Echo_Weapon_Scimitar.png",
+    "abilities": [
+      { "name": "Sweeping Strikes", "input": "primary", "stats": { "Melee Damage": "20 / 20 / 20 / 20" } },
+      {
+        "name": "Whirling Slash",
+        "input": "secondary",
+        "description": "A forward spinning attack that exhausts your target.",
+        "tags": ["Exhaust", "Pass Through"],
+        "stats": { "Melee Damage": "25", "Cooldown": "10s", "Exhaust Duration": "2s" }
+      }
+    ]
+  },
+  {
+    "id": "shurikens",
+    "name": "Shurikens",
+    "slot": "Weapon",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Shuriken.png/54px-Echo_Weapon_Shuriken.png",
+    "abilities": [
+      {
+        "name": "Rapid Fire",
+        "input": "primary",
+        "description": "Throw a spinning projectile.",
+        "tags": ["Continuous-Shot"],
+        "stats": { "Ranged Damage": "17", "Ammo": "6", "Max Distance": "12m" }
+      },
+      {
+        "name": "Snare Toss",
+        "input": "secondary",
+        "description": "Throw two merged shurikens that slow your target.",
+        "tags": ["Slow"],
+        "stats": { "Ranged Damage": "30", "Cooldown": "12s", "Slow Duration": "2s", "Speed Decrease": "50%", "Max Distance": "12m" }
+      }
+    ]
+  },
+  {
+    "id": "health-potion",
+    "name": "Health Potion",
+    "slot": "Consumable",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Essence.png/90px-Consumable_Essence.png",
+    "description": "Regain 150 Health",
+    "stats": { "Healing": "150", "Max stacks": "3" },
+    "abilities": []
+  },
+  {
+    "id": "fortitude-shard",
+    "name": "Fortitude Shard",
+    "slot": "Consumable",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Fortitude.png/86px-Consumable_Fortitude.png",
+    "description": "Gain 50 Fortitude",
+    "stats": { "Healing": "50", "Max stacks": "4" },
+    "abilities": []
+  },
+  {
+    "id": "healing-ward",
+    "name": "Healing Ward",
+    "slot": "Consumable",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_HealingWard.png/100px-Consumable_HealingWard.png",
+    "description": "A destructible ward that heals Health and Fortitude over time in a small Area of Effect.",
+    "stats": { "Healing": "100", "Duration": "6s", "Health": "30 hp", "Max stacks": "3" },
+    "abilities": []
+  },
+  {
+    "id": "healing-mist",
+    "name": "Healing Mist",
+    "slot": "Consumable",
+    "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Healing_Shot.png/100px-Consumable_Healing_Shot.png",
+    "description": "A ranged consumable that heals Health and Fortitude in a targeted area. Caster will also be healed upon successfully healing allies.",
+    "stats": { "Healing": "50", "Area of Effect Range": "5m" },
+    "abilities": []
+  },
+  {
+    "id": "last-wish",
+    "name": "Last Wish",
+    "slot": "Anchor",
+    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_LastWish.png/93px-AnchorAbility_LastWish.png",
+    "description": "If you are knocked down while this ability is active, you become Phased and Revive with 100 health. Lasts 7 seconds.",
+    "abilities": []
+  },
+  {
+    "id": "mending-hands",
+    "name": "Mending Hands",
+    "slot": "Anchor",
+    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_MendingHands.png/93px-AnchorAbility_MendingHands.png",
+    "description": "Damage dealt to you is converted into healing. Lasts 2 seconds and Silences your abilities.",
+    "abilities": []
+  },
+  {
+    "id": "rescue",
+    "name": "Rescue",
+    "slot": "Anchor",
+    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_Rescue.png/93px-AnchorAbility_Rescue.png",
+    "description": "Teleport a downed teammate to your position and Revive them with 100 health. Rescue can revive teammates after they have been fully executed.",
+    "abilities": []
+  },
+  {
+    "id": "summon-shrine",
+    "name": "Summon Shrine",
+    "slot": "Anchor",
+    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_SummonShrine.png/93px-AnchorAbility_SummonShrine.png",
+    "description": "Summon a shrine. Your team can purchase items and resurrect fallen allies here. Lasts 30 seconds.",
+    "abilities": []
+  },
+  {
+    "id": "vision-pulse",
+    "name": "Vision Pulse",
+    "slot": "Anchor",
+    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_VisionPulse.png/93px-AnchorAbility_VisionPulse.png",
+    "description": "Temporarily give your team vision of enemy players on the map.",
+    "abilities": []
+  },
+  {
+    "id": "full-heal",
+    "name": "Full Heal",
+    "slot": "Anchor",
+    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_FullHeal.png/93px-AnchorAbility_FullHeal.png",
+    "description": "Channel for 2.5 seconds to heal yourself to full.",
+    "abilities": []
+  },
+  {
+    "id": "self-revive",
+    "name": "Self Revive",
+    "slot": "Anchor",
+    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_SelfRevive.png/93px-AnchorAbility_SelfRevive.png",
+    "description": "Channel for 2 seconds when knocked down to pick yourself back up with 100 health.",
+    "abilities": []
+  }
+]

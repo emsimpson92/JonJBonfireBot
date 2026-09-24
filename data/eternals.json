@@ -1,0 +1,217 @@
+[
+  {
+    "id": "dahla",
+    "name": "Dahla",
+    "title": "The Dancer",
+    "description": "The memories of an entertainer trapped in a moment. Dahla performs for an audience that only she can see. This Eternal is highly mobile, dangerous at any distance, and able to sustain her allies with healing.",
+    "coreAbility": {
+      "name": "Curtain Call",
+      "description": "Pull in distant enemies, stunning them.",
+      "tags": ["Cone Attack", "Stun", "Exhaust"],
+      "damage": "35",
+      "cooldown": "26s",
+      "range": "9m"
+    },
+    "setBonus": { "name": "Deep Pockets", "description": "Max stack of consumables increased" },
+    "items": ["dahlas-vanish-crown", "dahlas-petal-dance-amulet", "dahlas-dancing-blade", "dahlas-throwing-knives"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Dahla",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Dahla.png/256px-Arkheron_Eternal_Dahla.png",
+    "aliases": ["dancer"]
+  },
+  {
+    "id": "edani",
+    "name": "Edani",
+    "title": "The Mistress of Suffering",
+    "description": "The memories of a tortured writer. Edani knows suffering and wants to share it. Excelling in isolation, this Eternal hooks, claws, and banishes her prey before ripping them apart.",
+    "coreAbility": { "name": "Banish", "description": "Banish an enemy to another realm.", "tags": ["Single Target", "Phased"], "damage": "35", "cooldown": "20s" },
+    "setBonus": { "name": "Ferocious", "description": "Melee damage increased by 20%" },
+    "items": ["edanis-outburst-crown", "edanis-suffering-amulet", "edanis-lunging-hook", "edanis-pulling-claws"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Edani",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Edani.png/256px-Arkheron_Eternal_Edani.png",
+    "aliases": ["mistress of suffering", "mistress"]
+  },
+  {
+    "id": "irenna",
+    "name": "Irenna",
+    "title": "The Maul",
+    "description": "The memories of a knight who failed. Irenna is a durable frontline combatant. This Eternal fights like a bear, preferring to maul her enemies.",
+    "coreAbility": {
+      "name": "Spiral Strike",
+      "description": "A spin attack that lifesteals and heals teammates.",
+      "tags": ["Lifesteal", "Crushing"],
+      "damage": "30 / 30",
+      "cooldown": "20s"
+    },
+    "setBonus": { "name": "Cold-blooded", "description": "25% Increased damage to stunned or slowed enemies" },
+    "items": ["irennas-frost-armor-crown", "irennas-north-wind-amulet", "irennas-icebreaker-mace", "irennas-sword-caretaker"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Irenna",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Irenna.png/256px-Arkheron_Eternal_Irenna.png",
+    "aliases": ["maul"]
+  },
+  {
+    "id": "ravah",
+    "name": "Ravah",
+    "title": "The Fading Huntress",
+    "description": "The memories of a bounty hunter who was caged in a Tower. Ravah stalks her targets, using smoke and shadow to confuse her enemies. This Eternal deals devastating bursts of damage at long range.",
+    "coreAbility": {
+      "name": "The Parliament",
+      "description": "Summon a damaging ring of owls that follow your ringblade when thrown.",
+      "tags": ["Aura"],
+      "damage": "12 per 0.5s",
+      "cooldown": "22s",
+      "range": "2.8m"
+    },
+    "setBonus": { "name": "Distant", "description": "Ranged damaged increased by 20%" },
+    "items": ["ravahs-shadowsmoke-crown", "ravahs-stalking-amulet", "ravahs-talonflight-crossbow", "ravahs-ringblade"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Ravah",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Ravah.png/256px-Arkheron_Eternal_Ravah.png",
+    "aliases": ["fading huntress", "huntress"]
+  },
+  {
+    "id": "hollow",
+    "name": "Hollow",
+    "title": "The Forest Darkling",
+    "description": "The memories of an outcast. Hollow prefers the Tower to the living world. This Eternal is aided by her gloomies, strange creatures born of feeling and memory.",
+    "coreAbility": {
+      "name": "Gloomy Swarm",
+      "description": "Release a stream of Gloomies that seek out the closest target.",
+      "tags": ["Tracking"],
+      "damage": "8 x ?",
+      "cooldown": "22s"
+    },
+    "setBonus": { "name": "Unscathed", "description": "20% Bonus damage when you have Fortitude" },
+    "items": ["hollows-companion-crown", "hollows-outcast-amulet", "hollows-sneklan", "hollows-darkling-staff"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Hollow",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Hollow.png/256px-Arkheron_Eternal_Hollow.png",
+    "aliases": ["forest darkling", "darkling", "gloomies"]
+  },
+  {
+    "id": "leodin",
+    "name": "Leodin",
+    "title": "The Lightbringer",
+    "description": "The memories of a warrior who had faith in himself. The Lightbringer is a god or a madman. This Eternal can take to the sky, reflect projectiles, and punch through armor with his glint spear.",
+    "coreAbility": {
+      "name": "Sky Strike",
+      "description": "Launch into the sky and crash down, stunning enemies on arrival.",
+      "tags": ["Airborne Attack", "Phased", "AoE", "Stun"],
+      "damage": "40",
+      "cooldown": "20s",
+      "range": "2m"
+    },
+    "setBonus": { "name": "Divine", "description": "20% Damage Reduction" },
+    "items": ["leodins-radiant-crown", "leodins-sanctuary-amulet", "leodins-eclipse-hammer", "leodins-glint-spear"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Leodin",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Leodin.png/256px-Arkheron_Eternal_Leodin.png",
+    "aliases": ["lightbringer"]
+  },
+  {
+    "id": "karriv",
+    "name": "Karriv",
+    "title": "The Forge",
+    "description": "The memories of a weaponsmith destined to lead others to ruin. Karriv is a resilient protector. This Eternal excels at defending an area and forcing opponents to fight on his terms.",
+    "coreAbility": {
+      "name": "Fire Cage",
+      "description": "A stomp attack that damages nearby enemies and summons a collapsing ring of fire.",
+      "tags": ["AoE", "Damage over Time", "Underground Attack"],
+      "damage": "20 / 30 + 15 DoT",
+      "cooldown": "25s",
+      "range": "9m"
+    },
+    "setBonus": { "name": "Persistent", "description": "Ability Cooldowns are 20% faster" },
+    "items": ["karrivs-forgefire-crown", "karrivs-flamepath-amulet", "karrivs-flaming-lantern", "karrivs-searing-shovel"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Karriv",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Karriv.png/256px-Arkheron_Eternal_Karriv.png",
+    "aliases": ["forge"]
+  },
+  {
+    "id": "rynshi",
+    "name": "Rynshi",
+    "title": "The Beast",
+    "description": "The memories of a berserker with blood on his hands. Rynshi knows that the Beast belongs here, with the other monsters. This Eternal stuns and blinds his victims before ripping them apart.",
+    "coreAbility": {
+      "name": "Rampage",
+      "description": "Enter a frenzied state. Ability cooldowns are reduced and gain a speed boost.",
+      "tags": ["Cooldown Reduction", "Movement Increase", "Steadfast"],
+      "cooldown": "20s"
+    },
+    "setBonus": { "name": "Relentless", "description": "40% Damage Reduction at Low Health (100HP)" },
+    "items": ["rynshis-blinding-rage-crown", "rynshis-vortex-amulet", "rynshis-wrath-cleaver", "rynshis-fury-bracers"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Rynshi",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Rynshi.png/256px-Arkheron_Eternal_Rynshi.png",
+    "aliases": ["beast"]
+  },
+  {
+    "id": "vaton",
+    "name": "Vaton",
+    "title": "The Charlatan",
+    "description": "The memories of a snake in the grass. Vaton is a villain who hunts tyrants. This Eternal tricks his opponents into defeating themselves.",
+    "coreAbility": {
+      "name": "Disquieting Metamorphosis",
+      "description": "Explode into crystal fragments, damaging nearby enemies.",
+      "tags": ["AoE", "Lifesteal", "Phased", "Crushing"],
+      "damage": "40",
+      "cooldown": "26s"
+    },
+    "setBonus": { "name": "Malleable", "description": "Increase Healing from your Items and Abilities by 50%" },
+    "items": ["vatons-payback-crown", "vatons-audacity-amulet", "vatons-seeing-eye", "vatons-serpent-staff"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Vaton",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Vaton.png/256px-Arkheron_Eternal_Vaton.png",
+    "aliases": ["charlatan"]
+  },
+  {
+    "id": "grimwold",
+    "name": "Grimwold",
+    "title": "The Scientist",
+    "description": "The memories of a genius and a fool. Grimwold uses his mastery of science to dictate the flow of battle. This Eternal uses turrets, teleporters, and barriers, littering the battlefield with deadly inventions.",
+    "coreAbility": {
+      "name": "Magnetic Field",
+      "description": "Create a magnetic field that increases the movement speed of teammates and slows enemies.",
+      "tags": ["AoE", "Slow", "Movement Increase"],
+      "damage": "25",
+      "cooldown": "24s",
+      "range": "7.5m"
+    },
+    "setBonus": { "name": "Galvanized", "description": "Fortitude and Health Regenerate if you have not received or dealt damage in the past 3 seconds" },
+    "items": ["grimwolds-oscillating-regeneration-crown", "grimwolds-voltaic-barrier-amulet", "grimwolds-strange-device", "grimwolds-charged-rings"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Grimwold",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Grimwold.png/256px-Arkheron_Eternal_Grimwold.png",
+    "aliases": ["scientist"]
+  },
+  {
+    "id": "penelope",
+    "name": "Penelope",
+    "title": "The Porcelain Girl",
+    "description": "The memories of a young woman who was told she was fragile. Penelope is built by lies. This Eternal fires crystalline shards that detonate in brilliant displays of glittering light.",
+    "coreAbility": {
+      "name": "Look How I Shine",
+      "description": "A wave of shattered pieces that passes through enemies and deals crushing damage.",
+      "tags": ["Pass Through", "Crushing"],
+      "damage": "80",
+      "cooldown": "20s"
+    },
+    "setBonus": { "name": "Youthful", "description": "Gain two extra endurance pips" },
+    "items": ["penelopes-sparkle-crown", "penelopes-correction-amulet", "penelopes-looking-glass", "penelopes-porcelain-parasol"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Penelope",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Penelope.png/256px-Arkheron_Eternal_Penelope.png",
+    "aliases": ["porcelain girl", "porcelain"]
+  },
+  {
+    "id": "tsubo",
+    "name": "Tsu'bo",
+    "title": "The Stray",
+    "description": "The memories of a stray from the old world. Tsu'bo is the last of his kind. This Eternal is a pack hunter that remembers his hound and runs alongside him.",
+    "coreAbility": {
+      "name": "Cull the Herd",
+      "description": "A primal scream that lacerates enemies, causing them to bleed. Scream damage is multiplied based on the number of enemies hit (max 3).",
+      "tags": ["AoE", "Damage over Time", "Crushing"],
+      "damage": "20 + 10 DoT",
+      "cooldown": "22s",
+      "range": "7m"
+    },
+    "setBonus": { "name": "Endling", "description": "Deal 70% more damage at low health (100HP)" },
+    "items": ["tsubos-forefather-crown", "tsubos-run-free-amulet", "tsubos-ripper-blades", "tsubos-boom-chakas"],
+    "wikiUrl": "https://arkheron.wiki.gg/wiki/Tsu%27bo",
+    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Tsu%27bo.png/256px-Arkheron_Eternal_Tsu%27bo.png",
+    "aliases": ["tsu bo", "stray"]
+  }
+]
