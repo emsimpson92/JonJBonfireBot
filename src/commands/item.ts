@@ -1,10 +1,10 @@
 import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 
-import { abilityBlock } from '../abilities.js';
+import { abilityBlock, inputLabel, statLine } from '../abilities.js';
 import { eternals, items, type OwnedItem } from '../data.js';
 import { baseEmbed, embedLength, errorEmbed, MAX_EMBEDS, MAX_MESSAGE_CHARS, truncate } from '../embeds.js';
 import { findBest, findSuggestions, keysOf, respondWithMatches } from '../search.js';
-import type { Command, ItemAbility, Stats } from '../types.js';
+import type { Command, ItemAbility } from '../types.js';
 
 /** Searchable by item name, its aliases, the abilities it grants, and its owner. */
 const keys = ({ item, eternal }: OwnedItem) =>
@@ -19,8 +19,11 @@ const keys = ({ item, eternal }: OwnedItem) =>
 const SLOTS = ['Crown', 'Amulet', 'Weapon', 'Anchor', 'Consumable'] as const;
 
 function abilityField(ability: ItemAbility) {
-  const prefix = ability.input ? `${ability.input === 'primary' ? 'Primary' : 'Secondary'} · ` : '';
-  return { name: `${prefix}${ability.name}`, value: truncate(abilityBlock(ability, { heading: false }), 1024) };
+  const label = inputLabel(ability);
+  return {
+    name: label ? `${label} · ${ability.name}` : ability.name,
+    value: truncate(abilityBlock(ability), 1024),
+  };
 }
 
 /**
@@ -30,10 +33,6 @@ function abilityField(ability: ItemAbility) {
  */
 function itemUrl({ item, eternal }: OwnedItem): string | undefined {
   return eternal ? `${eternal.wikiUrl}#${encodeURIComponent(item.name.replace(/ /g, '_'))}` : undefined;
-}
-
-function statLine(stats: Stats): string {
-  return Object.entries(stats).map(([label, value]) => `${label} ${value}`).join(' · ');
 }
 
 function detailEmbed(owned: OwnedItem) {
@@ -161,7 +160,7 @@ export const itemCommand: Command = {
       }
     }
 
-    const ownerName = eternalId === 'echo' ? 'Echo' : eternals.find((e) => e.id === eternalId)?.name;
+    const ownerName = echoOnly ? 'Echo' : eternals.find((e) => e.id === eternalId)?.name;
     const label = [ownerName, slot ? `${slot[0]?.toUpperCase()}${slot.slice(1)}s` : null].filter(Boolean).join(' · ');
     
     await interaction.reply({ embeds: [listEmbed(label || 'Matching items', matches)] });

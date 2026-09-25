@@ -1,7 +1,7 @@
 import { config } from './config.js';
 
 /** The limits are "per minute", so the window every bucket slides over is a minute wide. */
-export const WINDOW_MS = 60_000;
+const WINDOW_MS = 60_000;
 
 class SlidingWindow {
   private readonly hits: number[] = [];
@@ -43,15 +43,15 @@ class SlidingWindow {
   }
 }
 
-export type RateLimitResult = | { allowed: true } | { allowed: false; scope: 'user' | 'global'; retryAfterMs: number };
+type RateLimitResult = | { allowed: true } | { allowed: false; scope: 'user' | 'global'; retryAfterMs: number };
 
-export class RateLimiter {
+class RateLimiter {
   private readonly global: SlidingWindow;
   private readonly perUser = new Map<string, SlidingWindow>();
   private lastSweep = 0;
 
   constructor(
-    private readonly maxRequests: number,
+    maxRequests: number,
     private readonly maxRequestsPerUser: number,
   ) {
     this.global = new SlidingWindow(maxRequests);

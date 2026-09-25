@@ -1,11 +1,15 @@
 import type { ItemAbility, Stats } from './types.js';
 
 /** Weapons bind two abilities; crown and amulet abilities have no input to label. */
-export function inputBadge(ability: ItemAbility): string {
-  return ability.input ? `\`${ability.input === 'primary' ? 'Primary' : 'Secondary'}\` ` : '';
+export function inputLabel(ability: ItemAbility): string | undefined {
+  if (!ability.input) {
+    return undefined;
+  }
+
+  return ability.input === 'primary' ? 'Primary' : 'Secondary';
 }
 
-function statLine(stats: Stats): string {
+export function statLine(stats: Stats): string {
   return Object.entries(stats).map(([label, value]) => `${label} ${value}`).join(' · ');
 }
 
@@ -54,17 +58,13 @@ export function statsBlock(ability: ItemAbility): string {
 }
 
 /**
- * Renders one ability. `heading` puts the name inline, for when several abilities
- * share a single embed field; /item gives each its own field and omits it.
+ * Renders one ability's body. The name is not included: /item gives each ability
+ * its own embed field and puts the name, with its input label, on the field.
  */
-export function abilityBlock(ability: ItemAbility, { heading }: { heading: boolean }): string {
+export function abilityBlock(ability: ItemAbility): string {
   const lines: string[] = [];
 
-  if (heading) {
-    const title = `${inputBadge(ability)}**${ability.name}**`;
-    lines.push(ability.description ? `${title}\n${ability.description}` : title);
-  }
-  else if (ability.description) {
+  if (ability.description) {
     lines.push(ability.description);
   }
 

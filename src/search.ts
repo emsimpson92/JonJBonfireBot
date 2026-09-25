@@ -38,11 +38,9 @@ function distance(source: string, target: string): number {
 }
 
 /** Lower is better. Exact beats prefix beats substring beats near-miss. */
-/** fires on completion */
-function score(query: string, keys: string[]): number {
+function score(query: string, keys: IndexedKey[]): number {
   let best = Number.POSITIVE_INFINITY;
-  for (const key of keys) {
-    const candidate = normalize(key);
+  for (const { text: candidate } of keys) {
     let value: number;
 
     if (candidate === query) {
@@ -91,7 +89,7 @@ export function findBest<T>(query: string, items: T[], keys: (item: T) => string
     return [];
   }
 
-  const scored = items.map((item) => ({ item, result: score(normalized, keys(item)) }));
+  const scored = indexFor(items, keys).map((entry) => ({ item: entry.item, result: score(normalized, entry.keys) }));
   const best = scored.reduce((lowest, entry) => Math.min(lowest, entry.result), Number.POSITIVE_INFINITY);
   if (!Number.isFinite(best) || !isMatch(normalized, best)) {
     return [];
@@ -105,7 +103,7 @@ export function findBest<T>(query: string, items: T[], keys: (item: T) => string
  * anywhere. Without the word-start rung "ring" puts Suffe*ring* Amulet above
  * Ravah's *Ring*blade. Empty query keeps the roster order.
  */
-export function rankMatches<T>(
+function rankMatches<T>(
   query: string,
   items: T[],
   keys: (item: T) => string[],
@@ -135,9 +133,11 @@ export function rankMatches<T>(
 }
 
 /**
- * Normalized keys per dataset. The data is static and autocomplete fires on every
- * keystroke, so building them once beats re-deriving them for each event. Keyed on
- * the `keys` function, then the array, so callers must pass a stable function.
+ * Normalized keys per dataset, shared by every search in this file. The data is
+ * static and autocomplete fires on every keystroke, so building them once beats
+ * re-deriving them for each event. Keyed on the `keys` function, then the array,
+ * so callers must pass a stable function. A one-off array — /item searching its
+ * own filtered subset — just misses the cache and is collected with it.
  */
 const indexes = new WeakMap<object, WeakMap<object, IndexedItem<never>[]>>();
 
@@ -165,8 +165,7 @@ function indexFor<T>(items: T[], keys: (item: T) => string[]): IndexedItem<T>[] 
   return index;
 }
 
-/** 0 exact, 1 prefix, 2 word start, 3 anywhere, Infinity for no match. */
-/** fires on autocomplete event */
+/** Autocomplete ordering: 0 exact, 1 prefix, 2 word start, 3 anywhere, Infinity for no match. */
 function rankKey(query: string, key: IndexedKey): number {
   if (key.text === query) {
     return 0;
@@ -209,7 +208,7 @@ export function findSuggestions<T>(query: string, items: T[], keys: (item: T) =>
     return [];
   }
 
-  return items.map((item) => ({ item, result: score(normalized, keys(item)) }))
+  return indexFor(items, keys).map((entry) => ({ item: entry.item, result: score(normalized, entry.keys) }))
     .filter((entry) => isSuggestion(normalized, entry.result))
     .sort((a, b) => a.result - b.result)
     .slice(0, limit)
