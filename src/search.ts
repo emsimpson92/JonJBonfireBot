@@ -4,6 +4,16 @@ import type { AutocompleteInteraction } from 'discord.js';
 
 import { truncate } from './embeds.js';
 
+interface IndexedKey {
+  text: string;
+  words: string[];
+}
+
+interface IndexedItem<T> {
+  item: T;
+  keys: IndexedKey[];
+}
+
 function normalize(value: string): string {
   return value.toLowerCase().trim().replace(/\s+/g, ' ');
 }
@@ -28,6 +38,7 @@ function distance(source: string, target: string): number {
 }
 
 /** Lower is better. Exact beats prefix beats substring beats near-miss. */
+/** fires on completion */
 function score(query: string, keys: string[]): number {
   let best = Number.POSITIVE_INFINITY;
   for (const key of keys) {
@@ -74,24 +85,19 @@ export function keysOf(item: { aliases?: string[] }, ...primary: string[]): stri
  * silently pick one. `glossary damage` matches four terms equally well.
  * Empty when nothing is close enough.
  */
-export function findAllBest<T>(query: string, items: T[], keys: (item: T) => string[]): T[] {
-  const needle = normalize(query);
-  if (needle === '') {
+export function findBest<T>(query: string, items: T[], keys: (item: T) => string[]): T[] {
+  const normalized = normalize(query);
+  if (normalized === '') {
     return [];
   }
 
-  const scored = items.map((item) => ({ item, result: score(needle, keys(item)) }));
+  const scored = items.map((item) => ({ item, result: score(normalized, keys(item)) }));
   const best = scored.reduce((lowest, entry) => Math.min(lowest, entry.result), Number.POSITIVE_INFINITY);
-  if (!Number.isFinite(best) || !isMatch(needle, best)) {
+  if (!Number.isFinite(best) || !isMatch(normalized, best)) {
     return [];
   }
 
   return scored.filter((entry) => entry.result === best).map((entry) => entry.item);
-}
-
-/** Best single match, or undefined when nothing is close enough. */
-export function findBest<T>(query: string, items: T[], keys: (item: T) => string[]): T | undefined {
-  return findAllBest(query, items, keys)[0];
 }
 
 /**
@@ -99,36 +105,83 @@ export function findBest<T>(query: string, items: T[], keys: (item: T) => string
  * anywhere. Without the word-start rung "ring" puts Suffe*ring* Amulet above
  * Ravah's *Ring*blade. Empty query keeps the roster order.
  */
-export function rankMatches<T>(query: string, items: T[], keys: (item: T) => string[]): T[] {
-  const needle = normalize(query);
-  if (needle === '') {
-    return [...items];
+export function rankMatches<T>(
+  query: string,
+  items: T[],
+  keys: (item: T) => string[],
+  limit = Number.POSITIVE_INFINITY,
+): T[] {
+  const normalized = normalize(query);
+  if (normalized === '') {
+    return items.slice(0, limit);
   }
 
   const ranked: { item: T; rank: number }[] = [];
-  for (const item of items) {
-    const candidates = keys(item).map(normalize);
-    let rank: number | undefined;
-
-    if (candidates.some((key) => key === needle)) {
-      rank = 0;
-    }
-    else if (candidates.some((key) => key.startsWith(needle))) {
-      rank = 1;
-    }
-    else if (candidates.some((key) => key.split(' ').some((word) => word.startsWith(needle)))) {
-      rank = 2;
-    }
-    else if (candidates.some((key) => key.includes(needle))) {
-      rank = 3;
+  for (const { item, keys: candidates } of indexFor(items, keys)) {
+    let rank = Number.POSITIVE_INFINITY;
+    for (const candidate of candidates) {
+      rank = Math.min(rank, rankKey(normalized, candidate));
+      if (rank === 0) {
+        break;
+      }
     }
 
-    if (rank !== undefined) {
+    if (Number.isFinite(rank)) {
       ranked.push({ item, rank });
     }
   }
 
-  return ranked.sort((a, b) => a.rank - b.rank).map((entry) => entry.item);
+  return ranked.sort((a, b) => a.rank - b.rank).slice(0, limit).map((entry) => entry.item);
+}
+
+/**
+ * Normalized keys per dataset. The data is static and autocomplete fires on every
+ * keystroke, so building them once beats re-deriving them for each event. Keyed on
+ * the `keys` function, then the array, so callers must pass a stable function.
+ */
+const indexes = new WeakMap<object, WeakMap<object, IndexedItem<never>[]>>();
+
+function indexFor<T>(items: T[], keys: (item: T) => string[]): IndexedItem<T>[] {
+  let byItems = indexes.get(keys);
+  if (!byItems) {
+    byItems = new WeakMap();
+    indexes.set(keys, byItems);
+  }
+
+  let index = byItems.get(items) as IndexedItem<T>[] | undefined;
+  if (!index) {
+    index = items.map((item) => ({
+      item,
+      keys: keys(item).map((key) => {
+        const text = normalize(key);
+
+        return { text, words: text.split(' ') };
+      }),
+    }));
+
+    byItems.set(items, index as IndexedItem<never>[]);
+  }
+
+  return index;
+}
+
+/** 0 exact, 1 prefix, 2 word start, 3 anywhere, Infinity for no match. */
+/** fires on autocomplete event */
+function rankKey(query: string, key: IndexedKey): number {
+  if (key.text === query) {
+    return 0;
+  }
+  if (key.text.startsWith(query)) {
+    return 1;
+  }
+  if (key.words.some((word) => word.startsWith(query))) {
+    return 2;
+  }
+  if (key.text.includes(query)) {
+    return 3;
+  }
+
+  return Number.POSITIVE_INFINITY;
 }
 
 /**
@@ -141,8 +194,8 @@ export async function respondWithMatches<T>(
   keys: (item: T) => string[],
   toChoice: (item: T) => { name: string; value: string },
 ): Promise<void> {
-  const matches = rankMatches(interaction.options.getFocused(), items, keys);
-  await interaction.respond(matches.slice(0, 25).map((item) => {
+  const matches = rankMatches(interaction.options.getFocused(), items, keys, 25);
+  await interaction.respond(matches.map((item) => {
       const { name, value } = toChoice(item);
       return { name: truncate(name, 100), value };
     }),
@@ -151,13 +204,13 @@ export async function respondWithMatches<T>(
 
 /** Up to `limit` plausible alternatives, for "did you mean" lines. */
 export function findSuggestions<T>(query: string, items: T[], keys: (item: T) => string[], limit = 3): T[] {
-  const needle = normalize(query);
-  if (needle === '') {
+  const normalized = normalize(query);
+  if (normalized === '') {
     return [];
   }
 
-  return items.map((item) => ({ item, result: score(needle, keys(item)) }))
-    .filter((entry) => isSuggestion(needle, entry.result))
+  return items.map((item) => ({ item, result: score(normalized, keys(item)) }))
+    .filter((entry) => isSuggestion(normalized, entry.result))
     .sort((a, b) => a.result - b.result)
     .slice(0, limit)
     .map((entry) => entry.item);

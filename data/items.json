@@ -1138,7 +1138,7 @@
     "slot": "Consumable",
     "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Essence.png/90px-Consumable_Essence.png",
     "description": "Regain 150 Health",
-    "stats": { "Healing": "150", "Max stacks": "3" },
+    "stats": { "Healing": "150", "Max stacks": "4" },
     "abilities": []
   },
   {
@@ -1147,7 +1147,7 @@
     "slot": "Consumable",
     "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Fortitude.png/86px-Consumable_Fortitude.png",
     "description": "Gain 50 Fortitude",
-    "stats": { "Healing": "50", "Max stacks": "4" },
+    "stats": { "Healing": "50", "Max stacks": "5" },
     "abilities": []
   },
   {
@@ -1157,15 +1157,6 @@
     "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_HealingWard.png/100px-Consumable_HealingWard.png",
     "description": "A destructible ward that heals Health and Fortitude over time in a small Area of Effect.",
     "stats": { "Healing": "100", "Duration": "6s", "Health": "30 hp", "Max stacks": "3" },
-    "abilities": []
-  },
-  {
-    "id": "healing-mist",
-    "name": "Healing Mist",
-    "slot": "Consumable",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Healing_Shot.png/100px-Consumable_Healing_Shot.png",
-    "description": "A ranged consumable that heals Health and Fortitude in a targeted area. Caster will also be healed upon successfully healing allies.",
-    "stats": { "Healing": "50", "Area of Effect Range": "5m" },
     "abilities": []
   },
   {

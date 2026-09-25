@@ -3,7 +3,7 @@ import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { abilityBlock } from '../abilities.js';
 import { eternals, items, type OwnedItem } from '../data.js';
 import { baseEmbed, embedLength, errorEmbed, MAX_EMBEDS, MAX_MESSAGE_CHARS, truncate } from '../embeds.js';
-import { findAllBest, findSuggestions, keysOf, respondWithMatches } from '../search.js';
+import { findBest, findSuggestions, keysOf, respondWithMatches } from '../search.js';
 import type { Command, ItemAbility, Stats } from '../types.js';
 
 /** Searchable by item name, its aliases, the abilities it grants, and its owner. */
@@ -115,7 +115,7 @@ export const itemCommand: Command = {
     }
 
     if (name) {
-      const found = findAllBest(name, matches, keys);
+      const found = findBest(name, matches, keys);
       if (!found.length) {
         const suggestions = findSuggestions(name, matches, keys);
         const hint = suggestions.length ? 

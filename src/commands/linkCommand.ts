@@ -12,7 +12,6 @@ interface LinkCommandOptions {
   blurb: string;
 }
 
-/** /faq and /playtest differ only in their copy, so they share one builder. */
 export function linkCommand(options: LinkCommandOptions): Command {
   return {
     data: new SlashCommandBuilder().setName(options.name).setDescription(options.description).toJSON(),

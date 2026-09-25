@@ -6,7 +6,7 @@ export const faqCommand = linkCommand({
   description: 'Links the FAQ channel.',
   channelId: config.faqChannelId,
   title: 'Frequently Asked Questions',
-  blurb: 'PLACEHOLDER blurb. Most common questions are answered here — check it before posting.',
+  blurb: 'PLACEHOLDER',
 });
 
 // TODO: Implement this

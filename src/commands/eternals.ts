@@ -2,7 +2,7 @@ import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 
 import { eternalKeys, eternals, itemsOf } from '../data.js';
 import { baseEmbed, errorEmbed, truncate } from '../embeds.js';
-import { findAllBest, findSuggestions } from '../search.js';
+import { findBest, findSuggestions } from '../search.js';
 import type { Command, Eternal } from '../types.js';
 
 function detailEmbed(eternal: Eternal) {
@@ -14,6 +14,7 @@ function detailEmbed(eternal: Eternal) {
       value: `${core.description}\n${core.tags.map((tag) => `\`${tag}\``).join(' ')}`,
     });
 
+  // Core ability details
   const numbers: { name: string; value: string; inline: true }[] = [];
   if (core.damage) {
     numbers.push({ name: 'Damage', value: core.damage, inline: true });
@@ -28,6 +29,7 @@ function detailEmbed(eternal: Eternal) {
     embed.addFields(...numbers);
   }
 
+  // Set bonus
   embed.addFields({ name: `Set Bonus: ${eternal.setBonus.name}`, value: eternal.setBonus.description });
 
   // Item list. Item abilities can be found using /item
@@ -39,11 +41,12 @@ function detailEmbed(eternal: Eternal) {
   if (eternal.imageUrl) {
     embed.setThumbnail(eternal.imageUrl);
   }
+
   return embed.setFooter({ text: "/item for an item's abilities · /glossary explains any tag" });
 }
 
 function listEmbed() {
-  const lines = eternals.map((eternal) => `**${eternal.name}** — ${eternal.title}`).join('\n');
+  const lines = eternals.map((eternal) => `**${eternal.name}**`).join('\n');
   return baseEmbed(`Eternals (${eternals.length})`, lines || 'No eternals are configured yet.').setFooter({
     text: 'Use /eternals <name> for details on one.',
   });
@@ -54,7 +57,7 @@ export const eternalsCommand: Command = {
     .setDescription('Lists every eternal, or shows details for one.')
     .addStringOption((option) =>
       option.setName('name').setDescription('Which eternal')
-        .addChoices(...eternals.map((eternal) => ({ name: `${eternal.name} — ${eternal.title}`, value: eternal.id }))),
+        .addChoices(...eternals.map((eternal) => ({ name: `${eternal.name}`, value: eternal.id }))),
     ).toJSON(),
   usage: '/eternals [name]',
   examples: ['/eternals', '/eternals name:dahla'],
@@ -67,7 +70,7 @@ export const eternalsCommand: Command = {
       return;
     }
 
-    const matches = findAllBest(query, eternals, eternalKeys);
+    const matches = findBest(query, eternals, eternalKeys);
 
     if (matches.length === 1) {
       await interaction.reply({ embeds: [detailEmbed(matches[0] as Eternal)] });
@@ -77,7 +80,7 @@ export const eternalsCommand: Command = {
 
     // Reachable when a value is typed rather than picked from the choices.
     if (matches.length > 1) {
-      const options = matches.map((eternal) => `**${eternal.name}** — ${eternal.title}`).join('\n');
+      const options = matches.map((eternal) => `**${eternal.name}**`).join('\n');
       await interaction.reply({
         embeds: [baseEmbed('Multiple eternals match', `\`${query}\` matches several:\n\n${options}`)],
         flags: MessageFlags.Ephemeral,

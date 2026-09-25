@@ -38,6 +38,8 @@ function detailEmbed(command: Command) {
   return embed;
 }
 
+const keys = (command: Command) => [command.data.name];
+
 export const helpCommand: Command = {
   data: new SlashCommandBuilder()
     .setName('help')
@@ -53,7 +55,7 @@ export const helpCommand: Command = {
     await respondWithMatches(
       interaction,
       commands,
-      (command) => [command.data.name],
+      keys,
       (command) => ({ name: `/${command.data.name}`, value: command.data.name }),
     );
   },

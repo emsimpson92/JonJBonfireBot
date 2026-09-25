@@ -2,7 +2,7 @@ import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 
 import { glossary } from '../data.js';
 import { baseEmbed, errorEmbed } from '../embeds.js';
-import { findAllBest, findSuggestions, keysOf, respondWithMatches } from '../search.js';
+import { findBest, findSuggestions, keysOf, respondWithMatches } from '../search.js';
 import type { Command, GlossaryEntry } from '../types.js';
 
 const keys = (entry: GlossaryEntry) => keysOf(entry, entry.term);
@@ -32,7 +32,7 @@ export const glossaryCommand: Command = {
       return;
     }
 
-    const matches = findAllBest(query, glossary, keys);
+    const matches = findBest(query, glossary, keys);
 
     if (matches.length === 1) {
       const match = matches[0] as GlossaryEntry;

@@ -9,15 +9,15 @@ import { playtestCommand } from './playtest.js';
 /** Order here is the order /help lists them in. */
 export const commands: Command[] = [
   helpCommand,
-  faqCommand,
-  playtestCommand,
+  //faqCommand,
+  //playtestCommand,
   eternalsCommand,
   itemCommand,
   glossaryCommand,
 ];
 
-const byName = new Map(commands.map((command) => [command.data.name, command]));
+const commandsByName = new Map(commands.map((command) => [command.data.name, command]));
 
 export function findCommand(name: string): Command | undefined {
-  return byName.get(name);
+  return commandsByName.get(name);
 }
