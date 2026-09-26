@@ -563,8 +563,7 @@
         "name": "Cleave",
         "input": "primary",
         "description": "Sweeping two-handed chops.",
-        "stats": { "Melee Damage": "20 / 20 / 23 / 25" },
-        "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "23" } }, { "tier": "IV", "changes": { "Melee Damage": "25" } }]
+        "stats": { "Melee Damage": "20 / 20 / 23 / 25" }
       },
       {
         "name": "Savage Leap",
