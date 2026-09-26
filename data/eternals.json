@@ -7,10 +7,13 @@
     "coreAbility": {
       "name": "Curtain Call",
       "description": "Pull in distant enemies, stunning them.",
-      "tags": ["Cone Attack", "Stun", "Exhaust"],
-      "damage": "35",
-      "cooldown": "26s",
-      "range": "9m"
+      "tags": ["Cone Attack", "Stun"],
+      "stats": [
+        { "name": "Damage", "value": "35" },
+        { "name": "Cooldown", "value": "25s" },
+        { "name": "Range", "value": "9m" },
+        { "name": "Stun", "value": "1s" }
+      ]
     },
     "setBonus": { "name": "Deep Pockets", "description": "Max stack of consumables increased" },
     "items": ["dahlas-vanish-crown", "dahlas-petal-dance-amulet", "dahlas-dancing-blade", "dahlas-throwing-knives"],
@@ -23,7 +26,17 @@
     "name": "Edani",
     "title": "The Mistress of Suffering",
     "description": "The memories of a tortured writer. Edani knows suffering and wants to share it. Excelling in isolation, this Eternal hooks, claws, and banishes her prey before ripping them apart.",
-    "coreAbility": { "name": "Banish", "description": "Banish an enemy to another realm.", "tags": ["Single Target", "Phased"], "damage": "35", "cooldown": "20s" },
+    "coreAbility": {
+      "name": "Banish",
+      "description": "Banish an enemy to another realm.",
+      "tags": ["Single Target", "Phased", "Slow"],
+      "stats": [
+        { "name": "Damage", "value": "35" },
+        { "name": "Cooldown", "value": "20s" },
+        { "name": "Duration", "value": "6s" },
+        { "name": "Speed Decrease", "value": "50%" }
+      ]
+    },
     "setBonus": { "name": "Ferocious", "description": "Melee damage increased by 20%" },
     "items": ["edanis-outburst-crown", "edanis-suffering-amulet", "edanis-lunging-hook", "edanis-pulling-claws"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Edani",
@@ -39,8 +52,11 @@
       "name": "Spiral Strike",
       "description": "A spin attack that lifesteals and heals teammates.",
       "tags": ["Lifesteal", "Crushing"],
-      "damage": "30 / 30",
-      "cooldown": "20s"
+      "stats": [
+        { "name": "Damage", "value": "30 / 30" },
+        { "name": "Cooldown", "value": "20s" },
+        { "name": "Lifesteal", "value": "50%" }
+      ]
     },
     "setBonus": { "name": "Cold-blooded", "description": "25% Increased damage to stunned or slowed enemies" },
     "items": ["irennas-frost-armor-crown", "irennas-north-wind-amulet", "irennas-icebreaker-mace", "irennas-sword-caretaker"],
@@ -53,33 +69,38 @@
     "name": "Ravah",
     "title": "The Fading Huntress",
     "description": "The memories of a bounty hunter who was caged in a Tower. Ravah stalks her targets, using smoke and shadow to confuse her enemies. This Eternal deals devastating bursts of damage at long range.",
-    "coreAbility": {
+    "coreAbility": {                                      
       "name": "The Parliament",
       "description": "Summon a damaging ring of owls that follow your ringblade when thrown.",
       "tags": ["Aura"],
-      "damage": "12 per 0.5s",
-      "cooldown": "22s",
-      "range": "2.8m"
+      "stats": [
+        { "name": "Damage", "value": "12 per 0.5s" },
+        { "name": "Cooldown", "value": "22s" },
+        { "name": "Range", "value": "2.8m" },
+        { "name": "Duration", "value": "8s" }
+      ]
     },
-    "setBonus": { "name": "Distant", "description": "Ranged damaged increased by 20%" },
+    "setBonus": { "name": "Distant", "description": "Ranged damaged increased by 25%" },
     "items": ["ravahs-shadowsmoke-crown", "ravahs-stalking-amulet", "ravahs-talonflight-crossbow", "ravahs-ringblade"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Ravah",
     "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Ravah.png/256px-Arkheron_Eternal_Ravah.png",
     "aliases": ["fading huntress", "huntress"]
   },
   {
-    "id": "hollow",
+    "id": "hollow", 
     "name": "Hollow",
     "title": "The Forest Darkling",
     "description": "The memories of an outcast. Hollow prefers the Tower to the living world. This Eternal is aided by her gloomies, strange creatures born of feeling and memory.",
     "coreAbility": {
       "name": "Gloomy Swarm",
-      "description": "Release a stream of Gloomies that seek out the closest target.",
-      "tags": ["Tracking"],
-      "damage": "8 x ?",
-      "cooldown": "22s"
+      "description": "Release a stream of Gloomies that seek out the closest target within 45 degrees.",
+      "tags": ["Homing"],
+      "stats": [
+        { "name": "Damage", "value": "8" },         
+        { "name": "Cooldown", "value": "22s" }
+      ]
     },
-    "setBonus": { "name": "Unscathed", "description": "20% Bonus damage when you have Fortitude" },
+    "setBonus": { "name": "Unscathed", "description": "25% Bonus damage while you have Fortitude" },
     "items": ["hollows-companion-crown", "hollows-outcast-amulet", "hollows-sneklan", "hollows-darkling-staff"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Hollow",
     "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Hollow.png/256px-Arkheron_Eternal_Hollow.png",
@@ -94,9 +115,11 @@
       "name": "Sky Strike",
       "description": "Launch into the sky and crash down, stunning enemies on arrival.",
       "tags": ["Airborne Attack", "Phased", "AoE", "Stun"],
-      "damage": "40",
-      "cooldown": "20s",
-      "range": "2m"
+      "stats": [
+        { "name": "Damage", "value": "40" },
+        { "name": "Cooldown", "value": "20s" },
+        { "name": "Range", "value": "2m" }
+      ]
     },
     "setBonus": { "name": "Divine", "description": "20% Damage Reduction" },
     "items": ["leodins-radiant-crown", "leodins-sanctuary-amulet", "leodins-eclipse-hammer", "leodins-glint-spear"],
@@ -113,9 +136,12 @@
       "name": "Fire Cage",
       "description": "A stomp attack that damages nearby enemies and summons a collapsing ring of fire.",
       "tags": ["AoE", "Damage over Time", "Underground Attack"],
-      "damage": "20 / 30 + 15 DoT",
-      "cooldown": "25s",
-      "range": "9m"
+      "stats": [
+        { "name": "Damage", "value": "20 / 45 + 15 DoT" },
+        { "name": "Cooldown", "value": "23s" },
+        { "name": "Range", "value": "9m" },
+        { "name": "Duration", "value": "8s" }         
+      ]
     },
     "setBonus": { "name": "Persistent", "description": "Ability Cooldowns are 20% faster" },
     "items": ["karrivs-forgefire-crown", "karrivs-flamepath-amulet", "karrivs-flaming-lantern", "karrivs-searing-shovel"],
@@ -130,11 +156,15 @@
     "description": "The memories of a berserker with blood on his hands. Rynshi knows that the Beast belongs here, with the other monsters. This Eternal stuns and blinds his victims before ripping them apart.",
     "coreAbility": {
       "name": "Rampage",
-      "description": "Enter a frenzied state. Ability cooldowns are reduced and gain a speed boost.",
-      "tags": ["Cooldown Reduction", "Movement Increase", "Steadfast"],
-      "cooldown": "20s"
+      "description": "Enter a frenzied state. Abilies are refreshed. When rampaging you move faster.",
+      "tags": ["Movement Increase", "Reset"],
+      "stats": [
+        { "name": "Cooldown", "value": "20s" },
+        { "name": "Duration", "value": "5s" },
+        { "name": "Speed Increase", "value": "40%" }
+      ]
     },
-    "setBonus": { "name": "Relentless", "description": "40% Damage Reduction at Low Health (100HP)" },
+    "setBonus": { "name": "Relentless", "description": "40% Damage Reduction at 150 total hp" },
     "items": ["rynshis-blinding-rage-crown", "rynshis-vortex-amulet", "rynshis-wrath-cleaver", "rynshis-fury-bracers"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Rynshi",
     "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Rynshi.png/256px-Arkheron_Eternal_Rynshi.png",
@@ -146,11 +176,15 @@
     "title": "The Charlatan",
     "description": "The memories of a snake in the grass. Vaton is a villain who hunts tyrants. This Eternal tricks his opponents into defeating themselves.",
     "coreAbility": {
-      "name": "Disquieting Metamorphosis",
+      "name": "Disquieting Metamorphosis",  
       "description": "Explode into crystal fragments, damaging nearby enemies.",
       "tags": ["AoE", "Lifesteal", "Phased", "Crushing"],
-      "damage": "40",
-      "cooldown": "26s"
+      "stats": [
+        { "name": "Damage", "value": "40" },
+        { "name": "Cooldown", "value": "22s" },
+        { "name": "Duration", "value": "2s" },
+        { "name": "Lifesteal", "value": "50% (75% with set bonus)" }
+      ]
     },
     "setBonus": { "name": "Malleable", "description": "Increase Healing from your Items and Abilities by 50%" },
     "items": ["vatons-payback-crown", "vatons-audacity-amulet", "vatons-seeing-eye", "vatons-serpent-staff"],
@@ -167,9 +201,14 @@
       "name": "Magnetic Field",
       "description": "Create a magnetic field that increases the movement speed of teammates and slows enemies.",
       "tags": ["AoE", "Slow", "Movement Increase"],
-      "damage": "25",
-      "cooldown": "24s",
-      "range": "7.5m"
+      "stats": [
+        { "name": "Damage", "value": "25" },
+        { "name": "Cooldown", "value": "24s" },
+        { "name": "Range", "value": "8m" },
+        { "name": "Duration", "value": "7s" },
+        { "name": "Speed Decrease", "value": "50%" },
+        { "name": "Speed Increase", "value": "50%" }
+      ]
     },
     "setBonus": { "name": "Galvanized", "description": "Fortitude and Health Regenerate if you have not received or dealt damage in the past 3 seconds" },
     "items": ["grimwolds-oscillating-regeneration-crown", "grimwolds-voltaic-barrier-amulet", "grimwolds-strange-device", "grimwolds-charged-rings"],
@@ -186,8 +225,10 @@
       "name": "Look How I Shine",
       "description": "A wave of shattered pieces that passes through enemies and deals crushing damage.",
       "tags": ["Pass Through", "Crushing"],
-      "damage": "80",
-      "cooldown": "20s"
+      "stats": [
+        { "name": "Damage", "value": "80" },
+        { "name": "Cooldown", "value": "20s" }
+      ]
     },
     "setBonus": { "name": "Youthful", "description": "Gain two extra endurance pips" },
     "items": ["penelopes-sparkle-crown", "penelopes-correction-amulet", "penelopes-looking-glass", "penelopes-porcelain-parasol"],
@@ -204,9 +245,11 @@
       "name": "Cull the Herd",
       "description": "A primal scream that lacerates enemies, causing them to bleed. Scream damage is multiplied based on the number of enemies hit (max 3).",
       "tags": ["AoE", "Damage over Time", "Crushing"],
-      "damage": "20 + 10 DoT",
-      "cooldown": "22s",
-      "range": "7m"
+      "stats": [
+        { "name": "Damage", "value": "20 + 10 DoT" },
+        { "name": "Cooldown", "value": "22s" },
+        { "name": "Range", "value": "7m" }
+      ]
     },
     "setBonus": { "name": "Endling", "description": "Deal 70% more damage at low health (100HP)" },
     "items": ["tsubos-forefather-crown", "tsubos-run-free-amulet", "tsubos-ripper-blades", "tsubos-boom-chakas"],
