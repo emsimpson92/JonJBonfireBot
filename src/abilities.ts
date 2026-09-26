@@ -10,7 +10,7 @@ export function inputLabel(ability: ItemAbility): string | undefined {
 }
 
 export function statLine(stats: Stats): string {
-  return Object.entries(stats).map(([label, value]) => `${label} ${value}`).join('\n');
+  return Object.entries(stats).map(([label, value]) => `**${label}**: ${value}`).join('\n');
 }
 
 const normalize = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
