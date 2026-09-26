@@ -233,3 +233,7 @@ src/
   types.ts     Command, Eternal, GlossaryEntry
   commands/    One file per command, plus registry.ts
 ```
+
+## Adding Jon J Bonfire to your server
+
+https://discord.com/oauth2/authorize?client_id=1552144984768254083&permissions=19456&scope=bot%20applications.commands
