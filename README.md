@@ -167,8 +167,7 @@ propagate, so re-check them when the game patches.
   `stats` is Tier I in full. Each entry in `upgrades` is a tier above that, carrying only what
   it adds: `changes` for the stats it moves, `effect` for the wiki's prose where a tier grants
   a trait no number captures ("Eliminations reset cooldown"). A tier that changes nothing is
-  omitted, so labels can jump — Rynshi's Fury Punches lists `II`, `IV`, `V` because Tier III
-  repeats Tier II. Most abilities stop at III; those two basic attacks go to IV and V.
+  omitted. All abilities stop at III
 
   Where a tier has both `changes` and `effect`, the renderer drops the prose only when it
   merely restates the numbers ("Blind Duration 6s" vs "Blind duration increased to 6 seconds");
