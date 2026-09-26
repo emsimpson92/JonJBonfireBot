@@ -4,14 +4,14 @@ import type {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord.js';
 
+// A strict list of the stats that can appear on a core ability. No magic values
+export type CoreStatName = 'Damage' | 'Cooldown' | 'Range' | 'Stun' | 'Lifesteal' | 'Duration' | 'Speed Decrease' | 'Speed Increase';
+
 export interface CoreAbility {
   name: string;
   description: string;
   tags: string[];
-  /** Wiki damage format varies. "20 / 30 + 15 DoT". So we use a string */
-  damage?: string;
-  cooldown?: string;
-  range?: string;
+  stats?: Array<{ name: CoreStatName; value: string }>;
 }
 
 export interface SetBonus {

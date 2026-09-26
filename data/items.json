@@ -8,7 +8,7 @@
       {
         "name": "Vanish",
         "description": "Transform into an invulnerable fast-moving orb that is invisible to enemies.",
-        "tags": ["Phased", "Movement Increase", "Invisible", "Invulnerable"],
+        "tags": ["Phased", "Movement Increase", "Invisible"],
         "stats": { "Cooldown": "15s", "Duration": "1.5s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "When leaving Vanish, you are invulnerable to damage for 1 second" }]
       }
@@ -40,7 +40,7 @@
         "name": "Twisting Thorn",
         "input": "secondary",
         "description": "A lunging stab that Pierces your target.",
-        "tags": ["Piercing", "Stun", "Reset on Kill"],
+        "tags": ["Piercing", "Stun"],
         "stats": { "Melee Damage": "10/40", "Cooldown": "15s", "Stun Duration": "1.5s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Eliminations reset cooldown" }]
       }
@@ -64,7 +64,7 @@
         "input": "secondary",
         "description": "Surround yourself with knives. Each blade damages on impact.",
         "tags": ["Aura"],
-        "stats": { "Ranged Damage": "5", "Cooldown": "15s", "Duration": "8s", "Ammo": "12" },
+        "stats": { "Ranged Damage": "6", "Cooldown": "15s", "Duration": "8s", "Ammo": "12" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }]
       }
     ]
@@ -78,11 +78,11 @@
       {
         "name": "Creative Outburst",
         "description": "A shriek that pushes enemies away.",
-        "tags": ["Displacement", "AoE", "Exhaust"],
+        "tags": ["Displacement", "AoE", "Exhaust", "Breakout"],
         "stats": { "Damage": "20", "Cooldown": "15s", "AoE Range": "9m", "Exhaust Duration": "1.5s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "AoE Range": "12m" }, "effect": "Outburst Radius increased" }]
       }
-    ]
+    ] 
   },
   {
     "id": "edanis-suffering-amulet",
@@ -112,17 +112,16 @@
         "name": "Thin Skinned Thrash",
         "input": "primary",
         "tags": ["AoE"],
-        "stats": { "Melee Damage": "14" },
-        "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "12" } }]
+        "stats": { "Melee Damage": "14 / 14 / 12+12 " }
       },
       {
         "name": "Startling Lunge",
         "input": "secondary",
         "description": "Throw a hook at on enemy or object, pulling yourself towards them.",
-        "tags": ["Stun", "Invulnerable"],
-        "stats": { "Melee Damage": "25", "Cooldown": "14s", "Stun Duration": "1s" },
-        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "After a successful lunge, you are invulnerable to damage for 1 second" }]
-      }
+        "tags": ["Stun"],
+        "stats": { "Melee Damage": "25", "Cooldown": "14s", "Stun Duration": "0.5s" },
+          "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "After a successful lunge, you are invulnerable to damage for 1 second" }]
+        }
     ]
   },
   {
@@ -134,8 +133,7 @@
       {
         "name": "Scratch and Shred",
         "input": "primary",
-        "stats": { "Melee Damage": "16" },
-        "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "16 / 18" } }]
+        "stats": { "Melee Damage": "16 / 16 / 16 / 18" }
       },
       {
         "name": "Irresistible Pull",
@@ -183,14 +181,14 @@
     "slot": "Weapon (Mace)",
     "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Weapon_Mace.png/64px-Irenna_Weapon_Mace.png",
     "abilities": [
-      { "name": "Callous Swipes", "input": "primary", "stats": { "Melee Damage": "26 / 26" } },
+      { "name": "Callous Swipes", "input": "primary", "tags": ["Crushing"], "stats": { "Melee Damage": "26 / 26" } },
       {
         "name": "Icebreaker",
         "input": "secondary",
         "description": "A cone of ice that slows and damages enemies.",
         "tags": ["Slow", "Cone Attack", "Root"],
         "stats": { "Damage": "28", "Cooldown": "14s", "Slow Duration": "1.5s", "Speed Decrease": "50%", "Max Distance": "11.5m" },
-        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Enemies in the center of the cone are rooted in place for 2 seconds" }]
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Enemies in the center of the cone are rooted in place for 1.5 seconds" }]
       }
     ]
   },
@@ -203,16 +201,17 @@
       {
         "name": "Pragmatic Slashes",
         "input": "primary",
-        "stats": { "Melee Damage": "20 / 20" },
-        "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "26" } }]
+        "description": "Final slash has extended range and slows the target.",
+        "tags": ["Slow"],
+        "stats": { "Melee Damage": "20 / 20 / 23", "Slow Duration": "1s", "Speed Decrease": "50%" }
       },
       {
         "name": "Krurian Handshake",
         "input": "secondary",
-        "description": "Thrust forward and pierce a target.",
+        "description": "Thrust forward and pierce your target.",
         "tags": ["Stun", "Piercing"],
-        "stats": { "Melee Damage": "50", "Cooldown": "15s", "Stun Duration": "0.5s" },
-        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Stun Duration": "0.75s" }, "effect": "Stun duration increased to 0.75s" }]
+        "stats": { "Melee Damage": "50", "Cooldown": "15s", "Stun Duration": "0.25s", "Max Range": "8m" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Charge distance increased by 2m" }]
       }
     ]
   },
@@ -224,11 +223,11 @@
     "abilities": [
       {
         "name": "Shadowsmoke",
-        "description": "A cloud of smoke that makes you and your teammates invisible.",
+        "description": "A cloud of smoke that makes you and your teammates invisible. Attacking reveals you.",
         "tags": ["Invisible", "AoE"],
-        "stats": { "Cooldown": "18s", "Area of Effect Range": "8m" },
+        "stats": { "Cooldown": "18s", "Area of Effect Range": "8m", "Duration": "5s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "16s" } }, { "tier": "III", "effect": "You and your teammates gain 1.5 seconds of invisibility when leaving smoke." }]
-      }
+      } 
     ]
   },
   {
@@ -240,7 +239,7 @@
       {
         "name": "Stalking",
         "description": "Become Stealthed. After a brief period, your damage is increased.",
-        "tags": ["Damage Increase", "Stealth", "Reset on Kill"],
+        "tags": ["Damage Increase", "Stealthed"],
         "stats": { "Cooldown": "16s", "Duration": "3s", "Damage Increase": "30%", "Speed Increase": "50%" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "13s" } }, { "tier": "III", "effect": "Eliminations reset cooldown" }]
       }
@@ -255,8 +254,8 @@
       {
         "name": "Piercing Shot",
         "input": "primary",
-        "description": "A bolt that pierces through enemy armor when charged and fired at long range.",
-        "tags": ["Charged Attack", "Piercing", "Pass Through"],
+        "description": "A bolt that pierces your target when fired at long range.",
+        "tags": ["Charged Attack", "Piercing"],
         "stats": { "Ranged Damage": "20 - 40" },
         "upgrades": [{ "tier": "III", "effect": "Charged Attack has Pass Through" }]
       },
@@ -264,8 +263,8 @@
         "name": "Unload",
         "input": "secondary",
         "description": "A close-range burst of damage that pushes you and your enemies apart.",
-        "tags": ["Cone Attack", "Knockback", "Stun"],
-        "stats": { "Ranged Damage": "25", "Cooldown": "15s", "Stun Duration": "1s", "AoE Range": "3.5m" },
+        "tags": ["Cone Attack", "Knockback", "Stun", "Pass Through"],
+        "stats": { "Ranged Damage": "25", "Cooldown": "15s", "Stun Duration": "1s", "AoE Range": "4m" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }]
       }
     ]
@@ -287,8 +286,8 @@
         "name": "Take Flight",
         "input": "secondary",
         "description": "Teleport to your ringblade.",
-        "tags": ["Teleport", "Reset on Kill"],
-        "stats": { "Ranged Damage": "24", "Cooldown": "12s", "Activation Time Window": "5s" },
+        "tags": ["Teleport"],
+        "stats": { "Ranged Damage": "26", "Cooldown": "12s", "Activation Time Window": "5s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }, { "tier": "III", "effect": "Eliminations reset cooldown" }]
       }
     ]
@@ -302,8 +301,8 @@
       {
         "name": "Gloomy Groundlings",
         "description": "Summon Gloomies that attack nearby enemies and heal you and your teammates.",
-        "tags": ["Heal", "Summon"],
-        "stats": { "Cooldown": "16s", "Damage": "7.0 per 0.5s per Gloomy", "Duration": "5s", "Healing": "1.25 per 0.5s per Gloomy", "Aura Range": "2m" },
+        "tags": ["Heal", "Summon", "Lifesteal"],
+        "stats": { "Cooldown": "16s", "Damage": "7.0 per 0.5s per Gloomy", "Duration": "5s", "Healing": "1.25 per 0.5s per Gloomy", "Aura Range": "2m", "Lifesteal": "50%" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "14s" } }, { "tier": "III", "effect": "Summon a third Gloomy" }]
       }
     ]
@@ -335,7 +334,7 @@
       {
         "name": "Ground Shark",
         "input": "primary",
-        "description": "This gloomy can burrow under obstacles and inflict damage with its spines.",
+        "description": "Ranged attack. Burrows under obstacles and can pass through multiple enemies.",
         "tags": ["Underground Attack", "Pass Through"],
         "stats": { "Ranged Damage": "18", "Max Distance": "6.5m" },
         "upgrades": [{ "tier": "III", "changes": { "Max Distance": "8.5m" }, "effect": "Ground Shark range is increased" }]
@@ -360,7 +359,7 @@
         "name": "Dav's Darts",
         "input": "primary",
         "description": "Ranged attack that fires in a burst.",
-        "tags": ["Burst-Fire", "Homing"],
+        "tags": ["Burst-Fire"],
         "stats": { "Ranged Damage": "9 / 9 / 9", "Ammo": "9" },
         "upgrades": [{ "tier": "III", "effect": "Dav's Darts have Homing" }]
       },
@@ -479,7 +478,7 @@
         "name": "Flamepath",
         "description": "Summon a path of fire.",
         "tags": ["Damage over Time", "AoE"],
-        "stats": { "Damage": "12 per 0.5s + 15 DoT", "Cooldown": "15s", "Max Distance": "7m", "Duration": "5s" },
+        "stats": { "Damage": "12 per 0.5s + 15 DoT", "Cooldown": "15s", "Max Distance": "10m", "Duration": "6s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "13s" } }, { "tier": "III", "changes": { "Duration": "10s" }, "effect": "Duration increased to 10 seconds" }]
       }
     ]
@@ -490,10 +489,10 @@
     "slot": "Weapon (Lantern)",
     "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Weapon_Lantern.png/44px-Karriv_Weapon_Lantern.png",
     "abilities": [
-      { "name": "Strike the Anvil", "input": "primary", "tags": ["Damage over Time"], "stats": { "Melee Damage": "20 / 20 / 20 / 20 / 25 + 15 DoT" } },
+      { "name": "Strike the Anvil", "input": "primary", "description": "Final swing is a ground slam that sets the target on fire.", "tags": ["Damage over Time"], "stats": { "Melee Damage": "20 / 20 / 20 / 20 / 25 + 15 DoT" } },
       {
         "name": "Ember Toss",
-        "input": "secondary",
+        "input": "secondary",         
         "description": "A lobbed projectile that explodes and catches enemies on fire.",
         "tags": ["Damage over Time", "Airborne Attack", "AoE"],
         "stats": { "Ranged Damage": "25 + 15 DoT", "Cooldown": "15s" },
@@ -512,11 +511,11 @@
         "name": "Searing Blast",
         "input": "secondary",
         "description": "A wave of flame that passes through targets and sets them on fire.",
-        "tags": ["Damage over Time", "Pass Through", "Exploding"],
-        "stats": { "Ranged Damage": "20 + 15 DoT", "Cooldown": "15s", "Max Distance": "12m" },
+        "tags": ["Damage over Time", "Pass Through"],
+        "stats": { "Ranged Damage": "25 + 15 DoT", "Cooldown": "15s" },
         "upgrades": [
           { "tier": "II", "changes": { "Cooldown": "12s" } },
-          { "tier": "III", "changes": { "Ranged Damage": "20 / 10" }, "effect": "Searing Blast explodes when the wave passes through a target" }
+          { "tier": "III", "changes": { "Ranged Damage": "25 / 10" }, "effect": "Searing Blast explodes when the wave passes through a target" }
         ]
       }
     ]
@@ -531,7 +530,7 @@
         "name": "Blinding Roar",
         "description": "A battlecry that blinds nearby enemies.",
         "tags": ["Blind", "AoE"],
-        "stats": { "Damage": "20", "Cooldown": "16s", "Blind Duration": "4s", "AoE Range": "6m" },
+        "stats": { "Damage": "22", "Cooldown": "14s", "Blind Duration": "4s", "AoE Range": "6m" },
         "upgrades": [
           { "tier": "II", "changes": { "Cooldown": "12s" } },
           { "tier": "III", "changes": { "Blind Duration": "6s" }, "effect": "Blind duration increased to 6 seconds" }
@@ -563,7 +562,8 @@
       {
         "name": "Cleave",
         "input": "primary",
-        "stats": { "Melee Damage": "20" },
+        "description": "Sweeping two-handed chops.",
+        "stats": { "Melee Damage": "20 / 20 / 23 / 25" },
         "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "23" } }, { "tier": "IV", "changes": { "Melee Damage": "25" } }]
       },
       {
@@ -572,7 +572,7 @@
         "description": "Jump into the air and over obstacles. Slam down with crushing force.",
         "tags": ["Airborne Attack", "Crushing", "Stun", "AoE"],
         "stats": { "Melee Damage": "45", "Cooldown": "15s", "Stun Duration": "0.5s", "Area of Effect Range": "1.5m" },
-        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }, { "tier": "III", "changes": { "Stun Duration": "1s" }, "effect": "Hit now stuns players for 1 second" }]
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "10s" } }, { "tier": "III", "changes": { "Stun Duration": "1s" }, "effect": "Stun duration increased to 1 second" }]
       }
     ]
   },
@@ -585,19 +585,15 @@
       {
         "name": "Fury Punches",
         "input": "primary",
-        "stats": { "Melee Damage": "16" },
-        "upgrades": [
-          { "tier": "II", "changes": { "Melee Damage": "18" } },
-          { "tier": "IV", "changes": { "Melee Damage": "20" } },
-          { "tier": "V", "changes": { "Melee Damage": "23" } }
-        ]
+        "description": "Light-footed punching combination.",
+        "stats": { "Melee Damage": "16 / 17 / 17 / 18 / 20" }
       },
       {
         "name": "Sadistic Throw",
         "input": "secondary",
         "description": "Grab a nearby enemy and hurl them away.",
-        "tags": ["Piercing", "Grab", "Throw", "Vulnerable"],
-        "stats": { "Melee Damage": "10/30", "Cooldown": "15s", "Activation Time Window": "3s", "Stun Duration": "1s" },
+        "tags": ["Piercing", "Grab", "Throw", "Stun"],
+        "stats": { "Melee Damage": "10 / 30", "Cooldown": "15s", "Activation Time Window": "3s", "Stun Duration": "1s" },
         "upgrades": [
           { "tier": "II", "changes": { "Cooldown": "12s" } },
           { "tier": "III", "effect": "Throwing an opponent marks them and they take an additional 25% more damage for 5 seconds" }
@@ -613,8 +609,8 @@
     "abilities": [
       {
         "name": "Payback",
-        "description": "Reflect all damage types.",
-        "tags": ["Damage Reflect"],
+        "description": "Enemies take damage when they attack you. This ability does not reduce or negate incoming damage.",
+        "tags": ["Damage Return"],
         "stats": { "Cooldown": "15s", "Reflect Damage": "100%", "Duration": "3s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Duration": "5s" }, "effect": "Duration increased to 5 seconds" }]
       }
@@ -633,8 +629,7 @@
         "stats": { "Cooldown": "14s", "Damage Increase": "50%", "Vulnerability": "35%", "Duration": "5s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Vulnerability": "20%" }, "effect": "Take 20% more damage instead of 35%" }]
       }
-    ],
-    "aliases": ["Vaton's Imbalanced Scales Amulet", "imbalanced scales"]
+    ]
   },
   {
     "id": "vatons-seeing-eye",
@@ -647,7 +642,7 @@
         "input": "primary",
         "description": "A slow moving projectile that explodes on impact.",
         "tags": ["Exploding"],
-        "stats": { "Ranged Damage": "8 + 15 AoE", "AoE Range": "2.5m" }
+        "stats": { "Ranged Damage": "10 + 15 AoE", "AoE Range": "2.5m" }
       },
       {
         "name": "Ruinous Downfall",
@@ -668,7 +663,7 @@
     "slot": "Weapon",
     "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Weapon_Staff.png/56px-Vaton_Weapon_Staff.png",
     "abilities": [
-      { "name": "Serpent Lash", "input": "primary", "stats": { "Melee Damage": "20" }, "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "18" } }] },
+      { "name": "Serpent Lash", "input": "primary", "stats": { "Melee Damage": "20 / 20 / 18+18" } },
       {
         "name": "The Pillars",
         "input": "secondary",
@@ -688,7 +683,7 @@
       {
         "name": "Oscillating Regeneration",
         "description": "Create a portal. Casting again returns to the portal and heals you.",
-        "tags": ["Teleport", "Heal"],
+        "tags": ["Teleport", "Heal", "Breakout"],
         "stats": { "Cooldown": "18s", "Healing": "50hp", "Duration": "10s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "15s" } }, { "tier": "III", "changes": { "Healing": "65hp" }, "effect": "Heal increased to 65" }]
       }
@@ -719,15 +714,15 @@
         "name": "Shock",
         "input": "primary",
         "description": "Hold to damage a single nearby target. DPS increases the longer a target is shocked.",
-        "tags": ["Channeled Attack", "Soft Target"],
-        "stats": { "Ranged Damage": "4-11 per 0.3s", "Max Range": "7m" }
+        "tags": ["Channeled Attack", "Soft Target", "Overheat"],
+        "stats": { "Ranged Damage": "5-12 per 0.3s", "Max Range": "7m" }
       },
       {
         "name": "Static Turret",
         "input": "secondary",
         "description": "A stationary turret that targets the closest enemy.",
-        "tags": ["Soft Target", "Summon", "Exploding"],
-        "stats": { "Damage": "12", "Cooldown": "15s", "Duration": "8s", "Health": "50hp" },
+        "tags": ["Soft Target", "Summon"],
+        "stats": { "Damage": "12", "Cooldown": "15s", "Duration": "8s", "Health": "75hp" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "effect": "Static Turret detonates (30 damage) when destroyed or after 8 seconds" }]
       }
     ]
@@ -741,8 +736,8 @@
       {
         "name": "Particle Shot",
         "input": "primary",
-        "description": "Charged shots push targets back and apply a mini-stun.",
-        "tags": ["Single-Shot", "Charged Attack", "Displacement"],
+        "description": "Charged shots push targets back and stun.",
+        "tags": ["Single-Shot", "Charged Attack", "Displacement", "Stun"],
         "stats": { "Ranged Damage": "23-38", "Stun Duration": "0.5s" }
       },
       {
@@ -767,7 +762,7 @@
       {
         "name": "Sparkle",
         "description": "A projectile that bursts and forms a hazy bubble. Enemies inside the bubble are blinded.",
-        "tags": ["AoE", "Blind", "Airborne Ability"],
+        "tags": ["AoE", "Blind", "Airborne Attack"],
         "stats": { "Damage": "15", "Cooldown": "15s", "AoE Range": "4m", "Duration": "5s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Duration": "7s" }, "effect": "Blind duration Increased to 7 seconds" }]
       }
@@ -821,14 +816,15 @@
       {
         "name": "Sharp Burst",
         "input": "primary",
-        "stats": { "Ranged Damage": "5", "Ammo": "2", "Max Range": "4m" },
+        "description": "Ranged attack. Short range. Fires 10 shards in a cone shaped burst.",
+        "stats": { "Ranged Damage": "5 per shard", "Ammo": "2", "Max Range": "4m" },
         "upgrades": [{ "tier": "III", "changes": { "Ammo": "3" }, "effect": "Ammo count increased to 3" }]
       },
       {
         "name": "Under the Weather",
         "input": "secondary",
         "description": "A directional dodge with an invulnerable state. Reloads the Parasol.",
-        "tags": ["Pass Through", "Invulnerable"],
+        "tags": ["Pass Through", "Invulnerable", "Breakout"],
         "stats": { "Cooldown": "15s", "Duration": "0.4s" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }]
       }
@@ -906,14 +902,14 @@
     ]
   },
   {
-    "id": "essence-crown",
-    "name": "Essence Crown",
+    "id": "vitality-crown",
+    "name": "Vitality Crown",
     "slot": "Crown",
     "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Essence_VFX.png/100px-Echo_Crown_Essence_VFX.png",
     "abilities": [
       {
-        "name": "Replenish",
-        "description": "Recover your Health over time. Damage will interrupt recovery.",
+        "name": "Regenerate",
+        "description": "Recover your Health over time. Damage does not interrupt recovery.",
         "tags": ["Heal"],
         "stats": { "Healing": "25 per 1s", "Cooldown": "14s", "Duration": "3s" }
       }
@@ -929,7 +925,7 @@
         "name": "Repair",
         "description": "Recover your Fortitude over time. Damage will interrupt recovery.",
         "tags": ["Heal"],
-        "stats": { "Healing": "12.5 per 1s", "Cooldown": "14s", "Duration": "4s" }
+        "stats": { "Healing": "12.5 per 1s", "Cooldown": "12s", "Duration": "4s" }
       }
     ]
   },
@@ -963,7 +959,7 @@
       {
         "name": "Elusive",
         "description": "Become Steadfast and increase movement speed.",
-        "tags": ["Steadfast", "Movement Increase"],
+        "tags": ["Steadfast", "Movement Increase", "Breakout"],
         "stats": { "Cooldown": "14s", "Duration": "3s" }
       }
     ]
@@ -977,7 +973,7 @@
       {
         "name": "Barrage",
         "description": "A cascade of projectiles that deal damage in a straight line.",
-        "tags": ["Pass Through", "Slow"],
+        "tags": ["Pass Through", "Slow", "Airborne Attack"],
         "stats": { "Ranged Damage": "40", "Cooldown": "10s", "Slow Duration": "0.5s" }
       }
     ]
@@ -992,7 +988,7 @@
         "name": "Clusterbomb",
         "description": "Explosive orbs that form a triangle and then detonate.",
         "tags": ["AoE"],
-        "stats": { "Damage": "20", "Cooldown": "10s" }
+        "stats": { "Damage": "20", "Cooldown": "12s" }
       }
     ]
   },
@@ -1006,7 +1002,7 @@
         "name": "Invulnerable",
         "description": "Become immune to damage.",
         "tags": ["Invulnerable"],
-        "stats": { "Target": "Self", "Cooldown": "13s", "Duration": "2s" }
+        "stats": { "Cooldown": "13s", "Duration": "1.5s" }
       }
     ]
   },
@@ -1018,7 +1014,7 @@
     "abilities": [
       {
         "name": "Slide",
-        "description": "Slide along the ground. This ability does not interrupt sprinting.",
+        "description": "Slide along the ground. Pass beneath projectiles. This ability does not interrupt sprinting.",
         "tags": ["Pass Through"],
         "stats": { "Melee Damage": "15", "Cooldown": "10s", "Distance": "7m" }
       }
@@ -1030,11 +1026,11 @@
     "slot": "Weapon",
     "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_BashingShield.png/79px-Echo_Weapon_BashingShield.png",
     "abilities": [
-      { "name": "Bashing Combo", "input": "primary", "stats": { "Melee Damage": "25 / 25 / 28" } },
+      { "name": "Bashing Combo", "input": "primary", "stats": { "Melee Damage": "24 / 24 / 28" } },
       {
         "name": "Block & Bash",
         "input": "secondary",
-        "description": "Raise your shield to block damage. Attack while blocking to bash.",
+        "description": "Raise your shield to block damage. Attack while blocking to bash. Blocking or bashing degrades shield HP.",
         "tags": ["Block", "Displacement"],
         "stats": { "Melee Damage": "30", "Cooldown": "10s", "Durability": "300 hp" }
       }
@@ -1046,7 +1042,7 @@
     "slot": "Weapon",
     "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_DualAxes.png/87px-Echo_Weapon_DualAxes.png",
     "abilities": [
-      { "name": "Axe Combo", "input": "primary", "stats": { "Melee Damage": "13 / 13 / 15 / 15" } },
+      { "name": "Axe Combo", "input": "primary", "stats": { "Melee Damage": "19 / 19 / 21 / 21" } },
       {
         "name": "Bull Rush",
         "input": "secondary",
@@ -1062,7 +1058,7 @@
     "slot": "Weapon",
     "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Greatsword.png/56px-Echo_Weapon_Greatsword.png",
     "abilities": [
-      { "name": "Heavy Combo", "input": "primary", "stats": { "Melee Damage": "32 / 32" } },
+      { "name": "Heavy Combo", "input": "primary", "tags": ["Crushing"], "stats": { "Melee Damage": "32 / 32" } },
       {
         "name": "Charging Slam",
         "input": "secondary",
@@ -1083,14 +1079,14 @@
         "input": "primary",
         "description": "Fire a single arrow.",
         "tags": ["Single-Shot"],
-        "stats": { "Ranged Damage": "22", "Max Distance": "12m" }
+        "stats": { "Ranged Damage": "22" }
       },
       {
         "name": "Wave Shot",
         "input": "secondary",
         "description": "Fire a wave of force that hits every target in its path.",
         "tags": ["Pass Through"],
-        "stats": { "Ranged Damage": "30", "Cooldown": "12s", "Max Distance": "12m" }
+        "stats": { "Ranged Damage": "30", "Cooldown": "12s" }
       }
     ]
   },
@@ -1100,7 +1096,7 @@
     "slot": "Weapon",
     "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Scimitar.png/47px-Echo_Weapon_Scimitar.png",
     "abilities": [
-      { "name": "Sweeping Strikes", "input": "primary", "stats": { "Melee Damage": "20 / 20 / 20 / 20" } },
+      { "name": "Sweeping Strikes", "input": "primary", "stats": { "Melee Damage": "17 / 20 / 20 / 22" } },
       {
         "name": "Whirling Slash",
         "input": "secondary",
@@ -1121,14 +1117,14 @@
         "input": "primary",
         "description": "Throw a spinning projectile.",
         "tags": ["Continuous-Shot"],
-        "stats": { "Ranged Damage": "17", "Ammo": "6", "Max Distance": "12m" }
+        "stats": { "Ranged Damage": "17", "Ammo": "6" }
       },
       {
         "name": "Snare Toss",
         "input": "secondary",
         "description": "Throw two merged shurikens that slow your target.",
         "tags": ["Slow"],
-        "stats": { "Ranged Damage": "30", "Cooldown": "12s", "Slow Duration": "2s", "Speed Decrease": "50%", "Max Distance": "12m" }
+        "stats": { "Ranged Damage": "30", "Cooldown": "12s", "Slow Duration": "2s", "Speed Decrease": "50%" }
       }
     ]
   },
@@ -1137,8 +1133,8 @@
     "name": "Health Potion",
     "slot": "Consumable",
     "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Essence.png/90px-Consumable_Essence.png",
-    "description": "Regain 150 Health",
-    "stats": { "Healing": "150", "Max stacks": "4" },
+    "description": "Regain 125 Health",
+    "stats": { "Healing": "125", "Max stacks": "4" },
     "abilities": []
   },
   {
@@ -1156,7 +1152,7 @@
     "slot": "Consumable",
     "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_HealingWard.png/100px-Consumable_HealingWard.png",
     "description": "A destructible ward that heals Health and Fortitude over time in a small Area of Effect.",
-    "stats": { "Healing": "100", "Duration": "6s", "Health": "30 hp", "Max stacks": "3" },
+    "stats": { "Healing": "100", "Duration": "3.5s", "Health": "30 hp", "Max stacks": "3" },
     "abilities": []
   },
   {
@@ -1176,27 +1172,11 @@
     "abilities": []
   },
   {
-    "id": "rescue",
-    "name": "Rescue",
-    "slot": "Anchor",
-    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_Rescue.png/93px-AnchorAbility_Rescue.png",
-    "description": "Teleport a downed teammate to your position and Revive them with 100 health. Rescue can revive teammates after they have been fully executed.",
-    "abilities": []
-  },
-  {
     "id": "summon-shrine",
     "name": "Summon Shrine",
     "slot": "Anchor",
     "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_SummonShrine.png/93px-AnchorAbility_SummonShrine.png",
     "description": "Summon a shrine. Your team can purchase items and resurrect fallen allies here. Lasts 30 seconds.",
-    "abilities": []
-  },
-  {
-    "id": "vision-pulse",
-    "name": "Vision Pulse",
-    "slot": "Anchor",
-    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_VisionPulse.png/93px-AnchorAbility_VisionPulse.png",
-    "description": "Temporarily give your team vision of enemy players on the map.",
     "abilities": []
   },
   {
@@ -1213,6 +1193,14 @@
     "slot": "Anchor",
     "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_SelfRevive.png/93px-AnchorAbility_SelfRevive.png",
     "description": "Channel for 2 seconds when knocked down to pick yourself back up with 100 health.",
+    "abilities": []
+  },
+  {
+    "id": "refill-consumables",
+    "name": "Refill Consumables",
+    "slot": "Anchor",
+    "icon": "",
+    "description": "Refill your supply of consumables. If you have no consumables, Health Potions are the default.",
     "abilities": []
   }
 ]

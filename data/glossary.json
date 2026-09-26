@@ -1,8 +1,13 @@
 [
   {
     "term": "Airborne Attack",
-    "definition": "An attack that goes over obstacles.",
+    "definition": "An attack or ability that travels over obstacles.",
     "aliases": ["airborne ability"]
+  },
+  {
+    "term": "Anchor Abilities",
+    "definition": "Powerful abilities that can be purchased at the Shrine of Recollection. Destroyed after a single use.",
+    "aliases": ["anchor ability", "anchor", "anchors"]
   },
   {
     "term": "AoE",
@@ -12,6 +17,11 @@
   {
     "term": "Armor",
     "definition": "A health bar that stacks on top of your current health and fortitude that sometimes has unique affects."
+  },
+  {
+    "term": "Banished",
+    "definition": "The affected unit is Phased. They are slowed and cannot attack, heal, take damage, or be targeted.",
+    "aliases": ["banish"]
   },
   {
     "term": "Beacons",
@@ -29,6 +39,18 @@
   {
     "term": "Block",
     "definition": "The ability to transfer damage to an item."
+  },
+  {
+    "term": "Bounce",
+    "definition": "An attack or ability that hits one target and then bounces to another."
+  },
+  {
+    "term": "Break",
+    "definition": "The affected unit is purged of Buffs and Passives."
+  },
+  {
+    "term": "Breakout",
+    "definition": "An attack or ability that can be used to interrupt and remove the Stun status effect."
   },
   {
     "term": "Build",
@@ -55,6 +77,10 @@
     "aliases": ["cone"]
   },
   {
+    "term": "Conjured",
+    "definition": "Damage Type. An ability or weapon attack that is summoned or created from memory."
+  },
+  {
     "term": "Continuous-Shot",
     "definition": "An attack or ability that can be fired continuously by holding down a button.",
     "aliases": ["continuous shot", "continuous"]
@@ -63,6 +89,10 @@
     "term": "Cooldown Reduction",
     "definition": "Ability Cooldowns are reduced and can be used more often.",
     "aliases": ["cdr"]
+  },
+  {
+    "term": "Corrosive",
+    "definition": "Damage Type. Damage is dealt over a period of time rather than instantly. Effective against Fortitude."
   },
   {
     "term": "Crushing",
@@ -83,14 +113,18 @@
     "aliases": ["dot"]
   },
   {
-    "term": "Damage Return",
+    "term": "Damage Reflect",
     "definition": "Damage dealt to the affected unit is returned back to the attacker. This includes damage type such as Piercing or Crushing.",
-    "aliases": ["damage reflect"]
+    "aliases": ["damage return"]
   },
   {
     "term": "Destroyer",
     "definition": "Invulnerable enemies that roam around their spawn point, chases and locks onto players who are within their view.",
     "aliases": ["destroyers"]
+  },
+  {
+    "term": "Disarm",
+    "definition": "The affected unit can no longer attack or use abilities but they can move and dodge as normal."
   },
   {
     "term": "Displacement",
@@ -123,6 +157,11 @@
     "term": "Fortitude",
     "definition": "The blue bar on top of the health bar. A player has 100 Fortitude split into segments of 25. Non-piercing damage is dealt to Fortitude before health. Non-crushing damage can deal a max of 25 damage at a time to fortitude. Fortitude \"gates\" damage at each breakpoint of 25 fortitude. Example: A player is at 80 fortitude and is hit with a 20 damage (non-crushing) attack. That player only takes 5 damage as the \"gate\" at 75 fortitude prevents them from taking more.",
     "aliases": ["fort", "blue bar"]
+  },
+  {
+    "term": "Freeze",
+    "definition": "The affected unit is unable to move or take actions.",
+    "aliases": ["frozen"]
   },
   {
     "term": "Grab",
@@ -221,6 +260,10 @@
     "aliases": ["rooted"]
   },
   {
+    "term": "Searing",
+    "definition": "Damage Type. Damage is dealt over a period of time rather than instantly. Effective against unarmored targets."
+  },
+  {
     "term": "Shrine",
     "definition": "A building to buy items from (may also be known as Shop / Collector).",
     "aliases": ["shop", "collector"]
@@ -229,6 +272,11 @@
     "term": "Single Target",
     "definition": "This ability is cast on a single target, ally, or enemy.",
     "aliases": ["st"]
+  },
+  {
+    "term": "Silence",
+    "definition": "The affected unit is unable to use abilities, but they can move, dodge, and attack as normal.",
+    "aliases": ["silenced"]
   },
   {
     "term": "Single-Shot",
@@ -249,8 +297,9 @@
     "definition": "The affected unit is immune to slows, stuns, roots, and displacement."
   },
   {
-    "term": "Stealth",
-    "definition": "The affected unit is not visible to distant enemies but remains visible to party members and nearby enemies. Attacking exits this state."
+    "term": "Stealthed",
+    "definition": "The affected unit is not visible to distant enemies but remains visible to party members and nearby enemies. Attacking, dodging, or interacting with the environment exits this state.",
+    "aliases": ["stealth"]
   },
   {
     "term": "Stun",
@@ -263,14 +312,18 @@
     "aliases": ["pet", "minion"]
   },
   {
+    "term": "Targeted Area",
+    "definition": "This ability is aimed. It can affect multiple targets in an area."
+  },
+  {
     "term": "Teleport",
     "definition": "A type of movement that instantly moves the caster from one point to another.",
     "aliases": ["blink", "tp"]
   },
   {
-    "term": "Tether",
+    "term": "Tethered",
     "definition": "The affected unit is bound to a location with a limited movement radius. The unit can strain against the Tether to break it via movement or dodges. Teleports and unique movement abilities break it instantly.",
-    "aliases": ["tethered"]
+    "aliases": ["tether"]
   },
   {
     "term": "The Tower",
@@ -285,10 +338,6 @@
     "term": "Tormentors",
     "definition": "The major NPC enemies that drop Eternal Items upon death. These enemies are the targets of quests. Variants of Tormentors include: Reaver (axe), Scorcher (fire ball), Oracle (laser beam).",
     "aliases": ["tormentor", "reaver", "scorcher", "oracle"]
-  },
-  {
-    "term": "Tracking",
-    "definition": "Outdated, see Homing."
   },
   {
     "term": "Underground Attack",

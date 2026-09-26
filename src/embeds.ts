@@ -23,7 +23,8 @@ export function truncate(text: string, limit = MAX_DESCRIPTION): string {
 }
 
 /** Discord counts at most 10 embeds and 6000 characters across one message. */
-export const MAX_EMBEDS = 10;
+/** No more than 3 embeds per message because we don't want to spam the chat */
+export const MAX_EMBEDS = 3;
 export const MAX_MESSAGE_CHARS = 6000;
 
 /** The character count Discord measures against that 6000 budget. */

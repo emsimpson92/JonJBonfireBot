@@ -8,26 +8,19 @@ import type { Command, Eternal } from '../types.js';
 function detailEmbed(eternal: Eternal) {
   const { coreAbility: core } = eternal;
 
+  let abilityValue = `${core.description}\n${core.tags.map((tag) => `\`${tag}\``).join(' ')}`;
+
+  // Core ability details
+  if (core.stats?.length) {
+    const parts = core.stats.map((stat) => `**${stat.name}:** ${stat.value}`);
+    abilityValue += `\n${parts.join('\n')}`;
+  }
+
   const embed = baseEmbed(`${eternal.name} — ${eternal.title}`, eternal.description).setURL(eternal.wikiUrl)
     .addFields({
       name: `Eternal Ability: ${core.name}`,
-      value: `${core.description}\n${core.tags.map((tag) => `\`${tag}\``).join(' ')}`,
+      value: abilityValue,
     });
-
-  // Core ability details
-  const numbers: { name: string; value: string; inline: true }[] = [];
-  if (core.damage) {
-    numbers.push({ name: 'Damage', value: core.damage, inline: true });
-  }
-  if (core.cooldown) {
-    numbers.push({ name: 'Cooldown', value: core.cooldown, inline: true });
-  }
-  if (core.range) {
-    numbers.push({ name: 'Range', value: core.range, inline: true });
-  }
-  if (numbers.length) {
-    embed.addFields(...numbers);
-  }
 
   // Set bonus
   embed.addFields({ name: `Set Bonus: ${eternal.setBonus.name}`, value: eternal.setBonus.description });
