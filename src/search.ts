@@ -68,11 +68,6 @@ function isMatch(query: string, result: number): boolean {
   return result <= 3 + Math.max(1, Math.floor(query.length / 4));
 }
 
-/** Loose enough to offer as a "did you mean", but not a blind list of everything. */
-function isSuggestion(query: string, result: number): boolean {
-  return result <= 3 + Math.max(3, Math.ceil(query.length / 2));
-}
-
 /** Returns all keys for an item, including aliases. */
 export function keysOf(item: { aliases?: string[] }, ...primary: string[]): string[] {
   return [...primary, ...(item.aliases ?? [])];
@@ -199,18 +194,4 @@ export async function respondWithMatches<T>(
       return { name: truncate(name, 100), value };
     }),
   );
-}
-
-/** Up to `limit` plausible alternatives, for "did you mean" lines. */
-export function findSuggestions<T>(query: string, items: T[], keys: (item: T) => string[], limit = 3): T[] {
-  const normalized = normalize(query);
-  if (normalized === '') {
-    return [];
-  }
-
-  return indexFor(items, keys).map((entry) => ({ item: entry.item, result: score(normalized, entry.keys) }))
-    .filter((entry) => isSuggestion(normalized, entry.result))
-    .sort((a, b) => a.result - b.result)
-    .slice(0, limit)
-    .map((entry) => entry.item);
 }

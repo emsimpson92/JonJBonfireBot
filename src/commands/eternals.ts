@@ -2,7 +2,7 @@ import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 
 import { eternalKeys, eternals, itemsOf } from '../data.js';
 import { baseEmbed, errorEmbed, truncate } from '../embeds.js';
-import { findBest, findSuggestions } from '../search.js';
+import { findBest } from '../search.js';
 import type { Command, Eternal } from '../types.js';
 
 function detailEmbed(eternal: Eternal) {
@@ -82,13 +82,8 @@ export const eternalsCommand: Command = {
       return;
     }
 
-    const suggestions = findSuggestions(query, eternals, eternalKeys);
-    const hint = suggestions.length ? 
-      `Did you mean: ${suggestions.map((eternal) => `**${eternal.name}**`).join(', ')}?` : 
-      'Run /eternals to see the full list.';
-      
     await interaction.reply({
-      embeds: [errorEmbed('No such eternal', `No eternal matched \`${query}\`. ${hint}`)],
+      embeds: [errorEmbed('No such eternal', `No eternal matched \`${query}\`. Run /eternals to see the full list.`)],
       flags: MessageFlags.Ephemeral,
     });
   },

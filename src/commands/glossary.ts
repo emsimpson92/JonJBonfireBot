@@ -2,7 +2,7 @@ import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 
 import { glossary } from '../data.js';
 import { baseEmbed, errorEmbed } from '../embeds.js';
-import { findBest, findSuggestions, keysOf, respondWithMatches } from '../search.js';
+import { findBest, keysOf, respondWithMatches } from '../search.js';
 import type { Command, GlossaryEntry } from '../types.js';
 
 const keys = (entry: GlossaryEntry) => keysOf(entry, entry.term);
@@ -52,13 +52,8 @@ export const glossaryCommand: Command = {
       return;
     }
 
-    const suggestions = findSuggestions(query, glossary, keys);
-    const hint = suggestions.length ? 
-      `Did you mean: ${suggestions.map((entry) => `**${entry.term}**`).join(', ')}?` : 
-      `Run /glossary to see all ${glossary.length} terms.`;
-      
     await interaction.reply({
-      embeds: [errorEmbed('Term not found', `No entry for \`${query}\`. ${hint}`)],
+      embeds: [errorEmbed('Term not found', `No entry for \`${query}\`. Run /glossary to see all ${glossary.length} terms.`)],
       flags: MessageFlags.Ephemeral,
     });
   },

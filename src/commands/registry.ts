@@ -1,16 +1,16 @@
 import type { Command } from '../types.js';
 import { eternalsCommand } from './eternals.js';
-//import { faqCommand } from './faq.js';
+import { faqCommand } from './faq.js';
+import { faqAdminCommand } from './faqAdmin.js';
 import { glossaryCommand } from './glossary.js';
 import { helpCommand } from './help.js';
 import { itemCommand } from './item.js';
-//import { playtestCommand } from './playtest.js';
 
 /** Order here is the order /help lists them in. */
 export const commands: Command[] = [
   helpCommand,
-  //faqCommand,
-  //playtestCommand,
+  faqCommand,
+  faqAdminCommand,
   eternalsCommand,
   itemCommand,
   glossaryCommand,
