@@ -18,6 +18,7 @@ so `/glossary term:crushing` explains them.
 | `/help [command]` | Lists commands. With an argument, shows that command's syntax and examples. |
 | `/faq [topic]` | Lists FAQ topics. With an argument, shows that topic's numbered questions and answers. |
 | `/playtest` | Links the playtest channel. |
+| `/socials` | Links the official social channels. |
 | `/eternals [name]` | Lists every eternal. With an argument, shows their ability, set bonus, and items. |
 | `/item [eternal] [slot] [name]` | Shows an item and the abilities it grants. `eternal:` includes an **Echo** choice for items tied to no eternal; `slot:` covers crowns, amulets, weapons, anchors and consumables. The options combine and each works alone. |
 | `/glossary [term]` | Defines a term. With no argument, lists all 66. |
@@ -101,6 +102,7 @@ Content lives in JSON so it can be edited without touching code. Restart the bot
 | `data/items.json` | All 74 items: 48 eternal-specific, plus generic Echo crowns/amulets/weapons, anchors and consumables. |
 | `data/glossary.json` | The 66 glossary terms. |
 | `data/faq.json` | FAQ topics, each a list of `question`/`answer` pairs plus optional `aliases` (`playtest` → Beta). `/faq` numbers them in file order. |
+| `data/socials.json` | Social links, each a `name`/`url` pair. `/socials` lists them in file order. |
 
 An item belongs to an eternal purely by being listed in that eternal's `items` array — there is
 no back-reference to maintain. Anything no eternal lists is a generic item, which is how `/item`

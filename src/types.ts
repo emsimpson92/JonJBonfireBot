@@ -73,6 +73,11 @@ export interface GlossaryEntry {
   aliases?: string[];
 }
 
+export interface SocialLink {
+  name: string;
+  url: string;
+}
+
 export interface FaqEntry {
   question: string;
   answer: string;
