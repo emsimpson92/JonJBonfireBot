@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { keysOf } from './search.js';
-import type { Eternal, FaqTopic, GlossaryEntry, Item } from './types.js';
+import type { Eternal, FaqTopic, GlossaryEntry, Item, SocialLink } from './types.js';
 
 const dataDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'data');
 
@@ -20,6 +20,7 @@ function load<T>(file: string): T[] {
 export const eternals: Eternal[] = load<Eternal>('eternals.json');
 export const glossary: GlossaryEntry[] = load<GlossaryEntry>('glossary.json');
 export const faq: FaqTopic[] = load<FaqTopic>('faq.json');
+export const socials: SocialLink[] = load<SocialLink>('socials.json');
 
 // /faq shows a topic as one embed. Discord rejects the whole reply if any of these limits is
 // exceeded, so catch it at startup rather than when someone runs the command.
