@@ -1,0 +1,45 @@
+[
+  {
+    "topic": "Beta",
+    "entries": [
+      {
+        "question": "When is the next playtest?",
+        "answer": "TBD"
+      },
+      {
+        "question": "How do I sign up?",
+        "answer": "You can get a key here!\nhttps://arkheron.com/en_US/play/"
+      }
+    ],
+    "aliases": [
+      "playtest"
+    ]
+  },
+  {
+    "topic": "Bugs",
+    "entries": [
+      {
+        "question": "How do I report a bug?",
+        "answer": "Press CTRL+B while in game to open the bug report window."
+      }
+    ]
+  },
+  {
+    "topic": "Genre",
+    "entries": [
+      {
+        "question": "What genre is Arkheron?",
+        "answer": "idk lol"
+      }
+    ]
+  },
+  {
+    "topic": "Release Date",
+    "entries": [
+      {
+        "question": "When is the release date?",
+        "answer": "No exact release date has been announced, but the game is planned for release by the end of the year."
+      }
+    ]
+  }
+]

@@ -34,8 +34,6 @@ function parseColor(raw: string): number {
 export const config = {
   token: required('DISCORD_TOKEN'),
   guildId: snowflake('GUILD_ID'),
-  faqChannelId: optional('FAQ_CHANNEL_ID', '000000000000000001'),
-  playtestChannelId: optional('PLAYTEST_CHANNEL_ID', '000000000000000002'),
   embedColor: parseColor(optional('EMBED_COLOR', '#E25822')),
   maxRequests: positiveInt('MAX_REQUESTS_PER_MINUTE', 10),
   maxRequestsPerUser: positiveInt('MAX_REQUESTS_PER_USER_PER_MINUTE', 5),

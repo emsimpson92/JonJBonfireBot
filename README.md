@@ -1,6 +1,6 @@
 # JonJ Bonfire Bot
 
-A Discord bot with slash commands for FAQ links, playtest links, eternal and item lookups, and a glossary.
+A Discord bot with slash commands for an FAQ, playtest links, eternal and item lookups, and a glossary.
 
 Content is populated from the [Arkheron Wiki](https://arkheron.wiki.gg/): 12 eternals, 74 items
 (48 eternal-specific plus Echo crowns, amulets and weapons, anchors and consumables), and 66
@@ -16,7 +16,7 @@ so `/glossary term:crushing` explains them.
 | Command | Description |
 | --- | --- |
 | `/help [command]` | Lists commands. With an argument, shows that command's syntax and examples. |
-| `/faq` | Links the FAQ channel. |
+| `/faq [topic]` | Lists FAQ topics. With an argument, shows that topic's numbered questions and answers. |
 | `/playtest` | Links the playtest channel. |
 | `/eternals [name]` | Lists every eternal. With an argument, shows their ability, set bonus, and items. |
 | `/item [eternal] [slot] [name]` | Shows an item and the abilities it grants. `eternal:` includes an **Echo** choice for items tied to no eternal; `slot:` covers crowns, amulets, weapons, anchors and consumables. The options combine and each works alone. |
@@ -45,7 +45,7 @@ Tormentors. When several entries match equally well the bot lists them rather th
    ```sh
    cp .env.example .env
    ```
-   Fill in `DISCORD_TOKEN`, then `GUILD_ID`, `FAQ_CHANNEL_ID`, and `PLAYTEST_CHANNEL_ID`
+   Fill in `DISCORD_TOKEN`, then `GUILD_ID`
    (enable *Settings → Advanced → Developer Mode* in Discord, then right-click → *Copy ID*).
    The [rate limits](#rate-limiting) have working defaults and can be left alone.
 5. **Run**:
@@ -100,6 +100,7 @@ Content lives in JSON so it can be edited without touching code. Restart the bot
 | `data/eternals.json` | The 12 eternals. Their `items` are **ids into `items.json`**, not inline objects. |
 | `data/items.json` | All 74 items: 48 eternal-specific, plus generic Echo crowns/amulets/weapons, anchors and consumables. |
 | `data/glossary.json` | The 66 glossary terms. |
+| `data/faq.json` | FAQ topics, each a list of `question`/`answer` pairs plus optional `aliases` (`playtest` → Beta). `/faq` numbers them in file order. |
 
 An item belongs to an eternal purely by being listed in that eternal's `items` array — there is
 no back-reference to maintain. Anything no eternal lists is a generic item, which is how `/item`
@@ -208,8 +209,6 @@ Reproduced as-is rather than silently corrected. Worth re-checking upstream:
 - **Penelope's Lock the Door shrinks at Tier III** (AoE Range 3m → 1.5m), against the pattern
   of every other tier upgrade. Possibly an upstream typo; copied as written.
 
-- **Copy** — the blurbs on `/faq` and `/playtest` are in
-  [src/commands/faq.ts](src/commands/faq.ts) and [src/commands/playtest.ts](src/commands/playtest.ts).
 
 ## Adding a command
 

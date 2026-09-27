@@ -1,7 +1,6 @@
 import type { Command } from '../types.js';
 import { eternalsCommand } from './eternals.js';
 import { faqCommand } from './faq.js';
-import { faqAdminCommand } from './faqAdmin.js';
 import { glossaryCommand } from './glossary.js';
 import { helpCommand } from './help.js';
 import { itemCommand } from './item.js';
@@ -10,7 +9,6 @@ import { itemCommand } from './item.js';
 export const commands: Command[] = [
   helpCommand,
   faqCommand,
-  faqAdminCommand,
   eternalsCommand,
   itemCommand,
   glossaryCommand,

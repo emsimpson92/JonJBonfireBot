@@ -73,6 +73,18 @@ export interface GlossaryEntry {
   aliases?: string[];
 }
 
+export interface FaqEntry {
+  question: string;
+  answer: string;
+}
+
+/** /faq numbers the entries 1, 2, 3… in the order they are listed. */
+export interface FaqTopic {
+  topic: string;
+  entries: FaqEntry[];
+  aliases?: string[];
+}
+
 export interface Command {
   data: RESTPostAPIChatInputApplicationCommandsJSONBody;
   usage: string;
