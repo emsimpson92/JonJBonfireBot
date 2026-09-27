@@ -1,4 +1,4 @@
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 
 import { baseEmbed, errorEmbed } from '../embeds.js';
 import { respondWithMatches } from '../search.js';
@@ -30,12 +30,19 @@ function detailEmbed(command: Command) {
     embed.addFields({
       name: 'Options',
       value: options
-        .map((option) => `\`${option.name}\`${'required' in option && option.required ? '' : ' (optional)'} — ${option.description}`)
+        .map((option) => `\`${option.name}\`${isRequired(option) ? '' : ' (optional)'} — ${option.description}`)
         .join('\n'),
     });
   }
 
   return embed;
+}
+
+/** Subcommands are alternatives rather than inputs, so they are never "optional". */
+function isRequired(option: NonNullable<Command['data']['options']>[number]): boolean {
+  return option.type === ApplicationCommandOptionType.Subcommand ||
+    option.type === ApplicationCommandOptionType.SubcommandGroup ||
+    ('required' in option && Boolean(option.required));
 }
 
 const keys = (command: Command) => [command.data.name];

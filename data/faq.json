@@ -1,0 +1,141 @@
+[
+  {
+    "topic": "Ascension",
+    "entries": [
+      {
+        "question": "What is Ascension?",
+        "answer": "Ascension is our core mode. Fifteen teams of three drop into the Tower together to fight monsters, contest rival squads, and build their kit. When the horn sounds, your team must grab a beacon before time runs out. Hold a beacon and protect it against other teams to ascend. The field gets smaller every floor, until one team is left standing at the summit."
+      },
+      {
+        "question": "What are fragments and how do I get them?",
+        "answer": "Fragments are currency used to purchase consumables, items, and upgrades at the shrine. They can also be used to open doors, activate portals, and buy back teammates who have been downed. You get them by killing monsters and opening chests."
+      },
+      {
+        "question": "Why do beacons have different colors?",
+        "answer": "Beacons are color coded. Green/Blue means the beacon is currently empty, Gold means there is a team currently standing in the beacon, and Red means the beacon is contested by 2 or more teams. It is recommended not to enter a beacon until the last minute so you don't reveal yourself to the entire lobby."
+      },
+      {
+        "question": "I died... am I out for the rest of the match?",
+        "answer": "No. Teammates can be revived for a small amount of fragments at any shrine. Look for the green markers on the map."
+      },
+      {
+        "question": "Why can't I damage the destroyer?",
+        "answer": "The destroyer is meant as an obstacle to be avoided or to add chaos to the battlefield. It cannot be killed."
+      }
+    ]
+  },
+  {
+    "topic": "Beta",
+    "entries": [
+      {
+        "question": "When is the next playtest?",
+        "answer": "The latest playtest schedules are posted in <#1418030637398495282>"
+      },
+      {
+        "question": "How do I sign up?",
+        "answer": "You can get a key here!\nhttps://arkheron.com/en_US/play/"
+      }
+    ],
+    "aliases": [
+      "playtest"
+    ]
+  },
+  {
+    "topic": "Bugs",
+    "entries": [
+      {
+        "question": "How do I report a bug?",
+        "answer": "Press CTRL+B while in game to open the bug report window. Alternatively, you can submit a ticket a https://support.arkheron.com/"
+      }
+    ]
+  },
+  {
+    "topic": "Builds",
+    "entries": [
+      {
+        "question": "Why do I see people running mixed sets? Aren't full kits better?",
+        "answer": "You need 4 pieces of a set to transform into an eternal, but only 2 to acquire the set bonus. Mixing and matching can not only allow you to customize a play style, but you can gain 2 set bonuses. 2 set bonuses can be just as powerful as an additional eternal ability with the right combination."
+      },
+      {
+        "question": "Why doesn't everyone transform immediately when they have a full eternal kit?",
+        "answer": "Holding your transformation can be used as a tactical advantage. When you transform into an eternal, you receive a significant heal that can turn the tide of battle."
+      },
+      {
+        "question": "I accidentally picked up a set piece that my teammate is already building. Can I give it to them?",
+        "answer": "Yes! Hold tab and right click the item in your inventory to drop it on the ground."
+      }
+    ],
+    "aliases": [
+      "itemization",
+      "gear",
+      "sets"
+    ]
+  },
+  {
+    "topic": "Customization",
+    "entries": [
+      {
+        "question": "How do I unlock new customization options?",
+        "answer": "Some items can be unlocked by playing during in game events. Others can be purchased from a book."
+      },
+      {
+        "question": "What are books and pages?",
+        "answer": "Pages are the currency used to purchase seasonal and non-seasonal items. Books are similar to a battle pass. Purchasing items linked to a specific book adds progress to that book, unlocking additional exclusive rewards."
+      },
+      {
+        "question": "How do I earn pages?",
+        "answer": "Pages are earned naturally by playing the game. The further you climb in spires or ascension, the more pages you earn. Bot matches and custom lobbies do not grant pages."
+      }
+    ],
+    "aliases": [
+      "cosmetics",
+      "skins",
+      "books",
+      "pages"
+    ]
+  },
+  {
+    "topic": "Feedback",
+    "entries": [
+      {
+        "question": "How do I provide feedback?",
+        "answer": "If you have feedback, post on the Arkheron Forums: https://forums.arkheron.com/"
+      }
+    ]
+  },
+  {
+    "topic": "Genre",
+    "entries": [
+      {
+        "question": "What genre is Arkheron?",
+        "answer": "Arkheron is a team-based PvP game where combat creativity powers your ascension. It pulls from multiple genres to make something a little fresh and a little strange."
+      }
+    ]
+  },
+  {
+    "topic": "Release Date",
+    "entries": [
+      {
+        "question": "When is the release date?",
+        "answer": "No exact release date has been announced, but the game is planned for release by the end of the year."
+      }
+    ],
+    "aliases": [
+      "early access",
+      "launch"
+    ]
+  },
+  {
+    "topic": "Spires",
+    "entries": [
+      {
+        "question": "What is Spires?",
+        "answer": "Spires is an arena mode where two teams of three battle it out. Your team starts in the ready room to gear up and make a plan. The goal is to beat other teams and climb as many floors as you can. When you lose, your run resets. This is a great way to become familiar with the items in Arkheron and get reps in."
+      },
+      {
+        "question": "Why do I keep running out of money?",
+        "answer": "Each time you select the same item, the price increases, incentivizing players to try different builds each time they enter spires. Every 10 floors, this \"build tax\" resets. At the end of each round, any unspent fragments roll over into the next round, up to 5000 total. If you continue to select the same builds or max out your items every round, you may find yourself unable to afford items in a later round."
+      }
+    ]
+  }
+]

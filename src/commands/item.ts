@@ -3,7 +3,7 @@ import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { abilityBlock, inputLabel, statLine } from '../abilities.js';
 import { eternals, items, type OwnedItem } from '../data.js';
 import { baseEmbed, embedLength, errorEmbed, MAX_EMBEDS, MAX_MESSAGE_CHARS, truncate } from '../embeds.js';
-import { findBest, findSuggestions, keysOf, respondWithMatches } from '../search.js';
+import { findBest, keysOf, respondWithMatches } from '../search.js';
 import type { Command, ItemAbility } from '../types.js';
 
 /** Searchable by item name, its aliases, the abilities it grants, and its owner. */
@@ -116,13 +116,8 @@ export const itemCommand: Command = {
     if (name) {
       const found = findBest(name, matches, keys);
       if (!found.length) {
-        const suggestions = findSuggestions(name, matches, keys);
-        const hint = suggestions.length ? 
-          `Did you mean: ${suggestions.map(({ item }) => `**${item.name}**`).join(', ')}?` : 
-          'Try /eternals to browse the roster.';
-
         await interaction.reply({
-          embeds: [errorEmbed('No such item', `Nothing matched \`${name}\`. ${hint}`)],
+          embeds: [errorEmbed('No such item', `Nothing matched \`${name}\`. Try /eternals to browse the roster.`)],
           flags: MessageFlags.Ephemeral,
         });
 
