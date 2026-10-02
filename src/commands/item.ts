@@ -3,6 +3,7 @@ import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { abilityBlock, inputLabel, statLine } from '../abilities.js';
 import { eternals, items, type OwnedItem } from '../data.js';
 import { baseEmbed, embedLength, errorEmbed, MAX_EMBEDS, MAX_MESSAGE_CHARS, truncate } from '../embeds.js';
+import { publicUrl } from '../images.js';
 import { findBest, keysOf, respondWithMatches } from '../search.js';
 import type { Command, ItemAbility } from '../types.js';
 
@@ -47,7 +48,7 @@ function detailEmbed(owned: OwnedItem) {
     embed.setURL(url);
   }
   if (item.icon) {
-    embed.setThumbnail(item.icon);
+    embed.setThumbnail(publicUrl(item.icon));
   }
 
   if (item.abilities.length) {

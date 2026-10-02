@@ -103,17 +103,26 @@ Content lives in JSON so it can be edited without touching code. Restart the bot
 | `data/glossary.json` | The 66 glossary terms. |
 | `data/faq.json` | FAQ topics, each a list of `question`/`answer` pairs plus optional `aliases` (`playtest` → Beta). `/faq` numbers them in file order. |
 | `data/socials.json` | Social links, each a `name`/`url` pair. `/socials` lists them in file order. |
+| `images/items/`, `images/eternals/` | Item icons and eternal portraits, one PNG per id. |
 
 An item belongs to an eternal purely by being listed in that eternal's `items` array — there is
 no back-reference to maintain. Anything no eternal lists is a generic item, which is how `/item`
 tells them apart. Startup fails loudly if an eternal names an id that `items.json` does not have.
 
-Icons and portraits are hot-linked from the wiki (`arkheron.wiki.gg/images/...`): `icon` on each
-item, `imageUrl` on each eternal. They render as embed thumbnails, and nothing breaks if one
-404s — Discord just omits the image.
+Icons and portraits are local files, downloaded from the wiki: `icon` on each item and
+`imageUrl` on each eternal hold a path relative to the project root (`images/items/bow.png`), not
+a URL. The embed thumbnail points at the same file in this repo on GitHub, under `IMAGE_BASE_URL`
+(default: `https://raw.githubusercontent.com/emsimpson92/JonJBonfireBot/main/`). Discord fetches
+it once and caches it. The wiki's own image links didn't load in Discord. Nothing checks that a
+path exists; a wrong one just leaves the embed without a thumbnail.
 
-All three files are a **one-time copy from the wiki — nothing syncs.** Wiki edits will not
-propagate, so re-check them when the game patches.
+To add one, drop a PNG into `images/` and set the path; anything about 256px across is plenty,
+since Discord shows thumbnails at 80px. **It only shows up once it's on `main`** (or whichever
+branch `IMAGE_BASE_URL` names). Replacing an image under the same name can keep showing the old
+one for a while, because Discord caches by URL, so give a changed image a new file name.
+
+All three files and the images are a **one-time copy from the wiki — nothing syncs.** Wiki edits
+will not propagate, so re-check them when the game patches.
 
 - **`data/eternals.json`** — one object per eternal:
   ```json
@@ -133,7 +142,7 @@ propagate, so re-check them when the game patches.
     "setBonus": { "name": "Deep Pockets", "description": "Max stack of consumables increased" },
     "items": ["dahla-vanish-crown", "dahla-petal-dance-amulet", "dahla-dancing-blade", "dahla-throwing-knives"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Dahla",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Dahla.png/292px-…",
+    "imageUrl": "images/eternals/dahla.png",
     "aliases": ["dancer"]
   }
   ```
@@ -144,7 +153,7 @@ propagate, so re-check them when the game patches.
     "id": "dahla-vanish-crown",
     "name": "Dahla's Vanish Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Crown.png/100px-Dahla_Crown.png",
+    "icon": "images/items/dahla-vanish-crown.png",
     "abilities": [
       {
         "name": "Vanish",
@@ -187,8 +196,7 @@ propagate, so re-check them when the game patches.
   deals no damage).
 
   There are no per-character health/damage/speed stats — every player has the same 200 Essence
-  and 100 Fortitude. Adding `imageUrl` to an entry puts a portrait thumbnail on the embed;
-  none are set, since the wiki's image URLs were not collected.
+  and 100 Fortitude. `imageUrl` puts a portrait thumbnail on the embed.
 
 - **`data/glossary.json`** — one object per term: `term`, `definition`, optional `aliases`.
   Sourced from the [Arkheron Wiki glossary](https://arkheron.wiki.gg/wiki/Glossary); definitions
@@ -224,11 +232,13 @@ Reproduced as-is rather than silently corrected. Worth re-checking upstream:
 
 ```
 data/          Content: eternals.json, glossary.json
+images/        Item icons and eternal portraits
 src/
   index.ts     Client setup, command registration, interaction dispatch
   config.ts    Env vars with placeholder fallbacks
   rateLimit.ts Sliding-window throttling, bot-wide and per user
   data.ts      Loads and validates the JSON files
+  images.ts    Image paths to their GitHub URLs
   search.ts    Name/alias matching with typo tolerance
   embeds.ts    Embed builders and truncation helpers
   types.ts     Command, Eternal, GlossaryEntry

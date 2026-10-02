@@ -44,6 +44,7 @@ export interface Item {
   id: string;
   name: string;
   slot: string;
+  /** A file under images/items, relative to the repo root. */
   icon?: string;
   description?: string;
   stats?: Stats;
@@ -63,6 +64,7 @@ export interface Eternal {
   /** These map to item Ids */
   items: string[];
   wikiUrl: string;
+  /** A file under images/eternals, relative to the repo root. */
   imageUrl?: string;
   aliases?: string[];
 }
