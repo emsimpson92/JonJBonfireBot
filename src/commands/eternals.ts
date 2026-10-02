@@ -2,6 +2,7 @@ import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 
 import { eternalKeys, eternals, itemsOf } from '../data.js';
 import { baseEmbed, errorEmbed, truncate } from '../embeds.js';
+import { publicUrl } from '../images.js';
 import { findBest } from '../search.js';
 import type { Command, Eternal } from '../types.js';
 
@@ -32,7 +33,7 @@ function detailEmbed(eternal: Eternal) {
   }
 
   if (eternal.imageUrl) {
-    embed.setThumbnail(eternal.imageUrl);
+    embed.setThumbnail(publicUrl(eternal.imageUrl));
   }
 
   return embed.setFooter({ text: "/item for an item's abilities · /glossary explains any tag" });

@@ -3,7 +3,7 @@
     "id": "dahlas-vanish-crown",
     "name": "Dahla's Vanish Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Crown.png/100px-Dahla_Crown.png",
+    "icon": "images/items/dahlas-vanish-crown.png",
     "abilities": [
       {
         "name": "Vanish",
@@ -18,7 +18,7 @@
     "id": "dahlas-petal-dance-amulet",
     "name": "Dahla's Petal Dance Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Amulet.png/62px-Dahla_Amulet.png",
+    "icon": "images/items/dahlas-petal-dance-amulet.png",
     "abilities": [
       {
         "name": "Petal Dance",
@@ -33,7 +33,7 @@
     "id": "dahlas-dancing-blade",
     "name": "Dahla's Dancing Blade",
     "slot": "Weapon (Melee)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Weapon_Sword.png/60px-Dahla_Weapon_Sword.png",
+    "icon": "images/items/dahlas-dancing-blade.png",
     "abilities": [
       { "name": "Slashing Variation", "input": "primary", "stats": { "Melee Damage": "15 / 15 / 10+10" } },
       {
@@ -50,7 +50,7 @@
     "id": "dahlas-throwing-knives",
     "name": "Dahla's Throwing Knives",
     "slot": "Weapon (Ranged)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Dahla_Weapon_Knives.png/55px-Dahla_Weapon_Knives.png",
+    "icon": "images/items/dahlas-throwing-knives.png",
     "abilities": [
       {
         "name": "Pirouette Throw",
@@ -73,7 +73,7 @@
     "id": "edanis-outburst-crown",
     "name": "Edani's Outburst Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Edani_Crown.png/100px-Edani_Crown.png",
+    "icon": "images/items/edanis-outburst-crown.png",
     "abilities": [
       {
         "name": "Creative Outburst",
@@ -88,7 +88,7 @@
     "id": "edanis-suffering-amulet",
     "name": "Edani's Suffering Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Edani_Amulet.png/50px-Edani_Amulet.png",
+    "icon": "images/items/edanis-suffering-amulet.png",
     "abilities": [
       {
         "name": "More the Merrier",
@@ -106,7 +106,7 @@
     "id": "edanis-lunging-hook",
     "name": "Edani's Lunging Hook",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Edani_Weapon_Hook.png/49px-Edani_Weapon_Hook.png",
+    "icon": "images/items/edanis-lunging-hook.png",
     "abilities": [
       {
         "name": "Thin Skinned Thrash",
@@ -128,7 +128,7 @@
     "id": "edanis-pulling-claws",
     "name": "Edani's Pulling Claws",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Edani_Weapon_Claws.png/76px-Edani_Weapon_Claws.png",
+    "icon": "images/items/edanis-pulling-claws.png",
     "abilities": [
       {
         "name": "Scratch and Shred",
@@ -149,7 +149,7 @@
     "id": "irennas-frost-armor-crown",
     "name": "Irenna's Frost Armor Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Crown.png/100px-Irenna_Crown.png",
+    "icon": "images/items/irennas-frost-armor-crown.png",
     "abilities": [
       {
         "name": "Frost Armor",
@@ -164,7 +164,7 @@
     "id": "irennas-north-wind-amulet",
     "name": "Irenna's North Wind Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Amulet.png/80px-Irenna_Amulet.png",
+    "icon": "images/items/irennas-north-wind-amulet.png",
     "abilities": [
       {
         "name": "Northern Wind",
@@ -179,7 +179,7 @@
     "id": "irennas-icebreaker-mace",
     "name": "Irenna's Icebreaker Mace",
     "slot": "Weapon (Mace)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Weapon_Mace.png/64px-Irenna_Weapon_Mace.png",
+    "icon": "images/items/irennas-icebreaker-mace.png",
     "abilities": [
       { "name": "Callous Swipes", "input": "primary", "tags": ["Crushing"], "stats": { "Melee Damage": "26 / 26" } },
       {
@@ -196,7 +196,7 @@
     "id": "irennas-sword-caretaker",
     "name": "Irenna's Sword \"Caretaker\"",
     "slot": "Weapon (Sword)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Irenna_Weapon_Sword1.png/64px-Irenna_Weapon_Sword1.png",
+    "icon": "images/items/irennas-sword-caretaker.png",
     "abilities": [
       {
         "name": "Pragmatic Slashes",
@@ -219,7 +219,7 @@
     "id": "ravahs-shadowsmoke-crown",
     "name": "Ravah's Shadowsmoke Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Ravah_Crown.png/100px-Ravah_Crown.png",
+    "icon": "images/items/ravahs-shadowsmoke-crown.png",
     "abilities": [
       {
         "name": "Shadowsmoke",
@@ -234,7 +234,7 @@
     "id": "ravahs-stalking-amulet",
     "name": "Ravah's Stalking Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Ravah_Amulet.png/55px-Ravah_Amulet.png",
+    "icon": "images/items/ravahs-stalking-amulet.png",
     "abilities": [
       {
         "name": "Stalking",
@@ -249,7 +249,7 @@
     "id": "ravahs-talonflight-crossbow",
     "name": "Ravah's Talonflight Crossbow",
     "slot": "Weapon (Crossbow)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Ravah_Weapon_Crossbow.png/82px-Ravah_Weapon_Crossbow.png",
+    "icon": "images/items/ravahs-talonflight-crossbow.png",
     "abilities": [
       {
         "name": "Piercing Shot",
@@ -273,7 +273,7 @@
     "id": "ravahs-ringblade",
     "name": "Ravah's Ringblade",
     "slot": "Weapon (Ringblade)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Ravah_Weapon_Ringblade.png/97px-Ravah_Weapon_Ringblade.png",
+    "icon": "images/items/ravahs-ringblade.png",
     "abilities": [
       {
         "name": "Embedding Throw",
@@ -296,7 +296,7 @@
     "id": "hollows-companion-crown",
     "name": "Hollow's Companion Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Hollow_Crown.png/100px-Hollow_Crown.png",
+    "icon": "images/items/hollows-companion-crown.png",
     "abilities": [
       {
         "name": "Gloomy Groundlings",
@@ -311,7 +311,7 @@
     "id": "hollows-outcast-amulet",
     "name": "Hollow's Outcast Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Hollow_Amulet.png/53px-Hollow_Amulet.png",
+    "icon": "images/items/hollows-outcast-amulet.png",
     "abilities": [
       {
         "name": "Mark the Outcast",
@@ -329,7 +329,7 @@
     "id": "hollows-sneklan",
     "name": "Hollow's Sneklan",
     "slot": "Weapon (Sneklan)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Hollow_Weapon_Sneklan.png/100px-Hollow_Weapon_Sneklan.png",
+    "icon": "images/items/hollows-sneklan.png",
     "abilities": [
       {
         "name": "Ground Shark",
@@ -353,7 +353,7 @@
     "id": "hollows-darkling-staff",
     "name": "Hollow's Darkling Staff",
     "slot": "Weapon (Staff)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Hollow_Weapon_Staff.png/51px-Hollow_Weapon_Staff.png",
+    "icon": "images/items/hollows-darkling-staff.png",
     "abilities": [
       {
         "name": "Dav's Darts",
@@ -377,7 +377,7 @@
     "id": "leodins-radiant-crown",
     "name": "Leodin's Radiant Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Leodin_Crown.png/100px-Leodin_Crown.png",
+    "icon": "images/items/leodins-radiant-crown.png",
     "abilities": [
       {
         "name": "Radiant Shield",
@@ -395,7 +395,7 @@
     "id": "leodins-sanctuary-amulet",
     "name": "Leodin's Sanctuary Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Leodin_Amulet.png/76px-Leodin_Amulet.png",
+    "icon": "images/items/leodins-sanctuary-amulet.png",
     "abilities": [
       {
         "name": "Sanctuary",
@@ -410,7 +410,7 @@
     "id": "leodins-eclipse-hammer",
     "name": "Leodin's Eclipse Hammer",
     "slot": "Weapon (Hammer)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Leodin_Weapon_Hammer.png/70px-Leodin_Weapon_Hammer.png",
+    "icon": "images/items/leodins-eclipse-hammer.png",
     "abilities": [
       {
         "name": "Joyous Pummelling",
@@ -433,7 +433,7 @@
     "id": "leodins-glint-spear",
     "name": "Leodin's Glint Spear",
     "slot": "Weapon (Spear)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Leodin_Weapon_Spear.png/55px-Leodin_Weapon_Spear.png",
+    "icon": "images/items/leodins-glint-spear.png",
     "abilities": [
       {
         "name": "Divine Thrust",
@@ -457,7 +457,7 @@
     "id": "karrivs-forgefire-crown",
     "name": "Karriv's Forgefire Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Crown.png/100px-Karriv_Crown.png",
+    "icon": "images/items/karrivs-forgefire-crown.png",
     "abilities": [
       {
         "name": "Forgefire",
@@ -472,7 +472,7 @@
     "id": "karrivs-flamepath-amulet",
     "name": "Karriv's Flamepath Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Amulet.png/74px-Karriv_Amulet.png",
+    "icon": "images/items/karrivs-flamepath-amulet.png",
     "abilities": [
       {
         "name": "Flamepath",
@@ -487,7 +487,7 @@
     "id": "karrivs-flaming-lantern",
     "name": "Karriv's Flaming Lantern",
     "slot": "Weapon (Lantern)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Weapon_Lantern.png/44px-Karriv_Weapon_Lantern.png",
+    "icon": "images/items/karrivs-flaming-lantern.png",
     "abilities": [
       { "name": "Strike the Anvil", "input": "primary", "description": "Final swing is a ground slam that sets the target on fire.", "tags": ["Damage over Time"], "stats": { "Melee Damage": "20 / 20 / 20 / 20 / 25 + 15 DoT" } },
       {
@@ -504,7 +504,7 @@
     "id": "karrivs-searing-shovel",
     "name": "Karriv's Searing Shovel",
     "slot": "Weapon (Shovel)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Karriv_Weapon_Shovel.png/66px-Karriv_Weapon_Shovel.png",
+    "icon": "images/items/karrivs-searing-shovel.png",
     "abilities": [
       { "name": "Shovel Swing", "input": "primary", "tags": ["Damage over Time"], "stats": { "Melee Damage": "23 / 23 / 30 + 15 DoT" } },
       {
@@ -524,7 +524,7 @@
     "id": "rynshis-blinding-rage-crown",
     "name": "Rynshi's Blinding Rage Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Rynshi_Crown.png/100px-Rynshi_Crown.png",
+    "icon": "images/items/rynshis-blinding-rage-crown.png",
     "abilities": [
       {
         "name": "Blinding Roar",
@@ -542,7 +542,7 @@
     "id": "rynshis-vortex-amulet",
     "name": "Rynshi's Vortex Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Rynshi_Amulet.png/54px-Rynshi_Amulet.png",
+    "icon": "images/items/rynshis-vortex-amulet.png",
     "abilities": [
       {
         "name": "Vortex",
@@ -557,7 +557,7 @@
     "id": "rynshis-wrath-cleaver",
     "name": "Rynshi's Wrath Cleaver",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Rynshi_Weapon_Cleaver.png/68px-Rynshi_Weapon_Cleaver.png",
+    "icon": "images/items/rynshis-wrath-cleaver.png",
     "abilities": [
       {
         "name": "Cleave",
@@ -579,7 +579,7 @@
     "id": "rynshis-fury-bracers",
     "name": "Rynshi's Fury Bracers",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Rynshi_Weapon_Bracers.png/69px-Rynshi_Weapon_Bracers.png",
+    "icon": "images/items/rynshis-fury-bracers.png",
     "abilities": [
       {
         "name": "Fury Punches",
@@ -604,7 +604,7 @@
     "id": "vatons-payback-crown",
     "name": "Vaton's Payback Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Crown.png/100px-Vaton_Crown.png",
+    "icon": "images/items/vatons-payback-crown.png",
     "abilities": [
       {
         "name": "Payback",
@@ -619,7 +619,7 @@
     "id": "vatons-audacity-amulet",
     "name": "Vaton's Audacity Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Amulet.png/47px-Vaton_Amulet.png",
+    "icon": "images/items/vatons-audacity-amulet.png",
     "abilities": [
       {
         "name": "Audacity",
@@ -634,7 +634,7 @@
     "id": "vatons-seeing-eye",
     "name": "Vaton's Seeing Eye",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Weapon_Eye.png/93px-Vaton_Weapon_Eye.png",
+    "icon": "images/items/vatons-seeing-eye.png",
     "abilities": [
       {
         "name": "Shattering Sphere",
@@ -660,7 +660,7 @@
     "id": "vatons-serpent-staff",
     "name": "Vaton's Serpent Staff",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Vaton_Weapon_Staff.png/56px-Vaton_Weapon_Staff.png",
+    "icon": "images/items/vatons-serpent-staff.png",
     "abilities": [
       { "name": "Serpent Lash", "input": "primary", "stats": { "Melee Damage": "20 / 20 / 18+18" } },
       {
@@ -677,7 +677,7 @@
     "id": "grimwolds-oscillating-regeneration-crown",
     "name": "Grimwold's Oscillating Regeneration Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Grimwold_Crown.png/100px-Grimwold_Crown.png",
+    "icon": "images/items/grimwolds-oscillating-regeneration-crown.png",
     "abilities": [
       {
         "name": "Oscillating Regeneration",
@@ -692,7 +692,7 @@
     "id": "grimwolds-voltaic-barrier-amulet",
     "name": "Grimwold's Voltaic Barrier Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Grimwold_Amulet.png/65px-Grimwold_Amulet.png",
+    "icon": "images/items/grimwolds-voltaic-barrier-amulet.png",
     "abilities": [
       {
         "name": "Voltaic Barrier",
@@ -707,7 +707,7 @@
     "id": "grimwolds-strange-device",
     "name": "Grimwold's Strange Device",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Grimwold_Weapon_Device.png/91px-Grimwold_Weapon_Device.png",
+    "icon": "images/items/grimwolds-strange-device.png",
     "abilities": [
       {
         "name": "Shock",
@@ -730,7 +730,7 @@
     "id": "grimwolds-charged-rings",
     "name": "Grimwold's Charged Rings",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Grimwold_Weapon_Rings.png/68px-Grimwold_Weapon_Rings.png",
+    "icon": "images/items/grimwolds-charged-rings.png",
     "abilities": [
       {
         "name": "Particle Shot",
@@ -756,7 +756,7 @@
     "id": "penelopes-sparkle-crown",
     "name": "Penelope's Sparkle Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Penelope_Crown.png/100px-Penelope_Crown.png",
+    "icon": "images/items/penelopes-sparkle-crown.png",
     "abilities": [
       {
         "name": "Sparkle",
@@ -771,7 +771,7 @@
     "id": "penelopes-correction-amulet",
     "name": "Penelope's Correction Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Penelope_Amulet.png/56px-Penelope_Amulet.png",
+    "icon": "images/items/penelopes-correction-amulet.png",
     "abilities": [
       {
         "name": "Lock the Door",
@@ -786,7 +786,7 @@
     "id": "penelopes-looking-glass",
     "name": "Penelope's Looking Glass",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Penelope_Weapon_Mirror.png/68px-Penelope_Weapon_Mirror.png",
+    "icon": "images/items/penelopes-looking-glass.png",
     "abilities": [
       {
         "name": "Flying Shards",
@@ -810,7 +810,7 @@
     "id": "penelopes-porcelain-parasol",
     "name": "Penelope's Porcelain Parasol",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Penelope_Weapon_Parasol.png/76px-Penelope_Weapon_Parasol.png",
+    "icon": "images/items/penelopes-porcelain-parasol.png",
     "abilities": [
       {
         "name": "Sharp Burst",
@@ -833,7 +833,7 @@
     "id": "tsubos-forefather-crown",
     "name": "Tsu'bo's Forefather Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Tsu%27bo_Crown.png/100px-Tsu%27bo_Crown.png",
+    "icon": "images/items/tsubos-forefather-crown.png",
     "abilities": [
       {
         "name": "Yah'towa",
@@ -848,7 +848,7 @@
     "id": "tsubos-run-free-amulet",
     "name": "Tsu'bo's Run Free Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Tsu%27bo_Amulet.png/49px-Tsu%27bo_Amulet.png",
+    "icon": "images/items/tsubos-run-free-amulet.png",
     "abilities": [
       {
         "name": "Run Free",
@@ -863,7 +863,7 @@
     "id": "tsubos-ripper-blades",
     "name": "Tsu'bo's Ripper Blades",
     "slot": "Weapon (Arm Blades)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Tsu%27bo_Weapon_ArmBlades.png/83px-Tsu%27bo_Weapon_ArmBlades.png",
+    "icon": "images/items/tsubos-ripper-blades.png",
     "abilities": [
       { "name": "Slash and Smash", "input": "primary", "stats": { "Melee Damage": "10" }, "upgrades": [{ "tier": "III", "changes": { "Melee Damage": "30" } }] },
       {
@@ -880,7 +880,7 @@
     "id": "tsubos-boom-chakas",
     "name": "Tsu'bo's Boom-Chakas",
     "slot": "Weapon (Bolas)",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Tsu%27bo_Weapon_Bolas.png/77px-Tsu%27bo_Weapon_Bolas.png",
+    "icon": "images/items/tsubos-boom-chakas.png",
     "abilities": [
       {
         "name": "Boom-Crack",
@@ -904,7 +904,7 @@
     "id": "vitality-crown",
     "name": "Vitality Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Essence_VFX.png/100px-Echo_Crown_Essence_VFX.png",
+    "icon": "images/items/vitality-crown.png",
     "abilities": [
       {
         "name": "Regenerate",
@@ -918,7 +918,7 @@
     "id": "fortitude-crown",
     "name": "Fortitude Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Fortitude_VFX.png/100px-Echo_Crown_Fortitude_VFX.png",
+    "icon": "images/items/fortitude-crown.png",
     "abilities": [
       {
         "name": "Repair",
@@ -932,14 +932,14 @@
     "id": "reset-crown",
     "name": "Reset Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Reset_VFX.png/100px-Echo_Crown_Reset_VFX.png",
+    "icon": "images/items/reset-crown.png",
     "abilities": [{ "name": "Reset", "description": "Refresh the cooldowns of Weapon Abilities, Stamina, and Endurance", "tags": ["Reset"], "stats": { "Cooldown": "14s" } }]
   },
   {
     "id": "resilience-crown",
     "name": "Resilience Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Resilience_VFX.png/100px-Echo_Crown_Resilience_VFX.png",
+    "icon": "images/items/resilience-crown.png",
     "abilities": [
       {
         "name": "Resilience",
@@ -953,7 +953,7 @@
     "id": "elusive-crown",
     "name": "Elusive Crown",
     "slot": "Crown",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Crown_Steadfast_VFX.png/100px-Echo_Crown_Steadfast_VFX.png",
+    "icon": "images/items/elusive-crown.png",
     "abilities": [
       {
         "name": "Elusive",
@@ -967,7 +967,7 @@
     "id": "barrage-amulet",
     "name": "Barrage Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Amulet_Barrage.png/65px-Echo_Amulet_Barrage.png",
+    "icon": "images/items/barrage-amulet.png",
     "abilities": [
       {
         "name": "Barrage",
@@ -981,7 +981,7 @@
     "id": "cluster-amulet",
     "name": "Cluster Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Amulet_Cluster.png/64px-Echo_Amulet_Cluster.png",
+    "icon": "images/items/cluster-amulet.png",
     "abilities": [
       {
         "name": "Clusterbomb",
@@ -995,7 +995,7 @@
     "id": "invulnerable-amulet",
     "name": "Invulnerable Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Amulet_Shield.png/64px-Echo_Amulet_Shield.png",
+    "icon": "images/items/invulnerable-amulet.png",
     "abilities": [
       {
         "name": "Invulnerable",
@@ -1009,7 +1009,7 @@
     "id": "slide-amulet",
     "name": "Slide Amulet",
     "slot": "Amulet",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Amulet_Slide.png/64px-Echo_Amulet_Slide.png",
+    "icon": "images/items/slide-amulet.png",
     "abilities": [
       {
         "name": "Slide",
@@ -1023,7 +1023,7 @@
     "id": "bashing-shield",
     "name": "Bashing Shield",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_BashingShield.png/79px-Echo_Weapon_BashingShield.png",
+    "icon": "images/items/bashing-shield.png",
     "abilities": [
       { "name": "Bashing Combo", "input": "primary", "stats": { "Melee Damage": "24 / 24 / 28" } },
       {
@@ -1039,7 +1039,7 @@
     "id": "dual-axes",
     "name": "Dual Axes",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_DualAxes.png/87px-Echo_Weapon_DualAxes.png",
+    "icon": "images/items/dual-axes.png",
     "abilities": [
       { "name": "Axe Combo", "input": "primary", "stats": { "Melee Damage": "19 / 19 / 21 / 21" } },
       {
@@ -1055,7 +1055,7 @@
     "id": "great-sword",
     "name": "Great Sword",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Greatsword.png/56px-Echo_Weapon_Greatsword.png",
+    "icon": "images/items/great-sword.png",
     "abilities": [
       { "name": "Heavy Combo", "input": "primary", "tags": ["Crushing"], "stats": { "Melee Damage": "32 / 32" } },
       {
@@ -1071,7 +1071,7 @@
     "id": "bow",
     "name": "Bow",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Longbow.png/59px-Echo_Weapon_Longbow.png",
+    "icon": "images/items/bow.png",
     "abilities": [
       {
         "name": "Bow Shot",
@@ -1093,7 +1093,7 @@
     "id": "scimitar",
     "name": "Scimitar",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Scimitar.png/47px-Echo_Weapon_Scimitar.png",
+    "icon": "images/items/scimitar.png",
     "abilities": [
       { "name": "Sweeping Strikes", "input": "primary", "stats": { "Melee Damage": "17 / 20 / 20 / 22" } },
       {
@@ -1109,7 +1109,7 @@
     "id": "shurikens",
     "name": "Shurikens",
     "slot": "Weapon",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Echo_Weapon_Shuriken.png/54px-Echo_Weapon_Shuriken.png",
+    "icon": "images/items/shurikens.png",
     "abilities": [
       {
         "name": "Rapid Fire",
@@ -1131,7 +1131,7 @@
     "id": "health-potion",
     "name": "Health Potion",
     "slot": "Consumable",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Essence.png/90px-Consumable_Essence.png",
+    "icon": "images/items/health-potion.png",
     "description": "Regain 125 Health",
     "stats": { "Healing": "125", "Max stacks": "4" },
     "abilities": []
@@ -1140,7 +1140,7 @@
     "id": "fortitude-shard",
     "name": "Fortitude Shard",
     "slot": "Consumable",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_Fortitude.png/86px-Consumable_Fortitude.png",
+    "icon": "images/items/fortitude-shard.png",
     "description": "Gain 50 Fortitude",
     "stats": { "Healing": "50", "Max stacks": "5" },
     "abilities": []
@@ -1149,7 +1149,7 @@
     "id": "healing-ward",
     "name": "Healing Ward",
     "slot": "Consumable",
-    "icon": "https://arkheron.wiki.gg/images/thumb/Consumable_HealingWard.png/100px-Consumable_HealingWard.png",
+    "icon": "images/items/healing-ward.png",
     "description": "A destructible ward that heals Health and Fortitude over time in a small Area of Effect.",
     "stats": { "Healing": "100", "Duration": "3.5s", "Health": "30 hp", "Max stacks": "3" },
     "abilities": []
@@ -1158,7 +1158,7 @@
     "id": "last-wish",
     "name": "Last Wish",
     "slot": "Anchor",
-    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_LastWish.png/93px-AnchorAbility_LastWish.png",
+    "icon": "images/items/last-wish.png",
     "description": "If you are knocked down while this ability is active, you become Phased and Revive with 100 health. Lasts 7 seconds.",
     "abilities": []
   },
@@ -1166,7 +1166,7 @@
     "id": "mending-hands",
     "name": "Mending Hands",
     "slot": "Anchor",
-    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_MendingHands.png/93px-AnchorAbility_MendingHands.png",
+    "icon": "images/items/mending-hands.png",
     "description": "Damage dealt to you is converted into healing. Lasts 2 seconds and Silences your abilities.",
     "abilities": []
   },
@@ -1174,7 +1174,7 @@
     "id": "summon-shrine",
     "name": "Summon Shrine",
     "slot": "Anchor",
-    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_SummonShrine.png/93px-AnchorAbility_SummonShrine.png",
+    "icon": "images/items/summon-shrine.png",
     "description": "Summon a shrine. Your team can purchase items and resurrect fallen allies here. Lasts 30 seconds.",
     "abilities": []
   },
@@ -1182,7 +1182,7 @@
     "id": "full-heal",
     "name": "Full Heal",
     "slot": "Anchor",
-    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_FullHeal.png/93px-AnchorAbility_FullHeal.png",
+    "icon": "images/items/full-heal.png",
     "description": "Channel for 2.5 seconds to heal yourself to full.",
     "abilities": []
   },
@@ -1190,7 +1190,7 @@
     "id": "self-revive",
     "name": "Self Revive",
     "slot": "Anchor",
-    "icon": "https://arkheron.wiki.gg/images/thumb/AnchorAbility_SelfRevive.png/93px-AnchorAbility_SelfRevive.png",
+    "icon": "images/items/self-revive.png",
     "description": "Channel for 2 seconds when knocked down to pick yourself back up with 100 health.",
     "abilities": []
   },

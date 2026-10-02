@@ -18,7 +18,7 @@
     "setBonus": { "name": "Deep Pockets", "description": "Max stack of consumables increased" },
     "items": ["dahlas-vanish-crown", "dahlas-petal-dance-amulet", "dahlas-dancing-blade", "dahlas-throwing-knives"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Dahla",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Dahla.png/256px-Arkheron_Eternal_Dahla.png",
+    "imageUrl": "images/eternals/dahla.png",
     "aliases": ["dancer"]
   },
   {
@@ -40,7 +40,7 @@
     "setBonus": { "name": "Ferocious", "description": "Melee damage increased by 20%" },
     "items": ["edanis-outburst-crown", "edanis-suffering-amulet", "edanis-lunging-hook", "edanis-pulling-claws"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Edani",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Edani.png/256px-Arkheron_Eternal_Edani.png",
+    "imageUrl": "images/eternals/edani.png",
     "aliases": ["mistress of suffering", "mistress"]
   },
   {
@@ -61,7 +61,7 @@
     "setBonus": { "name": "Cold-blooded", "description": "25% Increased damage to stunned or slowed enemies" },
     "items": ["irennas-frost-armor-crown", "irennas-north-wind-amulet", "irennas-icebreaker-mace", "irennas-sword-caretaker"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Irenna",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Irenna.png/256px-Arkheron_Eternal_Irenna.png",
+    "imageUrl": "images/eternals/irenna.png",
     "aliases": ["maul"]
   },
   {
@@ -83,7 +83,7 @@
     "setBonus": { "name": "Distant", "description": "Ranged damaged increased by 25%" },
     "items": ["ravahs-shadowsmoke-crown", "ravahs-stalking-amulet", "ravahs-talonflight-crossbow", "ravahs-ringblade"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Ravah",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Ravah.png/256px-Arkheron_Eternal_Ravah.png",
+    "imageUrl": "images/eternals/ravah.png",
     "aliases": ["fading huntress", "huntress"]
   },
   {
@@ -103,7 +103,7 @@
     "setBonus": { "name": "Unscathed", "description": "25% Bonus damage while you have Fortitude" },
     "items": ["hollows-companion-crown", "hollows-outcast-amulet", "hollows-sneklan", "hollows-darkling-staff"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Hollow",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Hollow.png/256px-Arkheron_Eternal_Hollow.png",
+    "imageUrl": "images/eternals/hollow.png",
     "aliases": ["forest darkling", "darkling", "gloomies"]
   },
   {
@@ -124,7 +124,7 @@
     "setBonus": { "name": "Divine", "description": "20% Damage Reduction" },
     "items": ["leodins-radiant-crown", "leodins-sanctuary-amulet", "leodins-eclipse-hammer", "leodins-glint-spear"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Leodin",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Leodin.png/256px-Arkheron_Eternal_Leodin.png",
+    "imageUrl": "images/eternals/leodin.png",
     "aliases": ["lightbringer"]
   },
   {
@@ -146,7 +146,7 @@
     "setBonus": { "name": "Persistent", "description": "Ability Cooldowns are 20% faster" },
     "items": ["karrivs-forgefire-crown", "karrivs-flamepath-amulet", "karrivs-flaming-lantern", "karrivs-searing-shovel"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Karriv",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Karriv.png/256px-Arkheron_Eternal_Karriv.png",
+    "imageUrl": "images/eternals/karriv.png",
     "aliases": ["forge"]
   },
   {
@@ -167,7 +167,7 @@
     "setBonus": { "name": "Relentless", "description": "40% Damage Reduction at 150 total hp" },
     "items": ["rynshis-blinding-rage-crown", "rynshis-vortex-amulet", "rynshis-wrath-cleaver", "rynshis-fury-bracers"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Rynshi",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Rynshi.png/256px-Arkheron_Eternal_Rynshi.png",
+    "imageUrl": "images/eternals/rynshi.png",
     "aliases": ["beast"]
   },
   {
@@ -189,7 +189,7 @@
     "setBonus": { "name": "Malleable", "description": "Increase Healing from your Items and Abilities by 50%" },
     "items": ["vatons-payback-crown", "vatons-audacity-amulet", "vatons-seeing-eye", "vatons-serpent-staff"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Vaton",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Vaton.png/256px-Arkheron_Eternal_Vaton.png",
+    "imageUrl": "images/eternals/vaton.png",
     "aliases": ["charlatan"]
   },
   {
@@ -213,7 +213,7 @@
     "setBonus": { "name": "Galvanized", "description": "Fortitude and Health Regenerate if you have not received or dealt damage in the past 3 seconds" },
     "items": ["grimwolds-oscillating-regeneration-crown", "grimwolds-voltaic-barrier-amulet", "grimwolds-strange-device", "grimwolds-charged-rings"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Grimwold",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Grimwold.png/256px-Arkheron_Eternal_Grimwold.png",
+    "imageUrl": "images/eternals/grimwold.png",
     "aliases": ["scientist"]
   },
   {
@@ -233,7 +233,7 @@
     "setBonus": { "name": "Youthful", "description": "Gain two extra endurance pips" },
     "items": ["penelopes-sparkle-crown", "penelopes-correction-amulet", "penelopes-looking-glass", "penelopes-porcelain-parasol"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Penelope",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Penelope.png/256px-Arkheron_Eternal_Penelope.png",
+    "imageUrl": "images/eternals/penelope.png",
     "aliases": ["porcelain girl", "porcelain"]
   },
   {
@@ -254,7 +254,7 @@
     "setBonus": { "name": "Endling", "description": "Deal 70% more damage at low health (100HP)" },
     "items": ["tsubos-forefather-crown", "tsubos-run-free-amulet", "tsubos-ripper-blades", "tsubos-boom-chakas"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Tsu%27bo",
-    "imageUrl": "https://arkheron.wiki.gg/images/thumb/Arkheron_Eternal_Tsu%27bo.png/256px-Arkheron_Eternal_Tsu%27bo.png",
+    "imageUrl": "images/eternals/tsubo.png",
     "aliases": ["tsu bo", "stray"]
   }
 ]
