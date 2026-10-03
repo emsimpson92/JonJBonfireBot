@@ -1,8 +1,8 @@
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
 import { abilityBlock, inputLabel, statLine } from '../abilities.js';
 import { eternals, items, type OwnedItem } from '../data.js';
-import { baseEmbed, embedLength, errorEmbed, MAX_EMBEDS, MAX_MESSAGE_CHARS, truncate } from '../embeds.js';
+import { baseEmbed, embedLength, ephemeral, ephemeralError, MAX_EMBEDS, MAX_MESSAGE_CHARS, truncate } from '../embeds.js';
 import { publicUrl } from '../images.js';
 import { findBest, keysOf, respondWithMatches } from '../search.js';
 import type { Command, ItemAbility } from '../types.js';
@@ -117,10 +117,7 @@ export const itemCommand: Command = {
     if (name) {
       const found = findBest(name, matches, keys);
       if (!found.length) {
-        await interaction.reply({
-          embeds: [errorEmbed('No such item', `Nothing matched \`${name}\`. Try /eternals to browse the roster.`)],
-          flags: MessageFlags.Ephemeral,
-        });
+        await interaction.reply(ephemeralError('No such item', `Nothing matched \`${name}\`. Try /eternals to browse the roster.`));
 
         return;
       }
@@ -135,7 +132,7 @@ export const itemCommand: Command = {
           'The options combine, and any one of them works on its own. ' +
           'Anchors and consumables are under `slot:`.',
       );
-      await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+      await interaction.reply(ephemeral(embed));
 
       return;
     }

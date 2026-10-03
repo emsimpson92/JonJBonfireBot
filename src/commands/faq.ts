@@ -1,7 +1,7 @@
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
 import { faq } from '../data.js';
-import { baseEmbed, errorEmbed, truncate } from '../embeds.js';
+import { baseEmbed, ephemeral, ephemeralError, truncate } from '../embeds.js';
 import { findBest, keysOf, respondWithMatches } from '../search.js';
 import type { Command, FaqTopic } from '../types.js';
 
@@ -33,10 +33,7 @@ export const faqCommand: Command = {
         `**${faq.length} ${faq.length === 1 ? 'topic' : 'topics'}:**\n${faq.map((entry) => `\`${entry.topic}\``).join('\n')}` :
         'No FAQ topics have been added yet.';
 
-      await interaction.reply({
-        embeds: [baseEmbed('Frequently Asked Questions', list).setFooter({ text: 'Use /faq <topic> to read one.' })],
-        flags: MessageFlags.Ephemeral,
-      });
+      await interaction.reply(ephemeral(baseEmbed('Frequently Asked Questions', list).setFooter({ text: 'Use /faq <topic> to read one.' })));
 
       return;
     }
@@ -52,17 +49,11 @@ export const faqCommand: Command = {
     // Several topics match equally - not convinced this is valid
     if (matches.length > 1) {
       const options = matches.map((entry) => `\`${entry.topic}\``).join(', ');
-      await interaction.reply({
-        embeds: [baseEmbed('Multiple topics match', `\`${query}\` matches several: ${options}`)],
-        flags: MessageFlags.Ephemeral,
-      });
+      await interaction.reply(ephemeral(baseEmbed('Multiple topics match', `\`${query}\` matches several: ${options}`)));
 
       return;
     }
 
-    await interaction.reply({
-      embeds: [errorEmbed('Topic not found', `No FAQ topic \`${query}\`. Run /faq to see every topic.`)],
-      flags: MessageFlags.Ephemeral,
-    });
+    await interaction.reply(ephemeralError('Topic not found', `No FAQ topic \`${query}\`. Run /faq to see every topic.`));
   },
 };

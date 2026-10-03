@@ -1,7 +1,7 @@
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
 import { eternalKeys, eternals, itemsOf } from '../data.js';
-import { baseEmbed, errorEmbed, truncate } from '../embeds.js';
+import { baseEmbed, ephemeral, ephemeralError, truncate } from '../embeds.js';
 import { publicUrl } from '../images.js';
 import { findBest } from '../search.js';
 import type { Command, Eternal } from '../types.js';
@@ -75,17 +75,11 @@ export const eternalsCommand: Command = {
     // Reachable when a value is typed rather than picked from the choices.
     if (matches.length > 1) {
       const options = matches.map((eternal) => `**${eternal.name}**`).join('\n');
-      await interaction.reply({
-        embeds: [baseEmbed('Multiple eternals match', `\`${query}\` matches several:\n\n${options}`)],
-        flags: MessageFlags.Ephemeral,
-      });
+      await interaction.reply(ephemeral(baseEmbed('Multiple eternals match', `\`${query}\` matches several:\n\n${options}`)));
 
       return;
     }
 
-    await interaction.reply({
-      embeds: [errorEmbed('No such eternal', `No eternal matched \`${query}\`. Run /eternals to see the full list.`)],
-      flags: MessageFlags.Ephemeral,
-    });
+    await interaction.reply(ephemeralError('No such eternal', `No eternal matched \`${query}\`. Run /eternals to see the full list.`));
   },
 };

@@ -1,7 +1,7 @@
 {
   "name": "jonj-bonfire-bot",
   "version": "0.1.0",
-  "description": "Discord bot with slash commands for FAQ, playtest, eternals, items, and glossary lookups.",
+  "description": "Discord bot with slash commands for FAQ, playtest, eternals, items, and glossary lookups, plus player lobbies.",
   "type": "module",
   "main": "dist/index.js",
   "engines": {

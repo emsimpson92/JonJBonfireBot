@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, MessageFlags } from 'discord.js';
 
 import { config } from './config.js';
 
@@ -10,12 +10,20 @@ export function baseEmbed(title: string, description?: string): EmbedBuilder {
   if (description !== undefined) {
     embed.setDescription(truncate(description));
   }
-  
+
   return embed;
 }
 
 export function errorEmbed(title: string, description: string): EmbedBuilder {
   return new EmbedBuilder().setColor(0x992d22).setTitle(title).setDescription(truncate(description));
+}
+
+export function ephemeral(embed: EmbedBuilder): { embeds: EmbedBuilder[]; flags: MessageFlags.Ephemeral } {
+  return { embeds: [embed], flags: MessageFlags.Ephemeral as const };
+}
+
+export function ephemeralError(title: string, description: string): { embeds: EmbedBuilder[]; flags: MessageFlags.Ephemeral } {
+  return ephemeral(errorEmbed(title, description));
 }
 
 export function truncate(text: string, limit = MAX_DESCRIPTION): string {

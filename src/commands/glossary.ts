@@ -1,7 +1,7 @@
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
 import { glossary } from '../data.js';
-import { baseEmbed, errorEmbed } from '../embeds.js';
+import { baseEmbed, ephemeral, ephemeralError } from '../embeds.js';
 import { findBest, keysOf, respondWithMatches } from '../search.js';
 import type { Command, GlossaryEntry } from '../types.js';
 
@@ -24,10 +24,7 @@ export const glossaryCommand: Command = {
 
     if (!query) {
       const terms = glossary.map((entry) => `\`${entry.term}\``).join(', ');
-      await interaction.reply({
-        embeds: [baseEmbed('Glossary', `**${glossary.length} terms:** ${terms}`)],
-        flags: MessageFlags.Ephemeral,
-      });
+      await interaction.reply(ephemeral(baseEmbed('Glossary', `**${glossary.length} terms:** ${terms}`)));
 
       return;
     }
@@ -44,17 +41,11 @@ export const glossaryCommand: Command = {
     // Several terms match equally
     if (matches.length > 1) {
       const options = matches.map((entry) => `\`${entry.term}\``).join(', ');
-      await interaction.reply({
-        embeds: [baseEmbed('Multiple terms match', `\`${query}\` matches several: ${options}`)],
-        flags: MessageFlags.Ephemeral,
-      });
+      await interaction.reply(ephemeral(baseEmbed('Multiple terms match', `\`${query}\` matches several: ${options}`)));
 
       return;
     }
 
-    await interaction.reply({
-      embeds: [errorEmbed('Term not found', `No entry for \`${query}\`. Run /glossary to see all ${glossary.length} terms.`)],
-      flags: MessageFlags.Ephemeral,
-    });
+    await interaction.reply(ephemeralError('Term not found', `No entry for \`${query}\`. Run /glossary to see all ${glossary.length} terms.`));
   },
 };
