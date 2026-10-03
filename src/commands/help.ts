@@ -1,6 +1,6 @@
-import { ApplicationCommandOptionType, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, SlashCommandBuilder } from 'discord.js';
 
-import { baseEmbed, errorEmbed } from '../embeds.js';
+import { baseEmbed, ephemeralError } from '../embeds.js';
 import { respondWithMatches } from '../search.js';
 import type { Command } from '../types.js';
 // Circular with registry.ts by design: registry imports every command module,
@@ -81,9 +81,6 @@ export const helpCommand: Command = {
     }
 
     const known = commands.map((command) => `\`/${command.data.name}\``).join(', ');
-    await interaction.reply({
-      embeds: [errorEmbed('Unknown command', `There is no \`${query}\` command. Available: ${known}`)],
-      flags: MessageFlags.Ephemeral,
-    });
+    await interaction.reply(ephemeralError('Unknown command', `There is no \`${query}\` command. Available: ${known}`));
   },
 };

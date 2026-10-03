@@ -1,6 +1,7 @@
 # JonJ Bonfire Bot
 
-A Discord bot with slash commands for an FAQ, playtest links, eternal and item lookups, and a glossary.
+A Discord bot with slash commands for an FAQ, playtest links, eternal and item lookups, a glossary,
+and player-run lobbies.
 
 Content is populated from the [Arkheron Wiki](https://arkheron.wiki.gg/): 12 eternals, 74 items
 (48 eternal-specific plus Echo crowns, amulets and weapons, anchors and consumables), and 66
@@ -22,6 +23,10 @@ so `/glossary term:crushing` explains them.
 | `/eternals [name]` | Lists every eternal. With an argument, shows their ability, set bonus, and items. |
 | `/item [eternal] [slot] [name]` | Shows an item and the abilities it grants. `eternal:` includes an **Echo** choice for items tied to no eternal; `slot:` covers crowns, amulets, weapons, anchors and consumables. The options combine and each works alone. |
 | `/glossary [term]` | Defines a term. With no argument, lists all 66. |
+| `/createlobby <code> <region> [mode]` | Posts a lobby for an in-game invite code, with you as host. See [Lobbies](#lobbies). |
+| `/lobbies [region] [mode]` | Lists open lobbies, most recently active first, with their mode and links to their posts. `region:` and `mode:` filter the list and combine; lobbies with no mode don't match a `mode:` filter. |
+| `/lobbyadd <player>` | Host only. Adds a server member to the lobby you're hosting, unless they're already in a lobby. |
+| `/lobbykick <player>` | Host only. Removes a player from the lobby you're hosting; `player:` autocompletes against your own roster. |
 
 `/eternals name:` and `/item eternal:` / `slot:` are pick-lists. `/item name:` and
 `/glossary term:` use **autocomplete**, since 48 items and 66 terms are well past Discord's
@@ -46,7 +51,7 @@ Tormentors. When several entries match equally well the bot lists them rather th
    ```sh
    cp .env.example .env
    ```
-   Fill in `DISCORD_TOKEN`, then `GUILD_ID`
+   Fill in `DISCORD_TOKEN`, then `GUILD_ID` and `LOBBY_CHANNEL_ID`
    (enable *Settings → Advanced → Developer Mode* in Discord, then right-click → *Copy ID*).
    The [rate limits](#rate-limiting) have working defaults and can be left alone.
 5. **Run**:
@@ -91,6 +96,63 @@ replied to, and it runs entirely from data already in memory.
 
 Both windows live in the bot's process, so restarting clears them and a second instance would
 count separately.
+
+Lobby buttons and menus have a separate per-user budget of the same size, and no bot-wide one:
+a busy lobby can see dozens of joins in a minute, and those shouldn't lock everyone out of
+commands. A throttled click gets a reply only the clicker can see.
+
+## Lobbies
+
+`/createlobby code:DX89EE region:Europe` posts a lobby in the lobby channel (`LOBBY_CHANNEL_ID`;
+unset, any channel works). Codes are six letters or digits and are stored in capitals, so
+`dx89ee` works too. Regions are North America, South America, Europe and Asia. The optional
+`mode:` is Ascension or Spires, and shows on the post and in `/lobbies` when set.
+
+The post shows the region, the mode if one was given, when the lobby expires, and the numbered roster with the host
+marked 👑. It has three buttons:
+
+- **Join** — adds you to the lobby. Joining moves you out of any other lobby, since nobody can
+  be in two; at 45 players, joining is refused. Clicking it while already in the lobby gets an
+  ephemeral error.
+- **Leave** — removes you from the lobby; clicking it while not in the lobby gets an ephemeral
+  error. If the host leaves, whoever has been in the lobby longest takes over. When the last
+  player leaves, the lobby closes.
+- **Close Lobby** — visible to everyone, but only works for the host; anyone else gets an
+  ephemeral error. Deletes the post immediately.
+
+The host adds players with `/lobbyadd player:`, picking any member of the server. Unlike
+**Join**, adding never moves anyone: someone already in another lobby has to leave it first,
+and the host is told which lobby they're in. Bots can't be added, and a full lobby refuses.
+
+The host removes players with `/lobbykick player:`, whose `player:` option autocompletes
+against their own roster as they type, rather than listing everyone at once. Kicked players
+can rejoin; kicking is for keeping the roster accurate, not moderation.
+
+The `/createlobby` user is in the lobby too, so creating a lobby also moves them out of any other.
+At most 50 lobbies can be open at once, and two can't share a code.
+
+However a lobby closes — the host closes it, the last player leaves, or it expires — its post
+is deleted.
+
+### Expiry
+
+A lobby expires 2 hours after anyone last joined, left, or was added or kicked. The post's expiry time
+uses a Discord timestamp, so it counts down on its own without the bot editing the post.
+
+Each lobby stores when it was last active, and that alone decides whether it's open. Every
+click and command checks it first, so an expired lobby can't be joined or listed even a second
+late. A once-a-minute sweep then deletes the posts of lobbies that expired while nobody was
+looking. It only tidies up, so nothing goes wrong if it runs late. Per-lobby timers were
+avoided because codes are reused: a timer left running for a closed lobby could fire later and
+delete a new lobby with the same code. Every button also carries its lobby's unique id, so a
+button left on an old post can't act on a newer lobby with the same code.
+
+Nothing tells the bot who is actually in a game lobby, so the roster stays accurate through:
+moving players out when they join elsewhere, host kicks, and expiry. If an absent host's lobby
+fills up with people who have gone, nobody can join, so it goes quiet and expires.
+
+Lobbies live in memory, so **a restart or redeploy clears them**. Their posts stay up until
+someone clicks one, which deletes it.
 
 ## Editing the content
 
@@ -237,6 +299,8 @@ src/
   index.ts     Client setup, command registration, interaction dispatch
   config.ts    Env vars with placeholder fallbacks
   rateLimit.ts Sliding-window throttling, bot-wide and per user
+  lobbies.ts   Lobby state and rules: joining, leaving, kicking, expiry
+  lobbyMessages.ts  Lobby posts, buttons, the host panel, and the expiry sweep
   data.ts      Loads and validates the JSON files
   images.ts    Image paths to their GitHub URLs
   search.ts    Name/alias matching with typo tolerance
@@ -244,7 +308,3 @@ src/
   types.ts     Command, Eternal, GlossaryEntry
   commands/    One file per command, plus registry.ts
 ```
-
-## Adding Jon J Bonfire to your server
-
-https://discord.com/oauth2/authorize?client_id=1552144984768254083&permissions=19456&scope=bot%20applications.commands

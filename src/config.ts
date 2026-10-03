@@ -34,8 +34,10 @@ function parseColor(raw: string): number {
 export const config = {
   token: required('DISCORD_TOKEN'),
   guildId: snowflake('GUILD_ID'),
+  /** Where /createlobby works. Unset, it works in any channel. */
+  lobbyChannelId: snowflake('LOBBY_CHANNEL_ID'),
   embedColor: parseColor(optional('EMBED_COLOR', '#E25822')),
-  maxRequests: positiveInt('MAX_REQUESTS_PER_MINUTE', 10),
+  maxRequests: positiveInt('MAX_REQUESTS_PER_MINUTE', 15),
   maxRequestsPerUser: positiveInt('MAX_REQUESTS_PER_USER_PER_MINUTE', 5),
   imageBaseUrl: optional('IMAGE_BASE_URL', 'https://raw.githubusercontent.com/emsimpson92/JonJBonfireBot/main/'),
 } as const;
