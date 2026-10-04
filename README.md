@@ -1,10 +1,10 @@
 # JonJ Bonfire Bot
 
-A Discord bot with slash commands for an FAQ, playtest links, eternal and item lookups, a glossary,
-and player-run lobbies.
+A Discord bot with slash commands for an FAQ, social links, eternal and item lookups, random
+builds, a glossary, and player-run lobbies.
 
-Content is populated from the [Arkheron Wiki](https://arkheron.wiki.gg/): 12 eternals, 74 items
-(48 eternal-specific plus Echo crowns, amulets and weapons, anchors and consumables), and 66
+Content is populated from the [Arkheron Wiki](https://arkheron.wiki.gg/): 12 eternals, 72 items
+(48 eternal-specific plus Echo crowns, amulets and weapons, anchors and consumables), and 77
 glossary terms, with wiki icons and portraits on the embeds. The only remaining placeholders are
 the channel IDs and bot token in `.env`. See [Editing the content](#editing-the-content).
 
@@ -18,24 +18,27 @@ so `/glossary term:crushing` explains them.
 | --- | --- |
 | `/help [command]` | Lists commands. With an argument, shows that command's syntax and examples. |
 | `/faq [topic]` | Lists FAQ topics. With an argument, shows that topic's numbered questions and answers. |
-| `/playtest` | Links the playtest channel. |
 | `/socials` | Links the official social channels. |
 | `/eternals [name]` | Lists every eternal. With an argument, shows their ability, set bonus, and items. |
 | `/item [eternal] [slot] [name]` | Shows an item and the abilities it grants. `eternal:` includes an **Echo** choice for items tied to no eternal; `slot:` covers crowns, amulets, weapons, anchors and consumables. The options combine and each works alone. |
-| `/glossary [term]` | Defines a term. With no argument, lists all 66. |
+| `/randombuild` | Rolls a random build from the Echo items and the items of eternals currently in rotation: one crown, one amulet and two different weapons. Only you see the result. |
+| `/glossary [term]` | Defines a term. With no argument, lists all 77. |
 | `/createlobby <code> <region> [mode]` | Posts a lobby for an in-game invite code, with you as host. See [Lobbies](#lobbies). |
 | `/lobbies [region] [mode]` | Lists open lobbies, most recently active first, with their mode and links to their posts. `region:` and `mode:` filter the list and combine; lobbies with no mode don't match a `mode:` filter. |
 | `/lobbyadd <player>` | Host only. Adds a server member to the lobby you're hosting, unless they're already in a lobby. |
 | `/lobbykick <player>` | Host only. Removes a player from the lobby you're hosting; `player:` autocompletes against your own roster. |
 
-`/eternals name:` and `/item eternal:` / `slot:` are pick-lists. `/item name:` and
-`/glossary term:` use **autocomplete**, since 48 items and 66 terms are well past Discord's
-25-choice cap; matches are ranked exact, then prefix, then word-start, then anywhere.
+`/eternals name:`, `/item eternal:` / `slot:` and the lobby `region:` / `mode:` options are
+pick-lists. `/item name:`, `/glossary term:`, `/faq topic:` and `/help command:` use
+**autocomplete**, since 72 items and 77 terms are well past Discord's 25-choice cap; matches are
+ranked exact, then prefix, then word-start, then anywhere. `/item name:` only suggests items that
+fit the `eternal:` and `slot:` already picked, so `eternal:Dahla` narrows it to her four.
 
 Typed values are still matched leniently — case-insensitive, tolerant of partial names,
-aliases and small typos, so `stealh` finds Stealth, `hp` finds Essence and `reaver` finds
+aliases and small typos, so `stealh` finds Stealthed, `hp` finds Essence and `reaver` finds
 Tormentors. When several entries match equally well the bot lists them rather than guessing
-(`/glossary term:damage` → the four Damage terms); when nothing matches it suggests alternatives.
+(`/glossary term:damage` → the four Damage terms); when nothing matches it says so and points
+at the command that lists everything.
 
 ## Setup
 
@@ -74,7 +77,7 @@ inside its window, so the window moves continuously instead of resetting on a cl
 
 | Variable | Default | Scope |
 | --- | --- | --- |
-| `MAX_REQUESTS_PER_MINUTE` | 10 | Every command the bot handles, from anyone. |
+| `MAX_REQUESTS_PER_MINUTE` | 50 | Every command the bot handles, from anyone. |
 | `MAX_REQUESTS_PER_USER_PER_MINUTE` | 5 | One person's commands. |
 
 Both must be whole and positive; anything else falls back to the default rather than leaving the
@@ -97,9 +100,10 @@ replied to, and it runs entirely from data already in memory.
 Both windows live in the bot's process, so restarting clears them and a second instance would
 count separately.
 
-Lobby buttons and menus have a separate per-user budget of the same size, and no bot-wide one:
-a busy lobby can see dozens of joins in a minute, and those shouldn't lock everyone out of
-commands. A throttled click gets a reply only the clicker can see.
+Lobby buttons have budgets of their own, separate from commands: per user the same size as for
+commands, and bot-wide twice `MAX_REQUESTS_PER_MINUTE`. A busy lobby can see dozens of joins in a
+minute, and those shouldn't lock everyone out of commands. A throttled click gets a reply only
+the clicker can see.
 
 ## Lobbies
 
@@ -161,8 +165,8 @@ Content lives in JSON so it can be edited without touching code. Restart the bot
 | File | Holds |
 | --- | --- |
 | `data/eternals.json` | The 12 eternals. Their `items` are **ids into `items.json`**, not inline objects. |
-| `data/items.json` | All 74 items: 48 eternal-specific, plus generic Echo crowns/amulets/weapons, anchors and consumables. |
-| `data/glossary.json` | The 66 glossary terms. |
+| `data/items.json` | All 72 items: 48 eternal-specific, plus generic Echo crowns/amulets/weapons, anchors and consumables. |
+| `data/glossary.json` | The 77 glossary terms. |
 | `data/faq.json` | FAQ topics, each a list of `question`/`answer` pairs plus optional `aliases` (`playtest` → Beta). `/faq` numbers them in file order. |
 | `data/socials.json` | Social links, each a `name`/`url` pair. `/socials` lists them in file order. |
 | `images/items/`, `images/eternals/` | Item icons and eternal portraits, one PNG per id. |
@@ -183,8 +187,8 @@ since Discord shows thumbnails at 80px. **It only shows up once it's on `main`**
 branch `IMAGE_BASE_URL` names). Replacing an image under the same name can keep showing the old
 one for a while, because Discord caches by URL, so give a changed image a new file name.
 
-All three files and the images are a **one-time copy from the wiki — nothing syncs.** Wiki edits
-will not propagate, so re-check them when the game patches.
+The eternals, items and glossary, and the images, are a **one-time copy from the wiki — nothing
+syncs.** Wiki edits will not propagate, so re-check them when the game patches.
 
 - **`data/eternals.json`** — one object per eternal:
   ```json
@@ -192,17 +196,21 @@ will not propagate, so re-check them when the game patches.
     "id": "dahla",
     "name": "Dahla",
     "title": "The Dancer",
+    "inRotation": true,
     "description": "Shown as the embed body.",
     "coreAbility": {
       "name": "Curtain Call",
       "description": "Pull in distant enemies, stunning them.",
-      "tags": ["Cone Attack", "Stun", "Exhaust"],
-      "damage": "35",
-      "cooldown": "26s",
-      "range": "9m"
+      "tags": ["Cone Attack", "Stun"],
+      "stats": [
+        { "name": "Damage", "value": "35" },
+        { "name": "Cooldown", "value": "25s" },
+        { "name": "Range", "value": "9m" },
+        { "name": "Stun", "value": "1s" }
+      ]
     },
     "setBonus": { "name": "Deep Pockets", "description": "Max stack of consumables increased" },
-    "items": ["dahla-vanish-crown", "dahla-petal-dance-amulet", "dahla-dancing-blade", "dahla-throwing-knives"],
+    "items": ["dahlas-vanish-crown", "dahlas-petal-dance-amulet", "dahlas-dancing-blade", "dahlas-throwing-knives"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Dahla",
     "imageUrl": "images/eternals/dahla.png",
     "aliases": ["dancer"]
@@ -212,25 +220,29 @@ will not propagate, so re-check them when the game patches.
 - **`data/items.json`** — one object per item, referenced by `id`:
   ```json
   {
-    "id": "dahla-vanish-crown",
-    "name": "Dahla's Vanish Crown",
+    "id": "dahlas-vanish-crown",
+    "name": "Vanish Crown",
     "slot": "Crown",
-    "icon": "images/items/dahla-vanish-crown.png",
+    "icon": "images/items/dahlas-vanish-crown.png",
     "abilities": [
       {
         "name": "Vanish",
         "description": "Transform into an invulnerable fast-moving orb…",
-        "tags": ["Phased", "Invisible"],
+        "tags": ["Phased", "Movement Increase", "Invisible"],
         "stats": { "Cooldown": "15s", "Duration": "1.5s" },
         "upgrades": [
           { "tier": "II", "changes": { "Cooldown": "12s" } },
-          { "tier": "III", "effect": "When leaving Vanish, you are invulnerable for 1 second" }
+          { "tier": "III", "effect": "When leaving Vanish, you are invulnerable to damage for 1 second" }
         ]
       }
     ]
   }
   ```
-  `slot` is `Crown`, `Amulet`, `Weapon` (sometimes `Weapon (Sword)`), `Anchor` or `Consumable`.
+  `name` leaves off the owner: the wiki's *Dahla's Vanish Crown* is `Vanish Crown`. The embeds
+  show the owner alongside the name, and the wiki link puts it back to reach the item's section.
+
+  `slot` is `Crown`, `Amulet`, `Weapon`, `Anchor` or `Consumable`. Eternal weapons name their
+  type, e.g. `Weapon (Sword)`; the `slot:` filter matches them all as weapons.
   Anchors and consumables grant no separate ability: they carry a `description` and optional
   `stats` directly, with `abilities` left empty. Echo items have no tiers, so their abilities
   have `stats` and no `upgrades`.
@@ -253,9 +265,12 @@ will not propagate, so re-check them when the game patches.
   attacks are listed on the wiki with neither and render as stats only. `tags` are glossary
   terms, so `/glossary` explains what a tag means.
 
-  On the eternal itself, `damage`, `cooldown`, `range`, `imageUrl` and `aliases` are optional;
-  omitted number fields are left out of the embed rather than rendered blank (Rynshi's Rampage
-  deals no damage).
+  On the eternal itself, `coreAbility.stats` lists `name`/`value` pairs. Names are limited to
+  `CoreStatName` in [src/types.ts](src/types.ts) (Damage, Cooldown, Range, Stun, Lifesteal,
+  Duration, Speed Decrease, Speed Increase), and only the stats listed are shown: Rynshi's
+  Rampage has no Damage line because it deals none. `inRotation` is required and says whether
+  the eternal is currently in the game's rotation; `/randombuild` leaves out the items of
+  eternals that aren't. `stats`, `imageUrl` and `aliases` are optional. Eternal `aliases` are not currently used, since `/eternals name:` is a pick-list.
 
   There are no per-character health/damage/speed stats — every player has the same 200 Essence
   and 100 Fortitude. `imageUrl` puts a portrait thumbnail on the embed.
@@ -264,20 +279,21 @@ will not propagate, so re-check them when the game patches.
   Sourced from the [Arkheron Wiki glossary](https://arkheron.wiki.gg/wiki/Glossary); definitions
   are verbatim, `aliases` are additions for lookup convenience (`hp` → Essence, `dot` →
   Damage over Time, `reaver` → Tormentors). Entries the wiki marks outdated (Reflect,
-  Resilience, Soft Target, Tracking) are kept so the bot can point people at the current term.
+  Resilience, Soft Target) are kept so the bot can point people at the current term.
 
 ## Known wiki inconsistencies
 
 Reproduced as-is rather than silently corrected. Worth re-checking upstream:
 
 - **Vaton's amulet has two names.** The infobox calls it *Vaton's Audacity Amulet*, the item
-  section *Vaton's Imbalanced Scales Amulet*. The infobox name is used (consistent with every
-  other eternal); the other is an item alias, so both resolve.
-- **Two ability tags have no glossary entry:** `Aura` and `Bounce`. `/glossary` cannot explain
+  section *Vaton's Imbalanced Scales Amulet*. The infobox name is used, as `Audacity Amulet`
+  (consistent with every other eternal). The other name is not an alias, so searching for it
+  finds nothing.
+- **Two ability tags have no glossary entry:** `Aura` and `Overheat`. `/glossary` cannot explain
   them until the wiki adds them.
-- **Three tags are spelled differently from the glossary:** `Airborne Ability` vs Airborne
-  Attack, `Channeled Attack` vs Channeled Ability, `Damage Reflect` vs Damage Return. Tags are
-  kept as written and the glossary carries aliases, so lookups resolve either way.
+- **Three tags are spelled differently from the glossary:** `Channeled Attack` vs Channeled
+  Ability, `Damage Return` vs Damage Reflect, `Tether` vs Tethered. Tags are kept as written
+  and the glossary carries aliases, so lookups resolve either way.
 - **Penelope's Lock the Door shrinks at Tier III** (AoE Range 3m → 1.5m), against the pattern
   of every other tier upgrade. Possibly an upstream typo; copied as written.
 
@@ -293,18 +309,21 @@ Reproduced as-is rather than silently corrected. Worth re-checking upstream:
 ## Layout
 
 ```
-data/          Content: eternals.json, glossary.json
+data/          Content: eternals, items, glossary, faq and socials JSON
 images/        Item icons and eternal portraits
 src/
-  index.ts     Client setup, command registration, interaction dispatch
-  config.ts    Env vars with placeholder fallbacks
+  index.ts     Client setup, command registration, interaction dispatch, shutdown
+  config.ts    Env vars, with defaults for the optional ones
   rateLimit.ts Sliding-window throttling, bot-wide and per user
-  lobbies.ts   Lobby state and rules: joining, leaving, kicking, expiry
-  lobbyMessages.ts  Lobby posts, buttons, the host panel, and the expiry sweep
+  lobbies.ts   Lobby state and rules: joining, leaving, adding, kicking, expiry
+  lobbyMessages.ts  Lobby post buttons and clicks, post updates, and the expiry sweep
   data.ts      Loads and validates the JSON files
-  images.ts    Image paths to their GitHub URLs
-  search.ts    Name/alias matching with typo tolerance
-  embeds.ts    Embed builders and truncation helpers
-  types.ts     Command, Eternal, GlossaryEntry
+  types.ts     Command and the content types: Eternal, Item, GlossaryEntry, FaqTopic, SocialLink
   commands/    One file per command, plus registry.ts
+  embeds/      The embeds, one file per concept (eternals, items, lobbies…), with the shared
+               builders in general.ts
+  utils/       Helpers that aren't embeds, one file per concept, with the shared ones
+               (truncation, timestamps, message limits) in general.ts
+    search.ts  Name/alias matching with typo tolerance, lookup replies, autocomplete
+    images.ts  Image paths to their GitHub URLs
 ```

@@ -58,6 +58,8 @@ export interface Eternal {
   name: string;
   /** Archetype, e.g. "The Dancer". */
   title: string;
+  /** Whether the eternal is currently in the game's rotation. */
+  inRotation: boolean;
   description: string;
   coreAbility: CoreAbility;
   setBonus: SetBonus;

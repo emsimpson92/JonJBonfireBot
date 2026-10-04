@@ -1,10 +1,11 @@
 import { SlashCommandBuilder } from 'discord.js';
 
-import { baseEmbed, ephemeral, ephemeralError } from '../embeds.js';
-import { isHost, lobbyStore } from '../lobbies.js';
+import { ephemeral, ephemeralError } from '../embeds/general.js';
+import { lobbyKickEmbed } from '../embeds/lobbies.js';
+import { lobbyStore } from '../lobbies.js';
 import type { Player } from '../lobbies.js';
 import { syncPost } from '../lobbyMessages.js';
-import { respondWithMatches } from '../search.js';
+import { respondWithMatches } from '../utils/search.js';
 import type { Command } from '../types.js';
 
 const playerKeys = (player: Player) => [player.name];
@@ -24,14 +25,13 @@ export const lobbyKickCommand: Command = {
   examples: ['/lobbykick player:Steve'],
 
   async autocomplete(interaction) {
-    const lobby = lobbyStore.lobbyOf(interaction.user.id);
-    const kickable = lobby && isHost(lobby, interaction.user.id) ? lobby.players.slice(1) : [];
+    const kickable = lobbyStore.hostedBy(interaction.user.id)?.players.slice(1) ?? [];
     await respondWithMatches(interaction, kickable, playerKeys, (player) => ({ name: player.name, value: player.id }));
   },
 
   async execute(interaction) {
-    const lobby = lobbyStore.lobbyOf(interaction.user.id);
-    if (!lobby || !isHost(lobby, interaction.user.id)) {
+    const lobby = lobbyStore.hostedBy(interaction.user.id);
+    if (!lobby) {
       await interaction.reply(ephemeralError('Not hosting', "You are not the lobby host."));
 
       return;
@@ -46,10 +46,7 @@ export const lobbyKickCommand: Command = {
     }
 
     const removed = lobbyStore.kick(lobby, [target.id]);
-    const note = removed.length
-      ? `Removed ${removed.map((player) => `<@${player.id}>`).join(', ')}.`
-      : 'They had already left.';
-    await interaction.reply(ephemeral(baseEmbed('Lobby kick', note)));
+    await interaction.reply(ephemeral(lobbyKickEmbed(removed)));
 
     if (removed.length) {
       await syncPost(interaction.client, lobby);

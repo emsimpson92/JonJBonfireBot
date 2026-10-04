@@ -1,7 +1,7 @@
 [
   {
     "id": "dahlas-vanish-crown",
-    "name": "Dahla's Vanish Crown",
+    "name": "Vanish Crown",
     "slot": "Crown",
     "icon": "images/items/dahlas-vanish-crown.png",
     "abilities": [
@@ -16,7 +16,7 @@
   },
   {
     "id": "dahlas-petal-dance-amulet",
-    "name": "Dahla's Petal Dance Amulet",
+    "name": "Petal Dance Amulet",
     "slot": "Amulet",
     "icon": "images/items/dahlas-petal-dance-amulet.png",
     "abilities": [
@@ -31,7 +31,7 @@
   },
   {
     "id": "dahlas-dancing-blade",
-    "name": "Dahla's Dancing Blade",
+    "name": "Dancing Blade",
     "slot": "Weapon (Melee)",
     "icon": "images/items/dahlas-dancing-blade.png",
     "abilities": [
@@ -48,7 +48,7 @@
   },
   {
     "id": "dahlas-throwing-knives",
-    "name": "Dahla's Throwing Knives",
+    "name": "Throwing Knives",
     "slot": "Weapon (Ranged)",
     "icon": "images/items/dahlas-throwing-knives.png",
     "abilities": [
@@ -71,7 +71,7 @@
   },
   {
     "id": "edanis-outburst-crown",
-    "name": "Edani's Outburst Crown",
+    "name": "Outburst Crown",
     "slot": "Crown",
     "icon": "images/items/edanis-outburst-crown.png",
     "abilities": [
@@ -86,7 +86,7 @@
   },
   {
     "id": "edanis-suffering-amulet",
-    "name": "Edani's Suffering Amulet",
+    "name": "Suffering Amulet",
     "slot": "Amulet",
     "icon": "images/items/edanis-suffering-amulet.png",
     "abilities": [
@@ -104,7 +104,7 @@
   },
   {
     "id": "edanis-lunging-hook",
-    "name": "Edani's Lunging Hook",
+    "name": "Lunging Hook",
     "slot": "Weapon",
     "icon": "images/items/edanis-lunging-hook.png",
     "abilities": [
@@ -126,7 +126,7 @@
   },
   {
     "id": "edanis-pulling-claws",
-    "name": "Edani's Pulling Claws",
+    "name": "Pulling Claws",
     "slot": "Weapon",
     "icon": "images/items/edanis-pulling-claws.png",
     "abilities": [
@@ -147,7 +147,7 @@
   },
   {
     "id": "irennas-frost-armor-crown",
-    "name": "Irenna's Frost Armor Crown",
+    "name": "Frost Armor Crown",
     "slot": "Crown",
     "icon": "images/items/irennas-frost-armor-crown.png",
     "abilities": [
@@ -162,7 +162,7 @@
   },
   {
     "id": "irennas-north-wind-amulet",
-    "name": "Irenna's North Wind Amulet",
+    "name": "North Wind Amulet",
     "slot": "Amulet",
     "icon": "images/items/irennas-north-wind-amulet.png",
     "abilities": [
@@ -177,7 +177,7 @@
   },
   {
     "id": "irennas-icebreaker-mace",
-    "name": "Irenna's Icebreaker Mace",
+    "name": "Icebreaker Mace",
     "slot": "Weapon (Mace)",
     "icon": "images/items/irennas-icebreaker-mace.png",
     "abilities": [
@@ -194,7 +194,7 @@
   },
   {
     "id": "irennas-sword-caretaker",
-    "name": "Irenna's Sword \"Caretaker\"",
+    "name": "Sword \"Caretaker\"",
     "slot": "Weapon (Sword)",
     "icon": "images/items/irennas-sword-caretaker.png",
     "abilities": [
@@ -217,7 +217,7 @@
   },
   {
     "id": "ravahs-shadowsmoke-crown",
-    "name": "Ravah's Shadowsmoke Crown",
+    "name": "Shadowsmoke Crown",
     "slot": "Crown",
     "icon": "images/items/ravahs-shadowsmoke-crown.png",
     "abilities": [
@@ -232,7 +232,7 @@
   },
   {
     "id": "ravahs-stalking-amulet",
-    "name": "Ravah's Stalking Amulet",
+    "name": "Stalking Amulet",
     "slot": "Amulet",
     "icon": "images/items/ravahs-stalking-amulet.png",
     "abilities": [
@@ -247,7 +247,7 @@
   },
   {
     "id": "ravahs-talonflight-crossbow",
-    "name": "Ravah's Talonflight Crossbow",
+    "name": "Talonflight Crossbow",
     "slot": "Weapon (Crossbow)",
     "icon": "images/items/ravahs-talonflight-crossbow.png",
     "abilities": [
@@ -271,7 +271,7 @@
   },
   {
     "id": "ravahs-ringblade",
-    "name": "Ravah's Ringblade",
+    "name": "Ringblade",
     "slot": "Weapon (Ringblade)",
     "icon": "images/items/ravahs-ringblade.png",
     "abilities": [
@@ -294,7 +294,7 @@
   },
   {
     "id": "hollows-companion-crown",
-    "name": "Hollow's Companion Crown",
+    "name": "Companion Crown",
     "slot": "Crown",
     "icon": "images/items/hollows-companion-crown.png",
     "abilities": [
@@ -309,7 +309,7 @@
   },
   {
     "id": "hollows-outcast-amulet",
-    "name": "Hollow's Outcast Amulet",
+    "name": "Outcast Amulet",
     "slot": "Amulet",
     "icon": "images/items/hollows-outcast-amulet.png",
     "abilities": [
@@ -327,7 +327,7 @@
   },
   {
     "id": "hollows-sneklan",
-    "name": "Hollow's Sneklan",
+    "name": "Sneklan",
     "slot": "Weapon (Sneklan)",
     "icon": "images/items/hollows-sneklan.png",
     "abilities": [
@@ -351,7 +351,7 @@
   },
   {
     "id": "hollows-darkling-staff",
-    "name": "Hollow's Darkling Staff",
+    "name": "Darkling Staff",
     "slot": "Weapon (Staff)",
     "icon": "images/items/hollows-darkling-staff.png",
     "abilities": [
@@ -375,7 +375,7 @@
   },
   {
     "id": "leodins-radiant-crown",
-    "name": "Leodin's Radiant Crown",
+    "name": "Radiant Crown",
     "slot": "Crown",
     "icon": "images/items/leodins-radiant-crown.png",
     "abilities": [
@@ -393,7 +393,7 @@
   },
   {
     "id": "leodins-sanctuary-amulet",
-    "name": "Leodin's Sanctuary Amulet",
+    "name": "Sanctuary Amulet",
     "slot": "Amulet",
     "icon": "images/items/leodins-sanctuary-amulet.png",
     "abilities": [
@@ -408,7 +408,7 @@
   },
   {
     "id": "leodins-eclipse-hammer",
-    "name": "Leodin's Eclipse Hammer",
+    "name": "Eclipse Hammer",
     "slot": "Weapon (Hammer)",
     "icon": "images/items/leodins-eclipse-hammer.png",
     "abilities": [
@@ -431,7 +431,7 @@
   },
   {
     "id": "leodins-glint-spear",
-    "name": "Leodin's Glint Spear",
+    "name": "Glint Spear",
     "slot": "Weapon (Spear)",
     "icon": "images/items/leodins-glint-spear.png",
     "abilities": [
@@ -455,7 +455,7 @@
   },
   {
     "id": "karrivs-forgefire-crown",
-    "name": "Karriv's Forgefire Crown",
+    "name": "Forgefire Crown",
     "slot": "Crown",
     "icon": "images/items/karrivs-forgefire-crown.png",
     "abilities": [
@@ -470,7 +470,7 @@
   },
   {
     "id": "karrivs-flamepath-amulet",
-    "name": "Karriv's Flamepath Amulet",
+    "name": "Flamepath Amulet",
     "slot": "Amulet",
     "icon": "images/items/karrivs-flamepath-amulet.png",
     "abilities": [
@@ -485,7 +485,7 @@
   },
   {
     "id": "karrivs-flaming-lantern",
-    "name": "Karriv's Flaming Lantern",
+    "name": "Flaming Lantern",
     "slot": "Weapon (Lantern)",
     "icon": "images/items/karrivs-flaming-lantern.png",
     "abilities": [
@@ -502,7 +502,7 @@
   },
   {
     "id": "karrivs-searing-shovel",
-    "name": "Karriv's Searing Shovel",
+    "name": "Searing Shovel",
     "slot": "Weapon (Shovel)",
     "icon": "images/items/karrivs-searing-shovel.png",
     "abilities": [
@@ -522,7 +522,7 @@
   },
   {
     "id": "rynshis-blinding-rage-crown",
-    "name": "Rynshi's Blinding Rage Crown",
+    "name": "Blinding Rage Crown",
     "slot": "Crown",
     "icon": "images/items/rynshis-blinding-rage-crown.png",
     "abilities": [
@@ -540,7 +540,7 @@
   },
   {
     "id": "rynshis-vortex-amulet",
-    "name": "Rynshi's Vortex Amulet",
+    "name": "Vortex Amulet",
     "slot": "Amulet",
     "icon": "images/items/rynshis-vortex-amulet.png",
     "abilities": [
@@ -555,7 +555,7 @@
   },
   {
     "id": "rynshis-wrath-cleaver",
-    "name": "Rynshi's Wrath Cleaver",
+    "name": "Wrath Cleaver",
     "slot": "Weapon",
     "icon": "images/items/rynshis-wrath-cleaver.png",
     "abilities": [
@@ -577,7 +577,7 @@
   },
   {
     "id": "rynshis-fury-bracers",
-    "name": "Rynshi's Fury Bracers",
+    "name": "Fury Bracers",
     "slot": "Weapon",
     "icon": "images/items/rynshis-fury-bracers.png",
     "abilities": [
@@ -602,7 +602,7 @@
   },
   {
     "id": "vatons-payback-crown",
-    "name": "Vaton's Payback Crown",
+    "name": "Payback Crown",
     "slot": "Crown",
     "icon": "images/items/vatons-payback-crown.png",
     "abilities": [
@@ -617,7 +617,7 @@
   },
   {
     "id": "vatons-audacity-amulet",
-    "name": "Vaton's Audacity Amulet",
+    "name": "Audacity Amulet",
     "slot": "Amulet",
     "icon": "images/items/vatons-audacity-amulet.png",
     "abilities": [
@@ -632,7 +632,7 @@
   },
   {
     "id": "vatons-seeing-eye",
-    "name": "Vaton's Seeing Eye",
+    "name": "Seeing Eye",
     "slot": "Weapon",
     "icon": "images/items/vatons-seeing-eye.png",
     "abilities": [
@@ -658,7 +658,7 @@
   },
   {
     "id": "vatons-serpent-staff",
-    "name": "Vaton's Serpent Staff",
+    "name": "Serpent Staff",
     "slot": "Weapon",
     "icon": "images/items/vatons-serpent-staff.png",
     "abilities": [
@@ -675,7 +675,7 @@
   },
   {
     "id": "grimwolds-oscillating-regeneration-crown",
-    "name": "Grimwold's Oscillating Regeneration Crown",
+    "name": "Oscillating Regeneration Crown",
     "slot": "Crown",
     "icon": "images/items/grimwolds-oscillating-regeneration-crown.png",
     "abilities": [
@@ -690,7 +690,7 @@
   },
   {
     "id": "grimwolds-voltaic-barrier-amulet",
-    "name": "Grimwold's Voltaic Barrier Amulet",
+    "name": "Voltaic Barrier Amulet",
     "slot": "Amulet",
     "icon": "images/items/grimwolds-voltaic-barrier-amulet.png",
     "abilities": [
@@ -705,7 +705,7 @@
   },
   {
     "id": "grimwolds-strange-device",
-    "name": "Grimwold's Strange Device",
+    "name": "Strange Device",
     "slot": "Weapon",
     "icon": "images/items/grimwolds-strange-device.png",
     "abilities": [
@@ -728,7 +728,7 @@
   },
   {
     "id": "grimwolds-charged-rings",
-    "name": "Grimwold's Charged Rings",
+    "name": "Charged Rings",
     "slot": "Weapon",
     "icon": "images/items/grimwolds-charged-rings.png",
     "abilities": [
@@ -754,7 +754,7 @@
   },
   {
     "id": "penelopes-sparkle-crown",
-    "name": "Penelope's Sparkle Crown",
+    "name": "Sparkle Crown",
     "slot": "Crown",
     "icon": "images/items/penelopes-sparkle-crown.png",
     "abilities": [
@@ -769,7 +769,7 @@
   },
   {
     "id": "penelopes-correction-amulet",
-    "name": "Penelope's Correction Amulet",
+    "name": "Correction Amulet",
     "slot": "Amulet",
     "icon": "images/items/penelopes-correction-amulet.png",
     "abilities": [
@@ -784,7 +784,7 @@
   },
   {
     "id": "penelopes-looking-glass",
-    "name": "Penelope's Looking Glass",
+    "name": "Looking Glass",
     "slot": "Weapon",
     "icon": "images/items/penelopes-looking-glass.png",
     "abilities": [
@@ -808,7 +808,7 @@
   },
   {
     "id": "penelopes-porcelain-parasol",
-    "name": "Penelope's Porcelain Parasol",
+    "name": "Porcelain Parasol",
     "slot": "Weapon",
     "icon": "images/items/penelopes-porcelain-parasol.png",
     "abilities": [
@@ -831,7 +831,7 @@
   },
   {
     "id": "tsubos-forefather-crown",
-    "name": "Tsu'bo's Forefather Crown",
+    "name": "Forefather Crown",
     "slot": "Crown",
     "icon": "images/items/tsubos-forefather-crown.png",
     "abilities": [
@@ -846,7 +846,7 @@
   },
   {
     "id": "tsubos-run-free-amulet",
-    "name": "Tsu'bo's Run Free Amulet",
+    "name": "Run Free Amulet",
     "slot": "Amulet",
     "icon": "images/items/tsubos-run-free-amulet.png",
     "abilities": [
@@ -861,7 +861,7 @@
   },
   {
     "id": "tsubos-ripper-blades",
-    "name": "Tsu'bo's Ripper Blades",
+    "name": "Ripper Blades",
     "slot": "Weapon (Arm Blades)",
     "icon": "images/items/tsubos-ripper-blades.png",
     "abilities": [
@@ -878,7 +878,7 @@
   },
   {
     "id": "tsubos-boom-chakas",
-    "name": "Tsu'bo's Boom-Chakas",
+    "name": "Boom-Chakas",
     "slot": "Weapon (Bolas)",
     "icon": "images/items/tsubos-boom-chakas.png",
     "abilities": [

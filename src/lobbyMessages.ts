@@ -9,8 +9,9 @@ import type {
   User,
 } from 'discord.js';
 
-import { baseEmbed, ephemeral, ephemeralError } from './embeds.js';
-import { expiresAt, isHost, lobbyStore, MAX_PLAYERS } from './lobbies.js';
+import { ephemeral, ephemeralError } from './embeds/general.js';
+import { lobbyClosedEmbed, lobbyEmbed, switchedLobbiesEmbed } from './embeds/lobbies.js';
+import { isHost, lobbyStore } from './lobbies.js';
 import type { Lobby, Player } from './lobbies.js';
 
 /** Every lobby button id starts with this. We don't need it now but if we add buttons in the future it'll help */
@@ -29,16 +30,6 @@ export function isLobbyComponent(id: string): boolean {
   return id.startsWith(`${PREFIX}:`);
 }
 
-export function unixSeconds(ms: number): number {
-  return Math.floor(ms / 1000);
-}
-
-export function postUrl(lobby: Lobby): string | undefined {
-  return lobby.messageId
-    ? `https://discord.com/channels/${lobby.guildId}/${lobby.channelId}/${lobby.messageId}`
-    : undefined;
-}
-
 export function toPlayer(user: User, member: GuildMember | APIInteractionGuildMember | APIInteractionDataResolvedGuildMember | null): Player {
   const name = member && 'displayName' in member ? member.displayName : (member?.nick ?? user.displayName);
 
@@ -49,25 +40,15 @@ export function playerFrom(interaction: BaseInteraction): Player {
   return toPlayer(interaction.user, interaction.member);
 }
 
+/** The lobby's embed with its buttons, which live here beside the handler that reads their ids. */
 export function lobbyPost(lobby: Lobby) {
-  const roster = lobby.players
-    .map((player, index) => (index === 0 ? `1. 👑 <@${player.id}> — **Host**` : `${index + 1}. <@${player.id}>`))
-    .join('\n');
-  const embed = baseEmbed(
-    `Lobby Code: ${lobby.code}`,
-    `**Region:** ${lobby.region}\n` +
-      (lobby.mode ? `**Mode:** ${lobby.mode}\n` : '') +
-      `**Expires:** <t:${unixSeconds(expiresAt(lobby))}:R>\n\n` +
-      `**Players (${lobby.players.length}/${MAX_PLAYERS})**\n${roster}`,
-  );
-
   const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder().setCustomId(customId('join', lobby)).setLabel('Join').setStyle(ButtonStyle.Primary),
     new ButtonBuilder().setCustomId(customId('leave', lobby)).setLabel('Leave').setStyle(ButtonStyle.Secondary),
     new ButtonBuilder().setCustomId(customId('close', lobby)).setLabel('Close Lobby').setStyle(ButtonStyle.Danger),
   );
 
-  return { embeds: [embed], components: [buttons] };
+  return { embeds: [lobbyEmbed(lobby)], components: [buttons] };
 }
 
 /** Updates a lobby's post when the state changes */
@@ -112,7 +93,7 @@ export function startLobbySweep(client: Client): void {
 async function deleteClickedPost(interaction: MessageComponentInteraction, note: string): Promise<void> {
   await interaction.deferUpdate();
   await interaction.deleteReply();
-  await interaction.followUp(ephemeral(baseEmbed('Lobby closed', note)));
+  await interaction.followUp(ephemeral(lobbyClosedEmbed(note)));
 }
 
 export async function handleLobbyComponent(interaction: MessageComponentInteraction): Promise<void> {
@@ -120,7 +101,7 @@ export async function handleLobbyComponent(interaction: MessageComponentInteract
   const lobby = lobbyStore.find(code, id);
 
   if (!lobby) {
-    await lobbyGone(interaction);
+    await deleteClickedPost(interaction, 'This lobby is closed.');
     return;
   }
 
@@ -137,11 +118,6 @@ export async function handleLobbyComponent(interaction: MessageComponentInteract
   }
 }
 
-/** The lobby has closed — expired, emptied, or wiped by a restart — but these buttons are still up. */
-async function lobbyGone(interaction: MessageComponentInteraction): Promise<void> {
-  await deleteClickedPost(interaction, 'This lobby is closed.');
-}
-
 async function join(interaction: MessageComponentInteraction, lobby: Lobby): Promise<void> {
   const result = lobbyStore.join(lobby, playerFrom(interaction));
   if (!result.ok) {
@@ -154,7 +130,7 @@ async function join(interaction: MessageComponentInteraction, lobby: Lobby): Pro
   await interaction.update(lobbyPost(lobby));
 
   if (result.left) {
-    await interaction.followUp(ephemeral(baseEmbed('Switched lobbies', `You left lobby **${result.left.code}** to join this one.`)));
+    await interaction.followUp(ephemeral(switchedLobbiesEmbed(result.left, 'join')));
     await syncPost(interaction.client, result.left);
   }
 }

@@ -26,23 +26,12 @@ function positiveInt(name: string, fallback: number): number {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
-function parseColor(raw: string): number {
-  const parsed = Number.parseInt(raw.replace(/^#/, ''), 16);
-  return Number.isNaN(parsed) ? 0xe25822 : parsed;
-}
-
 export const config = {
   token: required('DISCORD_TOKEN'),
   guildId: snowflake('GUILD_ID'),
   /** Where /createlobby works. Unset, it works in any channel. */
   lobbyChannelId: snowflake('LOBBY_CHANNEL_ID'),
-  embedColor: parseColor(optional('EMBED_COLOR', '#E25822')),
-  maxRequests: positiveInt('MAX_REQUESTS_PER_MINUTE', 15),
+  maxRequests: positiveInt('MAX_REQUESTS_PER_MINUTE', 50),
   maxRequestsPerUser: positiveInt('MAX_REQUESTS_PER_USER_PER_MINUTE', 5),
   imageBaseUrl: optional('IMAGE_BASE_URL', 'https://raw.githubusercontent.com/emsimpson92/JonJBonfireBot/main/'),
 } as const;
-
-/** Direct jump link. Needs a real GUILD_ID; without one the channel mention stands alone. */
-export function channelUrl(channelId: string): string | undefined {
-  return config.guildId ? `https://discord.com/channels/${config.guildId}/${channelId}` : undefined;
-}

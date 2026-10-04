@@ -1,7 +1,7 @@
 import { InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 
-import { ephemeralError } from '../embeds.js';
-import { isHost, lobbyStore } from '../lobbies.js';
+import { ephemeralError } from '../embeds/general.js';
+import { lobbyStore } from '../lobbies.js';
 import type { AddResult, Lobby } from '../lobbies.js';
 import { syncPost, toPlayer } from '../lobbyMessages.js';
 import type { Command } from '../types.js';
@@ -32,8 +32,8 @@ export const lobbyAddCommand: Command = {
   examples: ['/lobbyadd player:@Steve'],
 
   async execute(interaction) {
-    const lobby = lobbyStore.lobbyOf(interaction.user.id);
-    if (!lobby || !isHost(lobby, interaction.user.id)) {
+    const lobby = lobbyStore.hostedBy(interaction.user.id);
+    if (!lobby) {
       await interaction.reply(ephemeralError('Not hosting', 'You are not the lobby host.'));
 
       return;

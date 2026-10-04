@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { keysOf } from './search.js';
 import type { Eternal, FaqTopic, GlossaryEntry, Item, SocialLink } from './types.js';
 
 const dataDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'data');
@@ -64,10 +63,22 @@ export const items: OwnedItem[] = allItems.map((item) => {
   return eternal ? { item, eternal } : { item };
 });
 
+export function filterItems(owner: string | null, slot: string | null): OwnedItem[] {
+  let matches = items;
+  if (owner === 'echo') {
+    matches = matches.filter(({ eternal }) => !eternal);
+  }
+  else if (owner) {
+    matches = matches.filter(({ eternal }) => eternal?.id === owner);
+  }
+  if (slot) {
+    matches = matches.filter(({ item }) => item.slot.toLowerCase().startsWith(slot));
+  }
+
+  return matches;
+}
+
 /** The four items an eternal carries, resolved from their ids. */
 export function itemsOf(eternal: Eternal): Item[] {
   return eternal.items.map((id) => itemsById.get(id) as Item);
 }
-
-/** How an eternal is looked up, shared by /eternals and /item. */
-export const eternalKeys = (eternal: Eternal): string[] => keysOf(eternal, eternal.id, eternal.name, eternal.title);

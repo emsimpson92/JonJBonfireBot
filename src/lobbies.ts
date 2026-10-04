@@ -6,6 +6,9 @@ export type Region = (typeof REGIONS)[number];
 export const MODES = ['Ascension', 'Spires'] as const;
 export type Mode = (typeof MODES)[number];
 
+export const REGION_CHOICES = REGIONS.map((region) => ({ name: region, value: region }));
+export const MODE_CHOICES = MODES.map((mode) => ({ name: mode, value: mode }));
+
 /** In-game invite codes are six capital letters or digits, e.g. DX89EE. */
 export const CODE_LENGTH = 6;
 export const CODE_PATTERN = /^[A-Z0-9]{6}$/;
@@ -75,6 +78,12 @@ class LobbyStore {
     return this.playerLobbies.get(userId);
   }
 
+  /** Get the lobby the player is hosting (if any) */
+  hostedBy(userId: string, now: number = Date.now()): Lobby | undefined {
+    const lobby = this.lobbyOf(userId, now);
+    return lobby && isHost(lobby, userId) ? lobby : undefined;
+  }
+
   list(now: number = Date.now()): Lobby[] {
     this.expire(now);
     return [...this.lobbies.values()].sort((a, b) => b.lastActivityAt - a.lastActivityAt);
@@ -112,9 +121,7 @@ class LobbyStore {
     }
 
     const left = this.removeFromCurrent(player.id, now);
-    lobby.players.push(player);
-    lobby.lastActivityAt = now;
-    this.playerLobbies.set(player.id, lobby);
+    this.addPlayer(lobby, player, now);
 
     return { ok: true, left };
   }
@@ -132,9 +139,7 @@ class LobbyStore {
       return { ok: false, reason: 'full' };
     }
 
-    lobby.players.push(player);
-    lobby.lastActivityAt = now;
-    this.playerLobbies.set(player.id, lobby);
+    this.addPlayer(lobby, player, now);
 
     return { ok: true };
   }
@@ -174,6 +179,12 @@ class LobbyStore {
         this.expired.push(lobby);
       }
     }
+  }
+
+  private addPlayer(lobby: Lobby, player: Player, now: number): void {
+    lobby.players.push(player);
+    lobby.lastActivityAt = now;
+    this.playerLobbies.set(player.id, lobby);
   }
 
   private removeFromCurrent(userId: string, now: number): Lobby | undefined {

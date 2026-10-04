@@ -1,10 +1,13 @@
 import { InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
 import { config } from '../config.js';
-import { baseEmbed, ephemeral, ephemeralError } from '../embeds.js';
-import { CODE_LENGTH, CODE_PATTERN, lobbyStore, MAX_LOBBIES, MODES, REGIONS } from '../lobbies.js';
-import { lobbyPost, playerFrom, postUrl, syncPost } from '../lobbyMessages.js';
+import { ephemeral, ephemeralError } from '../embeds/general.js';
+import { switchedLobbiesEmbed } from '../embeds/lobbies.js';
+import { CODE_LENGTH, CODE_PATTERN, lobbyStore, MAX_LOBBIES, MODE_CHOICES, MODES, REGION_CHOICES } from '../lobbies.js';
+import type { Region } from '../lobbies.js';
+import { lobbyPost, playerFrom, syncPost } from '../lobbyMessages.js';
 import type { Command } from '../types.js';
+import { postUrl } from '../utils/lobbies.js';
 
 export const lobbyCreateCommand: Command = {
   data: new SlashCommandBuilder()
@@ -22,12 +25,12 @@ export const lobbyCreateCommand: Command = {
       option.setName('region')
         .setDescription('Which server the lobby is hosted on')
         .setRequired(true)
-        .addChoices(...REGIONS.map((region) => ({ name: region, value: region }))),
+        .addChoices(...REGION_CHOICES),
     )
     .addStringOption((option) =>
       option.setName('mode')
         .setDescription('Which game mode')
-        .addChoices(...MODES.map((mode) => ({ name: mode, value: mode }))),
+        .addChoices(...MODE_CHOICES),
     )
     .toJSON(),
   usage: '/createlobby <code> <region> [mode]',
@@ -45,13 +48,14 @@ export const lobbyCreateCommand: Command = {
     }
 
     const code = interaction.options.getString('code', true).trim().toUpperCase();
-    const region = REGIONS.find((name) => name === interaction.options.getString('region', true));
-    const mode = MODES.find((name) => name === interaction.options.getString('mode'));
-    if (!CODE_PATTERN.test(code) || !region) {
+    if (!CODE_PATTERN.test(code)) {
       await interaction.reply(ephemeralError('Invalid code', `Invite codes are ${CODE_LENGTH} letters or numbers, like \`DX89EE\`.`));
 
       return;
     }
+
+    const region = interaction.options.getString('region', true) as Region;
+    const mode = MODES.find((name) => name === interaction.options.getString('mode'));
 
     const result = lobbyStore.create({
       code,
@@ -81,10 +85,14 @@ export const lobbyCreateCommand: Command = {
       lobbyStore.close(lobby);
       throw error;
     }
+    finally {
+      if (left) {
+        await syncPost(interaction.client, left);
+      }
+    }
 
     if (left) {
-      await interaction.followUp(ephemeral(baseEmbed('Switched lobbies', `You left lobby **${left.code}** to host this one.`)));
-      await syncPost(interaction.client, left);
+      await interaction.followUp(ephemeral(switchedLobbiesEmbed(left, 'host')));
     }
   },
 };

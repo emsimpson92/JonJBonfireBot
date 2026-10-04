@@ -1,49 +1,12 @@
-import { ApplicationCommandOptionType, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
-import { baseEmbed, ephemeralError } from '../embeds.js';
-import { respondWithMatches } from '../search.js';
+import { ephemeralError } from '../embeds/general.js';
+import { helpDetailEmbed, helpOverviewEmbed } from '../embeds/help.js';
+import { respondWithMatches } from '../utils/search.js';
 import type { Command } from '../types.js';
 // Circular with registry.ts by design: registry imports every command module,
 // including this one. Only read `commands` inside a handler, never at module scope.
 import { commands } from './registry.js';
-
-function overviewEmbed() {
-  const lines = commands.map((command) => `\`/${command.data.name}\` — ${command.data.description}`).join('\n');
-  return baseEmbed('Commands', lines).setFooter({ text: 'Use /help <command> for syntax and examples.' });
-}
-
-function detailEmbed(command: Command) {
-  const embed = baseEmbed(`/${command.data.name}`, command.data.description).addFields({
-    name: 'Usage',
-    value: `\`${command.usage}\``,
-  });
-
-  if (command.examples.length) {
-    embed.addFields({
-      name: command.examples.length === 1 ? 'Example' : 'Examples',
-      value: command.examples.map((example) => `\`${example}\``).join('\n'),
-    });
-  }
-
-  const options = command.data.options ?? [];
-  if (options.length) {
-    embed.addFields({
-      name: 'Options',
-      value: options
-        .map((option) => `\`${option.name}\`${isRequired(option) ? '' : ' (optional)'} — ${option.description}`)
-        .join('\n'),
-    });
-  }
-
-  return embed;
-}
-
-/** Subcommands are alternatives rather than inputs, so they are never "optional". */
-function isRequired(option: NonNullable<Command['data']['options']>[number]): boolean {
-  return option.type === ApplicationCommandOptionType.Subcommand ||
-    option.type === ApplicationCommandOptionType.SubcommandGroup ||
-    ('required' in option && Boolean(option.required));
-}
 
 const keys = (command: Command) => [command.data.name];
 
@@ -70,13 +33,13 @@ export const helpCommand: Command = {
   async execute(interaction) {
     const query = interaction.options.getString('command');
     if (!query) {
-      await interaction.reply({ embeds: [overviewEmbed()] });
+      await interaction.reply({ embeds: [helpOverviewEmbed(commands)] });
       return;
     }
 
     const match = commands.find((command) => command.data.name === query.replace(/^\//, '').toLowerCase());
     if (match) {
-      await interaction.reply({ embeds: [detailEmbed(match)] });
+      await interaction.reply({ embeds: [helpDetailEmbed(match)] });
       return;
     }
 

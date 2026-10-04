@@ -8,6 +8,7 @@ import { lobbiesCommand } from './lobbies.js';
 import { lobbyCreateCommand } from './createlobby.js';
 import { lobbyAddCommand } from './lobbyadd.js';
 import { lobbyKickCommand } from './lobbykick.js';
+import { randomBuildCommand } from './randombuild.js';
 import { socialsCommand } from './socials.js';
 
 /** Order here is the order /help lists them in. */
@@ -17,6 +18,7 @@ export const commands: Command[] = [
   socialsCommand,
   eternalsCommand,
   itemCommand,
+  randomBuildCommand,
   glossaryCommand,
   lobbyCreateCommand,
   lobbiesCommand,

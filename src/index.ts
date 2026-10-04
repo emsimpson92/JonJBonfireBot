@@ -2,7 +2,7 @@ import { Client, Events, GatewayIntentBits, MessageFlags } from 'discord.js';
 import type { ChatInputCommandInteraction, MessageComponentInteraction } from 'discord.js';
 import { commands, findCommand } from './commands/registry.js';
 import { config } from './config.js';
-import { ephemeral, ephemeralError, errorEmbed } from './embeds.js';
+import { ephemeral, ephemeralError, errorEmbed } from './embeds/general.js';
 import { handleLobbyComponent, isLobbyComponent, startLobbySweep } from './lobbyMessages.js';
 import { RateLimiter } from './rateLimit.js';
 
@@ -10,7 +10,7 @@ const RATE_LIMITED_MESSAGE = 'The message limit has been reached. Please wait an
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const rateLimiter = new RateLimiter(config.maxRequests, config.maxRequestsPerUser);
-const componentRateLimiter = new RateLimiter(config.maxRequests * 5, config.maxRequestsPerUser);
+const componentRateLimiter = new RateLimiter(config.maxRequests * 2, config.maxRequestsPerUser);
 
 client.once(Events.ClientReady, async (ready) => {
   const payload = commands.map((command) => command.data);
@@ -81,16 +81,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
   catch (error) {
     console.error(`Command "${interaction.commandName}" failed:`, error);
-    const body = ephemeralError('Something went wrong', 'That command failed. Try again in a moment.');
-    // Either reply or follow up, depending on how far the handler got.
-    await (interaction.replied || interaction.deferred
-      ? interaction.followUp(body)
-      : interaction.reply(body)
-    ).catch(() => undefined);
+    await replyWithFailure(interaction, 'That command failed. Try again in a moment.');
   }
 });
 
-/** Lobby buttons and menus. A click posts nothing in the channel, so a throttled one is told privately. */
+/** Lobby buttons. A click posts nothing in the channel, so a throttled one is told privately. */
 async function handleComponent(interaction: MessageComponentInteraction): Promise<void> {
   if (!isLobbyComponent(interaction.customId)) {
     return;
@@ -113,12 +108,19 @@ async function handleComponent(interaction: MessageComponentInteraction): Promis
   }
   catch (error) {
     console.error(`Lobby action "${interaction.customId}" failed:`, error);
-    const body = ephemeralError('Something went wrong', 'That didn\'t work. Try again in a moment.');
-    await (interaction.replied || interaction.deferred
-      ? interaction.followUp(body)
-      : interaction.reply(body)
-    ).catch(() => undefined);
+    await replyWithFailure(interaction, 'That didn\'t work. Try again in a moment.');
   }
+}
+
+async function replyWithFailure(
+  interaction: ChatInputCommandInteraction | MessageComponentInteraction,
+  description: string,
+): Promise<void> {
+  const body = ephemeralError('Something went wrong', description);
+  await (interaction.replied || interaction.deferred ? 
+    interaction.followUp(body) : 
+    interaction.reply(body)
+  ).catch(() => undefined);
 }
 
 /** The bot as a whole is over its limit, so everyone in the channel should see why. */
@@ -149,6 +151,14 @@ async function warnUser(interaction: ChatInputCommandInteraction): Promise<void>
   catch (error: unknown) {
     console.error('Failed to dismiss a rate limited interaction:', error);
   }
+}
+
+/** Die gracefully */
+for (const signal of ['SIGTERM', 'SIGINT'] as const) {
+  process.once(signal, () => {
+    console.log(`Received ${signal}, logging out.`);
+    void client.destroy().finally(() => process.exit(0));
+  });
 }
 
 client.login(config.token).catch((error: unknown) => {
