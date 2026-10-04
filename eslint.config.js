@@ -5,7 +5,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ["src/**/*.ts"],
+    files: ["src/**/*.ts", "tests/**/*.ts"],
     rules: {
       curly: ["error", "all"],
       "brace-style": ["error", "stroustrup", { allowSingleLine: false }],

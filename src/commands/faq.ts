@@ -1,17 +1,12 @@
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
 import { faq } from '../data.js';
-import { baseEmbed, errorEmbed, truncate } from '../embeds.js';
-import { findBest, keysOf, respondWithMatches } from '../search.js';
+import { faqListEmbed, faqTopicEmbed } from '../embeds/faq.js';
+import { ephemeral } from '../embeds/general.js';
+import { keysOf, replyWithBest, respondWithMatches } from '../utils/search.js';
 import type { Command, FaqTopic } from '../types.js';
 
-const keys = (entry: FaqTopic) => keysOf(entry, entry.topic);
-
-function topicEmbed(entry: FaqTopic) {
-  return baseEmbed(entry.topic).addFields(
-    entry.entries.map((qa, index) => ({ name: truncate(`${index + 1}. ${qa.question}`, 256), value: qa.answer })),
-  );
-}
+export const keys = (entry: FaqTopic) => keysOf(entry, entry.topic);
 
 export const faqCommand: Command = {
   data: new SlashCommandBuilder().setName('faq').setDescription('Lists FAQ topics, or answers one.')
@@ -29,40 +24,16 @@ export const faqCommand: Command = {
     const query = interaction.options.getString('topic');
 
     if (!query) {
-      const list = faq.length ?
-        `**${faq.length} ${faq.length === 1 ? 'topic' : 'topics'}:**\n${faq.map((entry) => `\`${entry.topic}\``).join('\n')}` :
-        'No FAQ topics have been added yet.';
-
-      await interaction.reply({
-        embeds: [baseEmbed('Frequently Asked Questions', list).setFooter({ text: 'Use /faq <topic> to read one.' })],
-        flags: MessageFlags.Ephemeral,
-      });
+      await interaction.reply(ephemeral(faqListEmbed(faq)));
 
       return;
     }
 
-    const matches = findBest(query, faq, keys);
-
-    if (matches.length === 1) {
-      await interaction.reply({ embeds: [topicEmbed(matches[0] as FaqTopic)] });
-
-      return;
-    }
-
-    // Several topics match equally - not convinced this is valid
-    if (matches.length > 1) {
-      const options = matches.map((entry) => `\`${entry.topic}\``).join(', ');
-      await interaction.reply({
-        embeds: [baseEmbed('Multiple topics match', `\`${query}\` matches several: ${options}`)],
-        flags: MessageFlags.Ephemeral,
-      });
-
-      return;
-    }
-
-    await interaction.reply({
-      embeds: [errorEmbed('Topic not found', `No FAQ topic \`${query}\`. Run /faq to see every topic.`)],
-      flags: MessageFlags.Ephemeral,
+    await replyWithBest(interaction, query, faq, keys, {
+      plural: 'topics',
+      label: (entry) => entry.topic,
+      render: faqTopicEmbed,
+      notFound: { title: 'Topic not found', description: `No FAQ topic \`${query}\`. Run /faq to see every topic.` },
     });
   },
 };

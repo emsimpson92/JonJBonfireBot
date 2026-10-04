@@ -1,50 +1,9 @@
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
-import { eternalKeys, eternals, itemsOf } from '../data.js';
-import { baseEmbed, errorEmbed, truncate } from '../embeds.js';
-import { publicUrl } from '../images.js';
-import { findBest } from '../search.js';
-import type { Command, Eternal } from '../types.js';
-
-function detailEmbed(eternal: Eternal) {
-  const { coreAbility: core } = eternal;
-
-  let abilityValue = `${core.description}\n${core.tags.map((tag) => `\`${tag}\``).join(' ')}`;
-
-  // Core ability details
-  if (core.stats?.length) {
-    const parts = core.stats.map((stat) => `**${stat.name}:** ${stat.value}`);
-    abilityValue += `\n${parts.join('\n')}`;
-  }
-
-  const embed = baseEmbed(`${eternal.name} — ${eternal.title}`, eternal.description).setURL(eternal.wikiUrl)
-    .addFields({
-      name: `Eternal Ability: ${core.name}`,
-      value: abilityValue,
-    });
-
-  // Set bonus
-  embed.addFields({ name: `Set Bonus: ${eternal.setBonus.name}`, value: eternal.setBonus.description });
-
-  // Item list. Item abilities can be found using /item
-  const itemLines = itemsOf(eternal).map((item) => `\`${item.slot}\` **${item.name}**`);
-  if (itemLines.length) {
-    embed.addFields({ name: 'Items', value: truncate(itemLines.join('\n'), 1024) });
-  }
-
-  if (eternal.imageUrl) {
-    embed.setThumbnail(publicUrl(eternal.imageUrl));
-  }
-
-  return embed.setFooter({ text: "/item for an item's abilities · /glossary explains any tag" });
-}
-
-function listEmbed() {
-  const lines = eternals.map((eternal) => `**${eternal.name}**`).join('\n');
-  return baseEmbed(`Eternals (${eternals.length})`, lines || 'No eternals are configured yet.').setFooter({
-    text: 'Use /eternals <name> for details on one.',
-  });
-}
+import { eternals } from '../data.js';
+import { eternalDetailEmbed, eternalListEmbed } from '../embeds/eternals.js';
+import { ephemeralError } from '../embeds/general.js';
+import type { Command } from '../types.js';
 
 export const eternalsCommand: Command = {
   data: new SlashCommandBuilder().setName('eternals')
@@ -57,35 +16,20 @@ export const eternalsCommand: Command = {
   examples: ['/eternals', '/eternals name:dahla'],
 
   async execute(interaction) {
-    const query = interaction.options.getString('name');
-    if (!query) {
-      await interaction.reply({ embeds: [listEmbed()] });
+    const id = interaction.options.getString('name');
+    if (!id) {
+      await interaction.reply({ embeds: [eternalListEmbed(eternals)] });
 
       return;
     }
 
-    const matches = findBest(query, eternals, eternalKeys);
-
-    if (matches.length === 1) {
-      await interaction.reply({ embeds: [detailEmbed(matches[0] as Eternal)] });
-
-      return;
-    }
-
-    // Reachable when a value is typed rather than picked from the choices.
-    if (matches.length > 1) {
-      const options = matches.map((eternal) => `**${eternal.name}**`).join('\n');
-      await interaction.reply({
-        embeds: [baseEmbed('Multiple eternals match', `\`${query}\` matches several:\n\n${options}`)],
-        flags: MessageFlags.Ephemeral,
-      });
+    const eternal = eternals.find((candidate) => candidate.id === id);
+    if (!eternal) {
+      await interaction.reply(ephemeralError('No such eternal', `No eternal matched \`${id}\`. Run /eternals to see the full list.`));
 
       return;
     }
 
-    await interaction.reply({
-      embeds: [errorEmbed('No such eternal', `No eternal matched \`${query}\`. Run /eternals to see the full list.`)],
-      flags: MessageFlags.Ephemeral,
-    });
+    await interaction.reply({ embeds: [eternalDetailEmbed(eternal)] });
   },
 };

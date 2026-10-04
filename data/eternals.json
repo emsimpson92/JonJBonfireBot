@@ -3,6 +3,7 @@
     "id": "dahla",
     "name": "Dahla",
     "title": "The Dancer",
+    "inRotation": true,
     "description": "The memories of an entertainer trapped in a moment. Dahla performs for an audience that only she can see. This Eternal is highly mobile, dangerous at any distance, and able to sustain her allies with healing.",
     "coreAbility": {
       "name": "Curtain Call",
@@ -25,6 +26,7 @@
     "id": "edani",
     "name": "Edani",
     "title": "The Mistress of Suffering",
+    "inRotation": true,
     "description": "The memories of a tortured writer. Edani knows suffering and wants to share it. Excelling in isolation, this Eternal hooks, claws, and banishes her prey before ripping them apart.",
     "coreAbility": {
       "name": "Banish",
@@ -47,6 +49,7 @@
     "id": "irenna",
     "name": "Irenna",
     "title": "The Maul",
+    "inRotation": true,
     "description": "The memories of a knight who failed. Irenna is a durable frontline combatant. This Eternal fights like a bear, preferring to maul her enemies.",
     "coreAbility": {
       "name": "Spiral Strike",
@@ -68,6 +71,7 @@
     "id": "ravah",
     "name": "Ravah",
     "title": "The Fading Huntress",
+    "inRotation": true,
     "description": "The memories of a bounty hunter who was caged in a Tower. Ravah stalks her targets, using smoke and shadow to confuse her enemies. This Eternal deals devastating bursts of damage at long range.",
     "coreAbility": {                                      
       "name": "The Parliament",
@@ -90,6 +94,7 @@
     "id": "hollow", 
     "name": "Hollow",
     "title": "The Forest Darkling",
+    "inRotation": true,
     "description": "The memories of an outcast. Hollow prefers the Tower to the living world. This Eternal is aided by her gloomies, strange creatures born of feeling and memory.",
     "coreAbility": {
       "name": "Gloomy Swarm",
@@ -110,6 +115,7 @@
     "id": "leodin",
     "name": "Leodin",
     "title": "The Lightbringer",
+    "inRotation": false,
     "description": "The memories of a warrior who had faith in himself. The Lightbringer is a god or a madman. This Eternal can take to the sky, reflect projectiles, and punch through armor with his glint spear.",
     "coreAbility": {
       "name": "Sky Strike",
@@ -131,6 +137,7 @@
     "id": "karriv",
     "name": "Karriv",
     "title": "The Forge",
+    "inRotation": true,
     "description": "The memories of a weaponsmith destined to lead others to ruin. Karriv is a resilient protector. This Eternal excels at defending an area and forcing opponents to fight on his terms.",
     "coreAbility": {
       "name": "Fire Cage",
@@ -153,6 +160,7 @@
     "id": "rynshi",
     "name": "Rynshi",
     "title": "The Beast",
+    "inRotation": true,
     "description": "The memories of a berserker with blood on his hands. Rynshi knows that the Beast belongs here, with the other monsters. This Eternal stuns and blinds his victims before ripping them apart.",
     "coreAbility": {
       "name": "Rampage",
@@ -174,6 +182,7 @@
     "id": "vaton",
     "name": "Vaton",
     "title": "The Charlatan",
+    "inRotation": true,
     "description": "The memories of a snake in the grass. Vaton is a villain who hunts tyrants. This Eternal tricks his opponents into defeating themselves.",
     "coreAbility": {
       "name": "Disquieting Metamorphosis",  
@@ -196,6 +205,7 @@
     "id": "grimwold",
     "name": "Grimwold",
     "title": "The Scientist",
+    "inRotation": true,
     "description": "The memories of a genius and a fool. Grimwold uses his mastery of science to dictate the flow of battle. This Eternal uses turrets, teleporters, and barriers, littering the battlefield with deadly inventions.",
     "coreAbility": {
       "name": "Magnetic Field",
@@ -220,6 +230,7 @@
     "id": "penelope",
     "name": "Penelope",
     "title": "The Porcelain Girl",
+    "inRotation": true,
     "description": "The memories of a young woman who was told she was fragile. Penelope is built by lies. This Eternal fires crystalline shards that detonate in brilliant displays of glittering light.",
     "coreAbility": {
       "name": "Look How I Shine",
@@ -240,6 +251,7 @@
     "id": "tsubo",
     "name": "Tsu'bo",
     "title": "The Stray",
+    "inRotation": false,
     "description": "The memories of a stray from the old world. Tsu'bo is the last of his kind. This Eternal is a pack hunter that remembers his hound and runs alongside him.",
     "coreAbility": {
       "name": "Cull the Herd",
