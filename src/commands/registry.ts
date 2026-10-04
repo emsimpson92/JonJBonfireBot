@@ -15,15 +15,15 @@ import { socialsCommand } from './socials.js';
 export const commands: Command[] = [
   helpCommand,
   faqCommand,
-  socialsCommand,
   eternalsCommand,
   itemCommand,
-  randomBuildCommand,
   glossaryCommand,
+  randomBuildCommand,
   lobbyCreateCommand,
   lobbiesCommand,
   lobbyAddCommand,
   lobbyKickCommand,
+  socialsCommand,
 ];
 
 const commandsByName = new Map(commands.map((command) => [command.data.name, command]));
