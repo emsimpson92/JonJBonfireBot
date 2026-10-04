@@ -58,7 +58,7 @@ export type AddResult =
   | { ok: false; reason: 'already-in' | 'full' }
   | { ok: false; reason: 'in-other'; other: Lobby };
 
-class LobbyStore {
+export class LobbyStore {
   /** Keyed by lobby code. */
   private readonly lobbies = new Map<string, Lobby>();
   /** The lobby each player is in. Slightly redundant but good for performance */

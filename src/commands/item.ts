@@ -7,7 +7,7 @@ import { findBest, keysOf, respondWithMatches } from '../utils/search.js';
 import type { Command } from '../types.js';
 
 /** Searchable by item name, its aliases, the abilities it grants, and its owner. */
-const keys = ({ item, eternal }: OwnedItem) =>
+export const keys = ({ item, eternal }: OwnedItem) =>
   keysOf(
     item,
     item.name,
@@ -61,6 +61,13 @@ export const itemCommand: Command = {
 
     if (!name && !owner && !slot) {
       await interaction.reply(ephemeral(itemsOverviewEmbed(items.length)));
+
+      return;
+    }
+
+    // e.g. eternal:dahla slot:anchor, since anchors are all Echo items. Discord rejects a reply with no embeds.
+    if (!matches.length) {
+      await interaction.reply(ephemeralError('No such item', 'No item matches all of those options. Try fewer, or /eternals to browse the roster.'));
 
       return;
     }

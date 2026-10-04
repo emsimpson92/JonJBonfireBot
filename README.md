@@ -4,7 +4,7 @@ A Discord bot with slash commands for an FAQ, social links, eternal and item loo
 builds, a glossary, and player-run lobbies.
 
 Content is populated from the [Arkheron Wiki](https://arkheron.wiki.gg/): 12 eternals, 72 items
-(48 eternal-specific plus Echo crowns, amulets and weapons, anchors and consumables), and 77
+(48 eternal-specific plus Echo crowns, amulets and weapons, anchors and consumables), and 79
 glossary terms, with wiki icons and portraits on the embeds. The only remaining placeholders are
 the channel IDs and bot token in `.env`. See [Editing the content](#editing-the-content).
 
@@ -22,7 +22,7 @@ so `/glossary term:crushing` explains them.
 | `/eternals [name]` | Lists every eternal. With an argument, shows their ability, set bonus, and items. |
 | `/item [eternal] [slot] [name]` | Shows an item and the abilities it grants. `eternal:` includes an **Echo** choice for items tied to no eternal; `slot:` covers crowns, amulets, weapons, anchors and consumables. The options combine and each works alone. |
 | `/randombuild` | Rolls a random build from the Echo items and the items of eternals currently in rotation: one crown, one amulet and two different weapons. Only you see the result. |
-| `/glossary [term]` | Defines a term. With no argument, lists all 77. |
+| `/glossary [term]` | Defines a term. With no argument, lists all 79. |
 | `/createlobby <code> <region> [mode]` | Posts a lobby for an in-game invite code, with you as host. See [Lobbies](#lobbies). |
 | `/lobbies [region] [mode]` | Lists open lobbies, most recently active first, with their mode and links to their posts. `region:` and `mode:` filter the list and combine; lobbies with no mode don't match a `mode:` filter. |
 | `/lobbyadd <player>` | Host only. Adds a server member to the lobby you're hosting, unless they're already in a lobby. |
@@ -30,7 +30,7 @@ so `/glossary term:crushing` explains them.
 
 `/eternals name:`, `/item eternal:` / `slot:` and the lobby `region:` / `mode:` options are
 pick-lists. `/item name:`, `/glossary term:`, `/faq topic:` and `/help command:` use
-**autocomplete**, since 72 items and 77 terms are well past Discord's 25-choice cap; matches are
+**autocomplete**, since 72 items and 79 terms are well past Discord's 25-choice cap; matches are
 ranked exact, then prefix, then word-start, then anywhere. `/item name:` only suggests items that
 fit the `eternal:` and `slot:` already picked, so `eternal:Dahla` narrows it to her four.
 
@@ -62,6 +62,7 @@ at the command that lists everything.
    npm install
    npm run dev     # watch mode
    npm run build && npm start   # production
+   npm test        # see Testing
    ```
 
 Commands register themselves on startup — there is no separate deploy step. With `GUILD_ID`
@@ -166,7 +167,7 @@ Content lives in JSON so it can be edited without touching code. Restart the bot
 | --- | --- |
 | `data/eternals.json` | The 12 eternals. Their `items` are **ids into `items.json`**, not inline objects. |
 | `data/items.json` | All 72 items: 48 eternal-specific, plus generic Echo crowns/amulets/weapons, anchors and consumables. |
-| `data/glossary.json` | The 77 glossary terms. |
+| `data/glossary.json` | The 79 glossary terms. |
 | `data/faq.json` | FAQ topics, each a list of `question`/`answer` pairs plus optional `aliases` (`playtest` → Beta). `/faq` numbers them in file order. |
 | `data/socials.json` | Social links, each a `name`/`url` pair. `/socials` lists them in file order. |
 | `images/items/`, `images/eternals/` | Item icons and eternal portraits, one PNG per id. |
@@ -175,12 +176,15 @@ An item belongs to an eternal purely by being listed in that eternal's `items` a
 no back-reference to maintain. Anything no eternal lists is a generic item, which is how `/item`
 tells them apart. Startup fails loudly if an eternal names an id that `items.json` does not have.
 
+Run `npm test` after editing. It checks the content more thoroughly than startup does, from
+missing images to aliases that clash; see [Testing](#testing).
+
 Icons and portraits are local files, downloaded from the wiki: `icon` on each item and
 `imageUrl` on each eternal hold a path relative to the project root (`images/items/bow.png`), not
 a URL. The embed thumbnail points at the same file in this repo on GitHub, under `IMAGE_BASE_URL`
 (default: `https://raw.githubusercontent.com/emsimpson92/JonJBonfireBot/main/`). Discord fetches
-it once and caches it. The wiki's own image links didn't load in Discord. Nothing checks that a
-path exists; a wrong one just leaves the embed without a thumbnail.
+it once and caches it. The wiki's own image links didn't load in Discord. `npm test` checks that
+every path exists; the bot itself doesn't, and a wrong one just leaves the embed without a thumbnail.
 
 To add one, drop a PNG into `images/` and set the path; anything about 256px across is plenty,
 since Discord shows thumbnails at 80px. **It only shows up once it's on `main`** (or whichever
@@ -281,30 +285,43 @@ syncs.** Wiki edits will not propagate, so re-check them when the game patches.
   Damage over Time, `reaver` → Tormentors). Entries the wiki marks outdated (Reflect,
   Resilience, Soft Target) are kept so the bot can point people at the current term.
 
-## Known wiki inconsistencies
-
-Reproduced as-is rather than silently corrected. Worth re-checking upstream:
-
-- **Vaton's amulet has two names.** The infobox calls it *Vaton's Audacity Amulet*, the item
-  section *Vaton's Imbalanced Scales Amulet*. The infobox name is used, as `Audacity Amulet`
-  (consistent with every other eternal). The other name is not an alias, so searching for it
-  finds nothing.
-- **Two ability tags have no glossary entry:** `Aura` and `Overheat`. `/glossary` cannot explain
-  them until the wiki adds them.
-- **Three tags are spelled differently from the glossary:** `Channeled Attack` vs Channeled
-  Ability, `Damage Return` vs Damage Reflect, `Tether` vs Tethered. Tags are kept as written
-  and the glossary carries aliases, so lookups resolve either way.
-- **Penelope's Lock the Door shrinks at Tier III** (AoE Range 3m → 1.5m), against the pattern
-  of every other tier upgrade. Possibly an upstream typo; copied as written.
-
-
 ## Adding a command
 
 1. Create `src/commands/yourCommand.ts` exporting a `Command` (see [src/types.ts](src/types.ts)).
    Give it a `SlashCommandBuilder` as `data`, plus `usage` and `examples` for /help.
 2. Add it to the `commands` array in [src/commands/registry.ts](src/commands/registry.ts).
 
-`/help` reads that array, so the new command documents itself.
+`/help` reads that array, so the new command documents itself. The tests read it too, and check
+that its `usage` and `examples` name it and that it has an `autocomplete` handler if any option
+asks for one.
+
+## Testing
+
+```sh
+npm test             # run once
+npm run test:watch   # re-run on every save
+```
+
+The tests use [Vitest](https://vitest.dev/) and live in `tests/`. CI runs them on every pull
+request and push to `main`, alongside typecheck, lint and build. None of them talk to Discord:
+the logic is tested as plain functions, and the rest checks the content against what Discord
+will accept.
+
+- **Logic.** `lobbies.test.ts`, `rateLimit.test.ts` and `search.test.ts` cover the lobby rules
+  (hosting, joining, adding, kicking, expiry), the sliding-window limits, and lookup ranking and
+  typo tolerance. The lobby store and the rate limiter both take the current time as an
+  argument, so expiry and windows are tested by passing timestamps rather than waiting.
+- **Content.** `data.test.ts` checks the JSON: unique ids, each eternal carrying a crown, an
+  amulet and two weapons, every image path existing, every ability tag having a glossary
+  entry, and every item name, glossary term, FAQ topic and alias finding only its own entry.
+  An alias shared by two entries makes the bot list both instead of answering.
+- **Embeds.** `embeds.test.ts` renders every embed the bot can send from the real data, every
+  `/item eternal: slot:` combination, a full lobby and a full `/lobbies` list. It fails if one
+  would break Discord's limits or have its text cut short. `commands.test.ts` checks that every
+  command registers and documents itself as described in [Adding a command](#adding-a-command).
+
+After a content edit, a failure names the entry to fix: an alias that's another item's name, a
+tag missing from the glossary, an ability too long for its embed.
 
 ## Layout
 
@@ -326,4 +343,5 @@ src/
                (truncation, timestamps, message limits) in general.ts
     search.ts  Name/alias matching with typo tolerance, lookup replies, autocomplete
     images.ts  Image paths to their GitHub URLs
+tests/         Vitest tests, one file per area; see Testing
 ```

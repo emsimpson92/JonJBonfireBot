@@ -6,7 +6,7 @@ import { ephemeral } from '../embeds/general.js';
 import { keysOf, replyWithBest, respondWithMatches } from '../utils/search.js';
 import type { Command, FaqTopic } from '../types.js';
 
-const keys = (entry: FaqTopic) => keysOf(entry, entry.topic);
+export const keys = (entry: FaqTopic) => keysOf(entry, entry.topic);
 
 export const faqCommand: Command = {
   data: new SlashCommandBuilder().setName('faq').setDescription('Lists FAQ topics, or answers one.')

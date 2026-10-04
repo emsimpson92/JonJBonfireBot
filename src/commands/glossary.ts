@@ -6,7 +6,7 @@ import { glossaryListEmbed, glossaryTermEmbed } from '../embeds/glossary.js';
 import { keysOf, replyWithBest, respondWithMatches } from '../utils/search.js';
 import type { Command, GlossaryEntry } from '../types.js';
 
-const keys = (entry: GlossaryEntry) => keysOf(entry, entry.term);
+export const keys = (entry: GlossaryEntry) => keysOf(entry, entry.term);
 
 export const glossaryCommand: Command = {
   data: new SlashCommandBuilder().setName('glossary').setDescription('Defines a game term.')
