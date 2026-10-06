@@ -33,6 +33,7 @@ export const glossaryCommand: Command = {
       plural: 'terms',
       label: (entry) => entry.term,
       render: glossaryTermEmbed,
+      shareable: true,
       notFound: { title: 'Term not found', description: `No entry for \`${query}\`. Run /glossary to see all ${glossary.length} terms.` },
     });
   },
