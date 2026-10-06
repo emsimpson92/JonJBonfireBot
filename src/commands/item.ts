@@ -3,6 +3,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import { eternals, filterItems, items, type OwnedItem } from '../data.js';
 import { ephemeral, ephemeralError } from '../embeds/general.js';
 import { itemDetailEmbeds, itemListEmbed, itemsOverviewEmbed } from '../embeds/items.js';
+import { shareable } from '../share.js';
 import { findBest, keysOf, respondWithMatches } from '../utils/search.js';
 import type { Command } from '../types.js';
 
@@ -75,11 +76,11 @@ export const itemCommand: Command = {
     // Show details if the embeds fit, otherwise a list
     const details = itemDetailEmbeds(matches);
     if (details) {
-      await interaction.reply(ephemeral(...details));
+      await interaction.reply(shareable(...details));
 
       return;
     }
 
-    await interaction.reply(ephemeral(itemListEmbed(matches, owner, slot)));
+    await interaction.reply(shareable(itemListEmbed(matches, owner, slot)));
   },
 };

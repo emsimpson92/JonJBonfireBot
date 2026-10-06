@@ -28,6 +28,12 @@ so `/glossary term:crushing` explains them.
 | `/lobbyadd <player>` | Host only. Adds a server member to the lobby you're hosting, unless they're already in a lobby. |
 | `/lobbykick <player>` | Host only. Removes a player from the lobby you're hosting; `player:` autocompletes against your own roster. |
 
+`/socials`, `/eternals`, `/item` and `/glossary term:` reply so only you see them, with a
+**Post to channel** button that posts the same embeds publicly, marked with who shared them. The
+post is a plain message rather than a reply, since a reply would point at the private one and
+read as deleted once it's dismissed, so the bot needs to be able to send messages and embed links
+in that channel. The button comes off the private reply once the post goes through.
+
 `/eternals name:`, `/item eternal:` / `slot:` and the lobby `region:` / `mode:` options are
 pick-lists. `/item name:`, `/glossary term:`, `/faq topic:` and `/help command:` use
 **autocomplete**, since 72 items and 79 terms are well past Discord's 25-choice cap; matches are
@@ -101,10 +107,10 @@ replied to, and it runs entirely from data already in memory.
 Both windows live in the bot's process, so restarting clears them and a second instance would
 count separately.
 
-Lobby buttons have budgets of their own, separate from commands: per user the same size as for
-commands, and bot-wide twice `MAX_REQUESTS_PER_MINUTE`. A busy lobby can see dozens of joins in a
-minute, and those shouldn't lock everyone out of commands. A throttled click gets a reply only
-the clicker can see.
+Buttons (the lobby ones and **Post to channel**) have budgets of their own, separate from
+commands: per user the same size as for commands, and bot-wide twice `MAX_REQUESTS_PER_MINUTE`.
+A busy lobby can see dozens of joins in a minute, and those shouldn't lock everyone out of
+commands. A throttled click gets a reply only the clicker can see.
 
 ## Lobbies
 
@@ -307,9 +313,9 @@ request and push to `main`, alongside typecheck, lint and build. None of them ta
 the logic is tested as plain functions, and the rest checks the content against what Discord
 will accept.
 
-- **Logic.** `lobbies.test.ts`, `rateLimit.test.ts` and `search.test.ts` cover the lobby rules
-  (hosting, joining, adding, kicking, expiry), the sliding-window limits, and lookup ranking and
-  typo tolerance. The lobby store and the rate limiter both take the current time as an
+- **Logic.** `lobbies.test.ts`, `rateLimit.test.ts`, `search.test.ts` and `share.test.ts` cover
+  the lobby rules (hosting, joining, adding, kicking, expiry), the sliding-window limits, lookup
+  ranking and typo tolerance, and the Post to channel button. The lobby store and the rate limiter both take the current time as an
   argument, so expiry and windows are tested by passing timestamps rather than waiting.
 - **Content.** `data.test.ts` checks the JSON: unique ids, each eternal carrying a crown, an
   amulet and two weapons, every image path existing, every ability tag having a glossary
@@ -334,6 +340,7 @@ src/
   rateLimit.ts Sliding-window throttling, bot-wide and per user
   lobbies.ts   Lobby state and rules: joining, leaving, adding, kicking, expiry
   lobbyMessages.ts  Lobby post buttons and clicks, post updates, and the expiry sweep
+  share.ts     The Post to channel button on private replies, and its click
   data.ts      Loads and validates the JSON files
   types.ts     Command and the content types: Eternal, Item, GlossaryEntry, FaqTopic, SocialLink
   commands/    One file per command, plus registry.ts

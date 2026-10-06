@@ -5,6 +5,7 @@ import { config } from './config.js';
 import { ephemeral, ephemeralError, errorEmbed } from './embeds/general.js';
 import { handleLobbyComponent, isLobbyComponent, startLobbySweep } from './lobbyMessages.js';
 import { RateLimiter } from './rateLimit.js';
+import { handleShare, isShareComponent } from './share.js';
 
 const RATE_LIMITED_MESSAGE = 'The message limit has been reached. Please wait and try again.';
 
@@ -85,16 +86,29 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 });
 
-/** Lobby buttons. A click posts nothing in the channel, so a throttled one is told privately. */
+/** The handler for a button id, or undefined for one this bot didn't make. */
+function componentHandler(id: string) {
+  if (isLobbyComponent(id)) {
+    return handleLobbyComponent;
+  }
+  else if (isShareComponent(id)) {
+    return handleShare;
+  }
+
+  return undefined;
+}
+
+/** Lobby and Post to channel buttons. Only the clicker needs to know they were throttled, so they're told privately. */
 async function handleComponent(interaction: MessageComponentInteraction): Promise<void> {
-  if (!isLobbyComponent(interaction.customId)) {
+  const handler = componentHandler(interaction.customId);
+  if (!handler) {
     return;
   }
 
   const limit = componentRateLimiter.check(interaction.user.id);
   if (!limit.allowed) {
     console.warn(
-      `Throttled a lobby click from ${interaction.user.tag} ` +
+      `Throttled a button click from ${interaction.user.tag} ` +
         `(${Math.ceil(limit.retryAfterMs / 1000)}s until a slot frees up).`,
     );
     await interaction.reply(ephemeralError('Slow down', RATE_LIMITED_MESSAGE))
@@ -104,10 +118,10 @@ async function handleComponent(interaction: MessageComponentInteraction): Promis
   }
 
   try {
-    await handleLobbyComponent(interaction);
+    await handler(interaction);
   }
   catch (error) {
-    console.error(`Lobby action "${interaction.customId}" failed:`, error);
+    console.error(`Button "${interaction.customId}" failed:`, error);
     await replyWithFailure(interaction, 'That didn\'t work. Try again in a moment.');
   }
 }

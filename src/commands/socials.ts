@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
 
 import { socials } from '../data.js';
-import { ephemeral } from '../embeds/general.js';
 import { socialsEmbed } from '../embeds/socials.js';
+import { shareable } from '../share.js';
 import type { Command } from '../types.js';
 
 export const socialsCommand: Command = {
@@ -11,6 +11,6 @@ export const socialsCommand: Command = {
   examples: ['/socials'],
 
   async execute(interaction) {
-    await interaction.reply(ephemeral(socialsEmbed(socials)));
+    await interaction.reply(shareable(socialsEmbed(socials)));
   },
 };

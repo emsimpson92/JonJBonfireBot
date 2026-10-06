@@ -3,6 +3,7 @@
 import type { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 
 import { ephemeral, ephemeralError, multipleMatchesEmbed } from '../embeds/general.js';
+import { shareable } from '../share.js';
 import { truncate } from './general.js';
 
 interface IndexedKey {
@@ -100,6 +101,8 @@ interface LookupReplies<T> {
   plural: string;
   label: (item: T) => string;
   render: (item: T) => EmbedBuilder;
+  /** Shareable results are ephemeral with a post to channel button */
+  shareable?: boolean;
   notFound: { title: string; description: string };
 }
 
@@ -114,7 +117,8 @@ export async function replyWithBest<T>(
   const [only] = matches;
 
   if (only && matches.length === 1) {
-    await interaction.reply({ embeds: [replies.render(only)] });
+    const embed = replies.render(only);
+    await interaction.reply(replies.shareable ? shareable(embed) : { embeds: [embed] });
 
     return;
   }
