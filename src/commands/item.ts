@@ -75,11 +75,11 @@ export const itemCommand: Command = {
     // Show details if the embeds fit, otherwise a list
     const details = itemDetailEmbeds(matches);
     if (details) {
-      await interaction.reply({ embeds: details });
+      await interaction.reply(ephemeral(...details));
 
       return;
     }
 
-    await interaction.reply({ embeds: [itemListEmbed(matches, owner, slot)] });
+    await interaction.reply(ephemeral(itemListEmbed(matches, owner, slot)));
   },
 };

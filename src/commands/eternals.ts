@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 
 import { eternals } from '../data.js';
 import { eternalDetailEmbed, eternalListEmbed } from '../embeds/eternals.js';
-import { ephemeralError } from '../embeds/general.js';
+import { ephemeral, ephemeralError } from '../embeds/general.js';
 import type { Command } from '../types.js';
 
 export const eternalsCommand: Command = {
@@ -18,7 +18,7 @@ export const eternalsCommand: Command = {
   async execute(interaction) {
     const id = interaction.options.getString('name');
     if (!id) {
-      await interaction.reply({ embeds: [eternalListEmbed(eternals)] });
+      await interaction.reply(ephemeral(eternalListEmbed(eternals)));
 
       return;
     }
@@ -30,6 +30,6 @@ export const eternalsCommand: Command = {
       return;
     }
 
-    await interaction.reply({ embeds: [eternalDetailEmbed(eternal)] });
+    await interaction.reply(ephemeral(eternalDetailEmbed(eternal)));
   },
 };

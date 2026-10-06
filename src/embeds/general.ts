@@ -18,8 +18,8 @@ export function errorEmbed(title: string, description: string): EmbedBuilder {
   return new EmbedBuilder().setColor(0x992d22).setTitle(title).setDescription(truncate(description, MAX_DESCRIPTION));
 }
 
-export function ephemeral(embed: EmbedBuilder): { embeds: EmbedBuilder[]; flags: MessageFlags.Ephemeral } {
-  return { embeds: [embed], flags: MessageFlags.Ephemeral as const };
+export function ephemeral(...embeds: EmbedBuilder[]): { embeds: EmbedBuilder[]; flags: MessageFlags.Ephemeral } {
+  return { embeds, flags: MessageFlags.Ephemeral as const };
 }
 
 export function ephemeralError(title: string, description: string): { embeds: EmbedBuilder[]; flags: MessageFlags.Ephemeral } {
