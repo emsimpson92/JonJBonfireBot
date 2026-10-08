@@ -61,7 +61,7 @@
         { "name": "Lifesteal", "value": "50%" }
       ]
     },
-    "setBonus": { "name": "Cold-blooded", "description": "25% Increased damage to stunned or slowed enemies" },
+    "setBonus": { "name": "Cold-blooded", "description": "25% Increased damage to stunned, slowed, or tethered enemies" },
     "items": ["irennas-frost-armor-crown", "irennas-north-wind-amulet", "irennas-icebreaker-mace", "irennas-sword-caretaker"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Irenna",
     "imageUrl": "images/eternals/irenna.png",
@@ -123,8 +123,9 @@
       "tags": ["Airborne Attack", "Phased", "AoE", "Stun"],
       "stats": [
         { "name": "Damage", "value": "40" },
-        { "name": "Cooldown", "value": "20s" },
-        { "name": "Range", "value": "2m" }
+        { "name": "Cooldown", "value": "24s" },
+        { "name": "Range", "value": "2m" },
+        { "name": "Stun", "value": "1s" }
       ]
     },
     "setBonus": { "name": "Divine", "description": "20% Damage Reduction" },
@@ -263,7 +264,7 @@
         { "name": "Range", "value": "7m" }
       ]
     },
-    "setBonus": { "name": "Endling", "description": "Deal 70% more damage at low health (100HP)" },
+    "setBonus": { "name": "Endling", "description": "Deal 50% more damage at 150 total HP" },
     "items": ["tsubos-forefather-crown", "tsubos-run-free-amulet", "tsubos-ripper-blades", "tsubos-boom-chakas"],
     "wikiUrl": "https://arkheron.wiki.gg/wiki/Tsu%27bo",
     "imageUrl": "images/eternals/tsubo.png",
