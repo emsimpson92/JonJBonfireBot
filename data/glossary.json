@@ -19,6 +19,10 @@
     "definition": "A health bar that stacks on top of your current health and fortitude that sometimes has unique affects."
   },
   {
+    "term": "Aura",
+    "definition": "A buff or debuff that emanates from a caster or target location."
+  },
+  {
     "term": "Banished",
     "definition": "The affected unit is Phased. They are slowed and cannot attack, heal, take damage, or be targeted.",
     "aliases": ["banish"]
@@ -218,6 +222,10 @@
   {
     "term": "Negates Piercing",
     "definition": "The affected unit ignores the effect of piercing attacks and takes damage as normal."
+  },
+  {
+    "term": "Overheat",
+    "definition": "An attack or ability that needs to cooldown after extended use."
   },
   {
     "term": "Pass Through",

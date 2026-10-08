@@ -1,13 +1,17 @@
 import { Client, Events, GatewayIntentBits, MessageFlags } from 'discord.js';
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, MessageComponentInteraction } from 'discord.js';
 import { commands, findCommand } from './commands/registry.js';
 import { config } from './config.js';
-import { errorEmbed } from './embeds.js';
-import { rateLimiter } from './rateLimit.js';
+import { ephemeral, ephemeralError, errorEmbed } from './embeds/general.js';
+import { handleLobbyComponent, isLobbyComponent, startLobbySweep } from './lobbyMessages.js';
+import { RateLimiter } from './rateLimit.js';
+import { handleShare, isShareComponent } from './share.js';
 
 const RATE_LIMITED_MESSAGE = 'The message limit has been reached. Please wait and try again.';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const rateLimiter = new RateLimiter(config.maxRequests, config.maxRequestsPerUser);
+const componentRateLimiter = new RateLimiter(config.maxRequests * 2, config.maxRequestsPerUser);
 
 client.once(Events.ClientReady, async (ready) => {
   const payload = commands.map((command) => command.data);
@@ -28,6 +32,7 @@ client.once(Events.ClientReady, async (ready) => {
     console.error('Failed to register commands:', error);
   }
 
+  startLobbySweep(ready);
   console.log(`Logged in as ${ready.user.tag}.`);
 });
 
@@ -41,6 +46,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
       console.error(`Autocomplete for "${interaction.commandName}" failed:`, error);
     }
     
+    return;
+  }
+
+  if (interaction.isMessageComponent()) {
+    await handleComponent(interaction);
     return;
   }
 
@@ -72,17 +82,60 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
   catch (error) {
     console.error(`Command "${interaction.commandName}" failed:`, error);
-    const body = {
-      embeds: [errorEmbed('Something went wrong', 'That command failed. Try again in a moment.')],
-      flags: MessageFlags.Ephemeral as const,
-    };
-    // Either reply or follow up, depending on how far the handler got.
-    await (interaction.replied || interaction.deferred
-      ? interaction.followUp(body)
-      : interaction.reply(body)
-    ).catch(() => undefined);
+    await replyWithFailure(interaction, 'That command failed. Try again in a moment.');
   }
 });
+
+/** The handler for a button id, or undefined for one this bot didn't make. */
+function componentHandler(id: string) {
+  if (isLobbyComponent(id)) {
+    return handleLobbyComponent;
+  }
+  else if (isShareComponent(id)) {
+    return handleShare;
+  }
+
+  return undefined;
+}
+
+/** Lobby and Post to channel buttons. Only the clicker needs to know they were throttled, so they're told privately. */
+async function handleComponent(interaction: MessageComponentInteraction): Promise<void> {
+  const handler = componentHandler(interaction.customId);
+  if (!handler) {
+    return;
+  }
+
+  const limit = componentRateLimiter.check(interaction.user.id);
+  if (!limit.allowed) {
+    console.warn(
+      `Throttled a button click from ${interaction.user.tag} ` +
+        `(${Math.ceil(limit.retryAfterMs / 1000)}s until a slot frees up).`,
+    );
+    await interaction.reply(ephemeralError('Slow down', RATE_LIMITED_MESSAGE))
+      .catch((error: unknown) => console.error('Failed to warn a rate limited user:', error));
+
+    return;
+  }
+
+  try {
+    await handler(interaction);
+  }
+  catch (error) {
+    console.error(`Button "${interaction.customId}" failed:`, error);
+    await replyWithFailure(interaction, 'That didn\'t work. Try again in a moment.');
+  }
+}
+
+async function replyWithFailure(
+  interaction: ChatInputCommandInteraction | MessageComponentInteraction,
+  description: string,
+): Promise<void> {
+  const body = ephemeralError('Something went wrong', description);
+  await (interaction.replied || interaction.deferred ? 
+    interaction.followUp(body) : 
+    interaction.reply(body)
+  ).catch(() => undefined);
+}
 
 /** The bot as a whole is over its limit, so everyone in the channel should see why. */
 async function warnChannel(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -92,14 +145,14 @@ async function warnChannel(interaction: ChatInputCommandInteraction): Promise<vo
 
 /** If the user is over their personal limit, DM them instead of posting in the channel. */
 async function warnUser(interaction: ChatInputCommandInteraction): Promise<void> {
-  const body = { embeds: [errorEmbed('Slow down', RATE_LIMITED_MESSAGE)] };
+  const embed = errorEmbed('Slow down', RATE_LIMITED_MESSAGE);
 
   try {
-    await interaction.user.send(body);
+    await interaction.user.send({ embeds: [embed] });
   }
   catch {
     // DMs closed, or no shared server any more — fall back to a reply only they can see.
-    await interaction.reply({ ...body, flags: MessageFlags.Ephemeral })
+    await interaction.reply(ephemeral(embed))
       .catch((error: unknown) => console.error('Failed to warn a rate limited user:', error));
 
     return;
@@ -112,6 +165,14 @@ async function warnUser(interaction: ChatInputCommandInteraction): Promise<void>
   catch (error: unknown) {
     console.error('Failed to dismiss a rate limited interaction:', error);
   }
+}
+
+/** Die gracefully */
+for (const signal of ['SIGTERM', 'SIGINT'] as const) {
+  process.once(signal, () => {
+    console.log(`Received ${signal}, logging out.`);
+    void client.destroy().finally(() => process.exit(0));
+  });
 }
 
 client.login(config.token).catch((error: unknown) => {

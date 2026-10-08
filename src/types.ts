@@ -44,6 +44,7 @@ export interface Item {
   id: string;
   name: string;
   slot: string;
+  /** A file under images/items, relative to the repo root. */
   icon?: string;
   description?: string;
   stats?: Stats;
@@ -57,12 +58,15 @@ export interface Eternal {
   name: string;
   /** Archetype, e.g. "The Dancer". */
   title: string;
+  /** Whether the eternal is currently in the game's rotation. */
+  inRotation: boolean;
   description: string;
   coreAbility: CoreAbility;
   setBonus: SetBonus;
   /** These map to item Ids */
   items: string[];
   wikiUrl: string;
+  /** A file under images/eternals, relative to the repo root. */
   imageUrl?: string;
   aliases?: string[];
 }

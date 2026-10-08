@@ -1,7 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
 
 import { socials } from '../data.js';
-import { baseEmbed } from '../embeds.js';
+import { socialsEmbed } from '../embeds/socials.js';
+import { shareable } from '../share.js';
 import type { Command } from '../types.js';
 
 export const socialsCommand: Command = {
@@ -10,7 +11,6 @@ export const socialsCommand: Command = {
   examples: ['/socials'],
 
   async execute(interaction) {
-    const lines = socials.map((social) => `[${social.name}](${social.url})`).join('\n');
-    await interaction.reply({ embeds: [baseEmbed('Socials', lines)] });
+    await interaction.reply(shareable(socialsEmbed(socials)));
   },
 };

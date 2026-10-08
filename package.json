@@ -1,7 +1,7 @@
 {
   "name": "jonj-bonfire-bot",
   "version": "0.1.0",
-  "description": "Discord bot with slash commands for FAQ, playtest, eternals, items, and glossary lookups.",
+  "description": "Discord bot with slash commands for FAQ, playtest, eternals, items, and glossary lookups, plus player lobbies.",
   "type": "module",
   "main": "dist/index.js",
   "engines": {
@@ -11,8 +11,10 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx watch --include \"data/**/*.json\" src/index.ts",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint src"
+    "typecheck": "tsc --noEmit && tsc -p tests",
+    "lint": "eslint src tests",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "discord.js": "^14.16.3",
@@ -24,6 +26,7 @@
     "eslint": "^9.13.0",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.6.0"
+    "typescript-eslint": "^8.6.0",
+    "vitest": "^5.0.3"
   }
 }

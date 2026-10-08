@@ -1,8 +1,10 @@
-/** Shared lookup for the name-or-alias searches that /eternals and /glossary both do. */
+/** Shared name-or-alias lookup for the commands that search their data, and for autocomplete. */
 
-import type { AutocompleteInteraction } from 'discord.js';
+import type { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 
-import { truncate } from './embeds.js';
+import { ephemeral, ephemeralError, multipleMatchesEmbed } from '../embeds/general.js';
+import { shareable } from '../share.js';
+import { truncate } from './general.js';
 
 interface IndexedKey {
   text: string;
@@ -18,7 +20,9 @@ function normalize(value: string): string {
   return value.toLowerCase().trim().replace(/\s+/g, ' ');
 }
 
-/** Levenshtein distance algorithm for fuzzy matching so typos don't matter */
+/** Levenshtein distance algorithm for fuzzy matching so typos don't matter 
+ *  Is it overkill? Probably. I just think it's neat
+*/
 function distance(source: string, target: string): number {
   const dp = Array.from({ length: target.length + 1 }, (_, i) => i);
 
@@ -74,9 +78,8 @@ export function keysOf(item: { aliases?: string[] }, ...primary: string[]): stri
 }
 
 /**
- * Every item tied for the best score, so callers can disambiguate rather than
- * silently pick one. `glossary damage` matches four terms equally well.
- * Empty when nothing is close enough.
+ * Returns all items tied for the best match so callers can disambiguate, or none if nothing is close enough.
+ * e.g. `glossary damage` matches four terms equally well.
  */
 export function findBest<T>(query: string, items: T[], keys: (item: T) => string[]): T[] {
   const normalized = normalize(query);
@@ -93,11 +96,42 @@ export function findBest<T>(query: string, items: T[], keys: (item: T) => string
   return scored.filter((entry) => entry.result === best).map((entry) => entry.item);
 }
 
-/**
- * Ordering for autocomplete: exact, then prefix, then any word start, then
- * anywhere. Without the word-start rung "ring" puts Suffe*ring* Amulet above
- * Ravah's *Ring*blade. Empty query keeps the roster order.
- */
+interface LookupReplies<T> {
+  /** Names the ambiguous reply: "terms" gives "Multiple terms match". */
+  plural: string;
+  label: (item: T) => string;
+  render: (item: T) => EmbedBuilder;
+  /** Shareable results are ephemeral with a post to channel button */
+  shareable?: boolean;
+  notFound: { title: string; description: string };
+}
+
+export async function replyWithBest<T>(
+  interaction: ChatInputCommandInteraction,
+  query: string,
+  items: T[],
+  keys: (item: T) => string[],
+  replies: LookupReplies<T>,
+): Promise<void> {
+  const matches = findBest(query, items, keys);
+  const [only] = matches;
+
+  if (only && matches.length === 1) {
+    const embed = replies.render(only);
+    await interaction.reply(replies.shareable ? shareable(embed) : { embeds: [embed] });
+
+    return;
+  }
+
+  if (matches.length > 1) {
+    await interaction.reply(ephemeral(multipleMatchesEmbed(replies.plural, query, matches.map(replies.label))));
+
+    return;
+  }
+
+  await interaction.reply(ephemeralError(replies.notFound.title, replies.notFound.description));
+}
+
 function rankMatches<T>(
   query: string,
   items: T[],
@@ -128,11 +162,8 @@ function rankMatches<T>(
 }
 
 /**
- * Normalized keys per dataset, shared by every search in this file. The data is
- * static and autocomplete fires on every keystroke, so building them once beats
- * re-deriving them for each event. Keyed on the `keys` function, then the array,
- * so callers must pass a stable function. A one-off array — /item searching its
- * own filtered subset — just misses the cache and is collected with it.
+ * Caches normalized keys by `keys` function, then items array, so autocomplete doesn't rebuild them every keystroke.
+ * Callers must pass a stable `keys` function, or the cache never hits.
  */
 const indexes = new WeakMap<object, WeakMap<object, IndexedItem<never>[]>>();
 
@@ -178,10 +209,6 @@ function rankKey(query: string, key: IndexedKey): number {
   return Number.POSITIVE_INFINITY;
 }
 
-/**
- * Answers an autocomplete interaction with the best matches for what is being
- * typed. Discord allows 25 choices, each name at most 100 characters.
- */
 export async function respondWithMatches<T>(
   interaction: AutocompleteInteraction,
   items: T[],

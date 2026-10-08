@@ -1,13 +1,14 @@
-import { MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
-import { abilityBlock, inputLabel, statLine } from '../abilities.js';
-import { eternals, items, type OwnedItem } from '../data.js';
-import { baseEmbed, embedLength, errorEmbed, MAX_EMBEDS, MAX_MESSAGE_CHARS, truncate } from '../embeds.js';
-import { findBest, keysOf, respondWithMatches } from '../search.js';
-import type { Command, ItemAbility } from '../types.js';
+import { eternals, filterItems, items, type OwnedItem } from '../data.js';
+import { ephemeral, ephemeralError } from '../embeds/general.js';
+import { itemDetailEmbeds, itemListEmbed, itemsOverviewEmbed } from '../embeds/items.js';
+import { shareable } from '../share.js';
+import { findBest, keysOf, respondWithMatches } from '../utils/search.js';
+import type { Command } from '../types.js';
 
 /** Searchable by item name, its aliases, the abilities it grants, and its owner. */
-const keys = ({ item, eternal }: OwnedItem) =>
+export const keys = ({ item, eternal }: OwnedItem) =>
   keysOf(
     item,
     item.name,
@@ -17,56 +18,6 @@ const keys = ({ item, eternal }: OwnedItem) =>
   );
 
 const SLOTS = ['Crown', 'Amulet', 'Weapon', 'Anchor', 'Consumable'] as const;
-
-function abilityField(ability: ItemAbility) {
-  const label = inputLabel(ability);
-  return {
-    name: label ? `${label} · ${ability.name}` : ability.name,
-    value: truncate(abilityBlock(ability), 1024),
-  };
-}
-
-/**
- * Discord merges embeds in one message that share a `url`, which would collapse an
- * eternal's items into a single embed. The section anchor keeps each url distinct
- * and still lands on the right wiki page.
- */
-function itemUrl({ item, eternal }: OwnedItem): string | undefined {
-  return eternal ? `${eternal.wikiUrl}#${encodeURIComponent(item.name.replace(/ /g, '_'))}` : undefined;
-}
-
-function detailEmbed(owned: OwnedItem) {
-  const { item, eternal } = owned;
-
-  const subtitle = eternal ? `${item.slot} · **${eternal.name}**, ${eternal.title}` : item.slot;
-  const body = [subtitle, item.description].filter(Boolean).join('\n\n');
-
-  const embed = baseEmbed(item.name, body);
-  const url = itemUrl(owned);
-  if (url) {
-    embed.setURL(url);
-  }
-  if (item.icon) {
-    embed.setThumbnail(item.icon);
-  }
-
-  if (item.abilities.length) {
-    embed.addFields(...item.abilities.map(abilityField));
-  }
-  else if (item.stats) {
-    embed.addFields({ name: 'Stats', value: statLine(item.stats) });
-  }
-
-  return eternal ? embed.setFooter({ text: `/eternals name:${eternal.id} for the rest of the set` }) : embed;
-}
-
-function listEmbed(label: string, matches: OwnedItem[]) {
-  const options = matches.map(({ item, eternal }) => `\`${item.slot}\` ${item.name}${eternal ? ` — *${eternal.name}*` : ''}`).join('\n');
-  
-  return baseEmbed(label, `${matches.length} items:\n\n${options}`).setFooter({
-    text: 'Narrow it with the eternal and slot options.',
-  });
-}
 
 export const itemCommand: Command = {
   data: new SlashCommandBuilder().setName('item')
@@ -89,7 +40,8 @@ export const itemCommand: Command = {
   examples: ['/item eternal:dahla slot:crown', '/item eternal:rynshi slot:weapon', '/item name:ringblade'],
 
   async autocomplete(interaction) {
-    await respondWithMatches(interaction, items, keys, ({ item }) => ({ name: item.name, value: item.name }));
+    const roster = filterItems(interaction.options.getString('eternal'), interaction.options.getString('slot'));
+    await respondWithMatches(interaction, roster, keys, ({ item }) => ({ name: item.name, value: item.name }));
   },
 
   async execute(interaction) {
@@ -97,29 +49,11 @@ export const itemCommand: Command = {
     const owner = interaction.options.getString('eternal');
     const slot = interaction.options.getString('slot');
 
-    // no eternalId for echo
-    const echoOnly = owner === 'echo';
-    const eternalId = echoOnly ? null : owner;
-
-    // eternal/slot filter the roster; name searches it. They combine.
-    let matches = items;
-    if (echoOnly) {
-      matches = matches.filter(({ eternal }) => !eternal);
-    }
-    else if (eternalId) {
-      matches = matches.filter(({ eternal }) => eternal?.id === eternalId);
-    }
-    if (slot) {
-      matches = matches.filter(({ item }) => item.slot.toLowerCase().startsWith(slot));
-    }
-
+    let matches = filterItems(owner, slot);
     if (name) {
       const found = findBest(name, matches, keys);
       if (!found.length) {
-        await interaction.reply({
-          embeds: [errorEmbed('No such item', `Nothing matched \`${name}\`. Try /eternals to browse the roster.`)],
-          flags: MessageFlags.Ephemeral,
-        });
+        await interaction.reply(ephemeralError('No such item', `Nothing matched \`${name}\`. Try /eternals to browse the roster.`));
 
         return;
       }
@@ -127,37 +61,26 @@ export const itemCommand: Command = {
     }
 
     if (!name && !owner && !slot) {
-      const embed = baseEmbed('Items',
-        `${items.length} items across the roster.\n\n` +
-          '`/item eternal: slot:` — browse, e.g. Dahla + Crown, or Echo + Weapon\n' +
-          '`/item name:` — search by item or ability, with autocomplete\n\n' +
-          'The options combine, and any one of them works on its own. ' +
-          'Anchors and consumables are under `slot:`.',
-      );
-      await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+      await interaction.reply(ephemeral(itemsOverviewEmbed(items.length)));
+
+      return;
+    }
+
+    // e.g. eternal:dahla slot:anchor, since anchors are all Echo items. Discord rejects a reply with no embeds.
+    if (!matches.length) {
+      await interaction.reply(ephemeralError('No such item', 'No item matches all of those options. Try fewer, or /eternals to browse the roster.'));
 
       return;
     }
 
     // Show details if the embeds fit, otherwise a list
-    if (matches.length <= MAX_EMBEDS) {
-      const embeds = matches.map(detailEmbed);
-      const total = embeds.reduce((sum, embed) => sum + embedLength(embed), 0);
+    const details = itemDetailEmbeds(matches);
+    if (details) {
+      await interaction.reply(shareable(...details));
 
-      if (total <= MAX_MESSAGE_CHARS) {
-        // One closing hint rather than the same footer on every embed.
-        for (const embed of embeds.slice(0, -1)) {
-          embed.setFooter(null);
-        }
-        await interaction.reply({ embeds });
-
-        return;
-      }
+      return;
     }
 
-    const ownerName = echoOnly ? 'Echo' : eternals.find((e) => e.id === eternalId)?.name;
-    const label = [ownerName, slot ? `${slot[0]?.toUpperCase()}${slot.slice(1)}s` : null].filter(Boolean).join(' · ');
-    
-    await interaction.reply({ embeds: [listEmbed(label || 'Matching items', matches)] });
+    await interaction.reply(shareable(itemListEmbed(matches, owner, slot)));
   },
 };

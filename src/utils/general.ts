@@ -1,24 +1,6 @@
-import { EmbedBuilder } from 'discord.js';
+import type { EmbedBuilder } from 'discord.js';
 
-import { config } from './config.js';
-
-/** Discord rejects embed descriptions over 4096 characters. */
-const MAX_DESCRIPTION = 4096;
-
-export function baseEmbed(title: string, description?: string): EmbedBuilder {
-  const embed = new EmbedBuilder().setColor(config.embedColor).setTitle(title);
-  if (description !== undefined) {
-    embed.setDescription(truncate(description));
-  }
-  
-  return embed;
-}
-
-export function errorEmbed(title: string, description: string): EmbedBuilder {
-  return new EmbedBuilder().setColor(0x992d22).setTitle(title).setDescription(truncate(description));
-}
-
-export function truncate(text: string, limit = MAX_DESCRIPTION): string {
+export function truncate(text: string, limit: number): string {
   return text.length <= limit ? text : `${text.slice(0, limit - 1)}…`;
 }
 
@@ -37,4 +19,9 @@ export function embedLength(embed: EmbedBuilder): number {
     (author?.name.length ?? 0) +
     (fields ?? []).reduce((total, field) => total + field.name.length + field.value.length, 0)
   );
+}
+
+/** A Discord timestamp shown as relative time ("in 2 hours"), which counts on its own without edits. */
+export function relativeTime(ms: number): string {
+  return `<t:${Math.floor(ms / 1000)}:R>`;
 }

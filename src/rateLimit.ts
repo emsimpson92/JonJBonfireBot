@@ -1,5 +1,3 @@
-import { config } from './config.js';
-
 /** The limits are "per minute", so the window every bucket slides over is a minute wide. */
 const WINDOW_MS = 60_000;
 
@@ -105,4 +103,4 @@ class RateLimiter {
   }
 }
 
-export const rateLimiter = new RateLimiter(config.maxRequests, config.maxRequestsPerUser);
+export { RateLimiter };
