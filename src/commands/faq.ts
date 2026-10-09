@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 
 import { faq } from '../data.js';
 import { faqListEmbed, faqTopicEmbed } from '../embeds/faq.js';
-import { ephemeral } from '../embeds/general.js';
+import { shareable } from '../share.js';
 import { keysOf, replyWithBest, respondWithMatches } from '../utils/search.js';
 import type { Command, FaqTopic } from '../types.js';
 
@@ -24,7 +24,7 @@ export const faqCommand: Command = {
     const query = interaction.options.getString('topic');
 
     if (!query) {
-      await interaction.reply(ephemeral(faqListEmbed(faq)));
+      await interaction.reply(shareable(faqListEmbed(faq)));
 
       return;
     }
@@ -33,6 +33,7 @@ export const faqCommand: Command = {
       plural: 'topics',
       label: (entry) => entry.topic,
       render: faqTopicEmbed,
+      shareable: true,
       notFound: { title: 'Topic not found', description: `No FAQ topic \`${query}\`. Run /faq to see every topic.` },
     });
   },

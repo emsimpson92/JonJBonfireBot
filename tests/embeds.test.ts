@@ -14,7 +14,7 @@ import { helpDetailEmbed, helpOverviewEmbed } from '../src/embeds/help.js';
 import { itemDetailEmbeds } from '../src/embeds/items.js';
 import { lobbyEmbed, lobbyListEmbed } from '../src/embeds/lobbies.js';
 import { socialsEmbed } from '../src/embeds/socials.js';
-import { MAX_LOBBIES, MAX_PLAYERS } from '../src/lobbies.js';
+import { MAX_DESCRIPTION_LENGTH, MAX_LOBBIES, MAX_PLAYERS } from '../src/lobbies.js';
 import type { Lobby } from '../src/lobbies.js';
 import { embedLength, MAX_MESSAGE_CHARS } from '../src/utils/general.js';
 import { choicesOf } from './helpers.js';
@@ -125,6 +125,7 @@ function busyLobby(code: string): Lobby {
     code,
     region: 'South America',
     mode: 'Ascension',
+    description: 'x'.repeat(MAX_DESCRIPTION_LENGTH),
     players: Array.from({ length: MAX_PLAYERS }, (_, n) => ({ id: snowflake(n), name: `Player ${n}` })),
     lastActivityAt: Date.now(),
     guildId: snowflake(1),
@@ -142,5 +143,12 @@ describe('lobby embeds', () => {
     const open = Array.from({ length: MAX_LOBBIES }, (_, n) => busyLobby(`CODE${String(n).padStart(2, '0')}`));
 
     expect(problems(lobbyListEmbed(open, null, null))).toEqual([]);
+  });
+
+  it('show the description on the post but not in /lobbies', () => {
+    const lobby = { ...busyLobby('DX89EE'), description: 'Casual, all welcome' };
+
+    expect(lobbyEmbed(lobby).data.description).toContain(lobby.description);
+    expect(JSON.stringify(lobbyListEmbed([lobby], null, null).toJSON())).not.toContain(lobby.description);
   });
 });

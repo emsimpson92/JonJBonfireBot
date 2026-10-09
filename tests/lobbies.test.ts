@@ -1,9 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { isHost, LOBBY_TTL_MS, LobbyStore, MAX_LOBBIES, MAX_PLAYERS } from '../src/lobbies.js';
+import { EXPIRY_WARNING_MS, isHost, LOBBY_TTL_MS, LobbyStore, MAX_LOBBIES, MAX_PLAYERS } from '../src/lobbies.js';
 import type { Lobby, Player } from '../src/lobbies.js';
-
-const HOUR = 60 * 60 * 1000;
 
 const host: Player = { id: 'host', name: 'Host' };
 const player = (n: number): Player => ({ id: `p${n}`, name: `Player ${n}` });
@@ -240,7 +238,7 @@ describe('close', () => {
 });
 
 describe('expiry', () => {
-  it('closes a lobby two hours after its last activity', () => {
+  it('closes a lobby an hour after its last activity', () => {
     const lobby = open();
 
     expect(store.list(LOBBY_TTL_MS - 1)).toEqual([lobby]);
@@ -251,10 +249,11 @@ describe('expiry', () => {
 
   it('counts from the latest activity', () => {
     const lobby = open();
-    store.join(lobby, player(1), HOUR);
+    const later = LOBBY_TTL_MS / 2;
+    store.join(lobby, player(1), later);
 
     expect(store.list(LOBBY_TTL_MS + 1)).toEqual([lobby]);
-    expect(store.list(HOUR + LOBBY_TTL_MS)).toEqual([]);
+    expect(store.list(later + LOBBY_TTL_MS)).toEqual([]);
   });
 
   it('applies to every lookup, not only the sweep', () => {
@@ -294,5 +293,32 @@ describe('list', () => {
     store.join(older, player(3), 2000);
 
     expect(store.list(2000)).toEqual([older, newer]);
+  });
+});
+
+describe('expiry warning', () => {
+  const warnAt = LOBBY_TTL_MS - EXPIRY_WARNING_MS;
+
+  it('is due once, from shortly before the lobby expires', () => {
+    const lobby = open();
+
+    expect(store.warningsPending(warnAt - 1)).toEqual([]);
+    expect(store.warningsPending(warnAt)).toEqual([lobby]);
+    expect(store.warningsPending(warnAt + 1)).toEqual([]);
+  });
+
+  it('is due again once activity has pushed back expiry', () => {
+    const lobby = open();
+    store.warningsPending(warnAt);
+    store.bump(lobby, warnAt);
+
+    expect(store.warningsPending(2 * warnAt - 1)).toEqual([]);
+    expect(store.warningsPending(2 * warnAt)).toEqual([lobby]);
+  });
+
+  it('is never due for a lobby that has expired', () => {
+    open();
+
+    expect(store.warningsPending(LOBBY_TTL_MS)).toEqual([]);
   });
 });

@@ -401,8 +401,8 @@
         "name": "Sanctuary",
         "description": "Sanctify an area. While inside it, all teammates are Steadfast.",
         "tags": ["AoE", "Steadfast"],
-        "stats": { "Cooldown": "14s", "Area of Effect Range": "6m", "Duration": "6s" },
-        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Area of Effect Range": "8m" }, "effect": "Radius increased" }]
+        "stats": { "Cooldown": "14s", "Area of Effect Range": "4.5m", "Duration": "6s" },
+        "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }, { "tier": "III", "changes": { "Area of Effect Range": "6m" }, "effect": "Radius increased" }]
       }
     ]
   },
@@ -448,7 +448,7 @@
         "input": "secondary",
         "description": "Reflect projectiles and block melee damage.",
         "tags": ["Channeled Attack", "Damage Reflect", "Block"],
-        "stats": { "Cooldown": "16s", "Channel Time": "4s", "Reflect Damage": "100%" },
+        "stats": { "Cooldown": "14s", "Channel Time": "3.5s", "Reflect Damage": "100%" },
         "upgrades": [{ "tier": "II", "changes": { "Cooldown": "12s" } }]
       }
     ]

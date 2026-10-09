@@ -13,11 +13,15 @@ export const MODE_CHOICES = MODES.map((mode) => ({ name: mode, value: mode }));
 export const CODE_LENGTH = 6;
 export const CODE_PATTERN = /^[A-Z0-9]{6}$/;
 
+export const MAX_DESCRIPTION_LENGTH = 100;
+
 export const MAX_PLAYERS = 45;
 export const MAX_LOBBIES = 50;
 
-/** A lobby closes after two hours with nobody joining, leaving or being kicked. */
-export const LOBBY_TTL_MS = 2 * 60 * 60 * 1000;
+/** A lobby closes after an hour with nobody joining, leaving or being kicked, and the host not bumping it. */
+export const LOBBY_TTL_MS = 60 * 60 * 1000;
+
+export const EXPIRY_WARNING_MS = 10 * 60 * 1000;
 
 export interface Player {
   id: string;
@@ -30,12 +34,15 @@ export interface Lobby {
   code: string;
   region: Region;
   mode?: Mode;
+  description?: string;
   players: Player[];
   lastActivityAt: number;
   guildId: string;
   channelId: string;
   messageId?: string;
   closed?: boolean;
+  /** The lastActivityAt the host was warned about, so any activity since sets up a fresh warning. */
+  warnedFor?: number;
 }
 
 export function expiresAt(lobby: Lobby): number {
@@ -90,7 +97,7 @@ export class LobbyStore {
   }
 
   create(
-    details: { code: string; region: Region; mode?: Mode; host: Player; guildId: string; channelId: string },
+    details: { code: string; region: Region; mode?: Mode; description?: string; host: Player; guildId: string; channelId: string },
     now: number = Date.now(),
   ): CreateResult {
     this.expire(now);
@@ -152,6 +159,10 @@ export class LobbyStore {
     return this.remove(lobby, userIds.filter((id) => !isHost(lobby, id)), now);
   }
 
+  bump(lobby: Lobby, now: number = Date.now()): void {
+    lobby.lastActivityAt = now;
+  }
+
   close(lobby: Lobby): void {
     if (this.lobbies.get(lobby.code) === lobby) {
       this.lobbies.delete(lobby.code);
@@ -170,6 +181,18 @@ export class LobbyStore {
     this.expired = [];
 
     return expired;
+  }
+
+  /** Lobbies that are close to expiring and need to be warned. */
+  warningsPending(now: number = Date.now()): Lobby[] {
+    this.expire(now);
+    const due = [...this.lobbies.values()].filter((lobby) =>
+      now >= expiresAt(lobby) - EXPIRY_WARNING_MS && lobby.warnedFor !== lobby.lastActivityAt);
+    for (const lobby of due) {
+      lobby.warnedFor = lobby.lastActivityAt;
+    }
+
+    return due;
   }
 
   private expire(now: number): void {

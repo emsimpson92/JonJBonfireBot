@@ -32,6 +32,6 @@ export const config = {
   /** Where /createlobby works. Unset, it works in any channel. */
   lobbyChannelId: snowflake('LOBBY_CHANNEL_ID'),
   maxRequests: positiveInt('MAX_REQUESTS_PER_MINUTE', 50),
-  maxRequestsPerUser: positiveInt('MAX_REQUESTS_PER_USER_PER_MINUTE', 5),
+  maxRequestsPerUser: positiveInt('MAX_REQUESTS_PER_USER_PER_MINUTE', 10),
   imageBaseUrl: optional('IMAGE_BASE_URL', 'https://raw.githubusercontent.com/emsimpson92/JonJBonfireBot/main/'),
 } as const;
