@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 
-import { ephemeralError } from '../embeds/general.js';
+import { ephemeral, ephemeralError } from '../embeds/general.js';
 import { helpDetailEmbed, helpOverviewEmbed } from '../embeds/help.js';
 import { respondWithMatches } from '../utils/search.js';
 import type { Command } from '../types.js';
@@ -33,13 +33,13 @@ export const helpCommand: Command = {
   async execute(interaction) {
     const query = interaction.options.getString('command');
     if (!query) {
-      await interaction.reply({ embeds: [helpOverviewEmbed(commands)] });
+      await interaction.reply(ephemeral(helpOverviewEmbed(commands)));
       return;
     }
 
     const match = commands.find((command) => command.data.name === query.replace(/^\//, '').toLowerCase());
     if (match) {
-      await interaction.reply({ embeds: [helpDetailEmbed(match)] });
+      await interaction.reply(ephemeral(helpDetailEmbed(match)));
       return;
     }
 

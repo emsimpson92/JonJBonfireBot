@@ -1,25 +1,39 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from 'discord.js';
 import type {
   APIInteractionDataResolvedGuildMember,
   APIInteractionGuildMember,
   BaseInteraction,
   Client,
+  EmbedBuilder,
   GuildMember,
   MessageComponentInteraction,
   User,
 } from 'discord.js';
 
-import { ephemeral, ephemeralError } from './embeds/general.js';
-import { lobbyClosedEmbed, lobbyEmbed, switchedLobbiesEmbed } from './embeds/lobbies.js';
-import { isHost, lobbyStore } from './lobbies.js';
+import { ephemeral, ephemeralError, errorEmbed } from './embeds/general.js';
+import {
+  expiryWarningEmbed,
+  lobbyClosedEmbed,
+  lobbyEmbed,
+  lobbyManageEmbed,
+  switchedLobbiesEmbed,
+} from './embeds/lobbies.js';
+import { expiresAt, isHost, lobbyStore } from './lobbies.js';
 import type { Lobby, Player } from './lobbies.js';
+import { relativeTime } from './utils/general.js';
+import { postUrl } from './utils/lobbies.js';
 
 /** Every lobby button id starts with this. We don't need it now but if we add buttons in the future it'll help */
 const PREFIX = 'lobby';
 
 const SWEEP_INTERVAL_MS = 60_000;
 
-type Action = 'join' | 'leave' | 'close';
+const NOT_HOST = 'Only the host can manage the lobby.';
+
+type Action = 'join' | 'leave' | 'manage' | 'bump' | 'close';
+
+/** Lobbies with a bump in flight. Each click is its own interaction, so a double click would otherwise post twice */
+const bumping = new Set<string>();
 
 /** Carries the lobby's id as well as its code, since codes are reused once a lobby closes. */
 function customId(action: Action, lobby: Lobby): string {
@@ -45,10 +59,34 @@ export function lobbyPost(lobby: Lobby) {
   const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder().setCustomId(customId('join', lobby)).setLabel('Join').setStyle(ButtonStyle.Primary),
     new ButtonBuilder().setCustomId(customId('leave', lobby)).setLabel('Leave').setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder().setCustomId(customId('close', lobby)).setLabel('Close Lobby').setStyle(ButtonStyle.Danger),
+    new ButtonBuilder().setCustomId(customId('manage', lobby)).setEmoji('⚙️').setStyle(ButtonStyle.Secondary),
   );
 
   return { embeds: [lobbyEmbed(lobby)], components: [buttons] };
+}
+
+export function managePanel(lobby: Lobby, note?: string) {
+  const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder().setCustomId(customId('bump', lobby)).setLabel('Bump').setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId(customId('close', lobby)).setLabel('Close Lobby').setStyle(ButtonStyle.Danger),
+  );
+
+  return { embeds: [lobbyManageEmbed(lobby, note)], components: [buttons] };
+}
+
+export function expiryWarning(lobby: Lobby) {
+  const url = postUrl(lobby);
+  const link = url && new ButtonBuilder().setURL(url).setLabel('Go to lobby').setStyle(ButtonStyle.Link);
+
+  return { embeds: [expiryWarningEmbed(lobby)], components: link ? [new ActionRowBuilder<ButtonBuilder>().addComponents(link)] : [] };
+}
+
+function endPanel(embed: EmbedBuilder) {
+  return { embeds: [embed], components: [] };
+}
+
+function isPanel(interaction: MessageComponentInteraction): boolean {
+  return interaction.message.flags.has(MessageFlags.Ephemeral);
 }
 
 /** Updates a lobby's post when the state changes */
@@ -75,12 +113,30 @@ export async function syncPost(client: Client, lobby: Lobby): Promise<void> {
   }
 }
 
-/** Delete expired lobby posts */
+async function warnHost(client: Client, lobby: Lobby): Promise<void> {
+  const host = lobby.players[0];
+  if (!host) {
+    return;
+  }
+
+  try {
+    await client.users.send(host.id, expiryWarning(lobby));
+  }
+  catch (error) {
+    // Most likely the host doesn't take DMs from server members
+    console.warn(`Could not warn the host of lobby ${lobby.code} that it's expiring:`, error);
+  }
+}
+
+/** Delete expired lobby posts, and warn the hosts of lobbies about to expire */
 export function startLobbySweep(client: Client): void {
   setInterval(() => {
     try {
       for (const lobby of lobbyStore.sweep()) {
         void syncPost(client, lobby);
+      }
+      for (const lobby of lobbyStore.warningsPending()) {
+        void warnHost(client, lobby);
       }
     }
     catch (error) {
@@ -101,7 +157,9 @@ export async function handleLobbyComponent(interaction: MessageComponentInteract
   const lobby = lobbyStore.find(code, id);
 
   if (!lobby) {
-    await deleteClickedPost(interaction, 'This lobby is closed.');
+    await (isPanel(interaction) ?
+      interaction.update(endPanel(lobbyClosedEmbed('This lobby is closed.'))) :
+      deleteClickedPost(interaction, 'This lobby is closed.'));
     return;
   }
 
@@ -111,6 +169,12 @@ export async function handleLobbyComponent(interaction: MessageComponentInteract
       break;
     case 'leave':
       await leave(interaction, lobby);
+      break;
+    case 'manage':
+      await manage(interaction, lobby);
+      break;
+    case 'bump':
+      await bump(interaction, lobby);
       break;
     case 'close':
       await close(interaction, lobby);
@@ -146,12 +210,58 @@ async function leave(interaction: MessageComponentInteraction, lobby: Lobby): Pr
     interaction.update(lobbyPost(lobby)));
 }
 
+async function manage(interaction: MessageComponentInteraction, lobby: Lobby): Promise<void> {
+  await interaction.reply(isHost(lobby, interaction.user.id) ?
+    { ...managePanel(lobby), flags: MessageFlags.Ephemeral } :
+    ephemeralError('Lobby Management', NOT_HOST));
+}
+
+/** Reposts the lobby as the channel's latest message and pushes back its expiry. */
+async function bump(interaction: MessageComponentInteraction, lobby: Lobby): Promise<void> {
+  // The host can change after the panel opens, if they leave
+  if (!isHost(lobby, interaction.user.id)) {
+    await interaction.update(endPanel(errorEmbed('Lobby Management', NOT_HOST)));
+    return;
+  }
+
+  if (bumping.has(lobby.id)) {
+    await interaction.deferUpdate();
+    return;
+  }
+  bumping.add(lobby.id);
+
+  try {
+    const channel = await interaction.client.channels.fetch(lobby.channelId);
+    if (!channel?.isSendable()) {
+      await interaction.reply(ephemeralError("Can't post here", "I can't post in this lobby's channel."));
+      return;
+    }
+
+    await interaction.deferUpdate();
+    lobbyStore.bump(lobby);
+
+    // Post the new one first, so a failed post leaves the old one up
+    const previous = lobby.messageId;
+    lobby.messageId = (await channel.send(lobbyPost(lobby))).id;
+    if (previous) {
+      await channel.messages.delete(previous)
+        .catch((error: unknown) => console.warn(`Could not delete the old post for lobby ${lobby.code}:`, error));
+    }
+  }
+  finally {
+    bumping.delete(lobby.id);
+  }
+
+  await interaction.editReply(managePanel(lobby, 'Lobby bumped'));
+}
+
 async function close(interaction: MessageComponentInteraction, lobby: Lobby): Promise<void> {
   if (!isHost(lobby, interaction.user.id)) {
-    await interaction.reply(ephemeralError('Host only', 'Only the host can close this lobby.'));
+    await interaction.update(endPanel(errorEmbed('Lobby Management', NOT_HOST)));
     return;
   }
 
   lobbyStore.close(lobby);
-  await deleteClickedPost(interaction, `Lobby ${lobby.code} is closed.`);
+  await interaction.update(endPanel(lobbyClosedEmbed(`Lobby ${lobby.code} is closed.`)));
+  await syncPost(interaction.client, lobby);
 }

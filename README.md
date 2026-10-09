@@ -23,16 +23,17 @@ so `/glossary term:crushing` explains them.
 | `/item [eternal] [slot] [name]` | Shows an item and the abilities it grants. `eternal:` includes an **Echo** choice for items tied to no eternal; `slot:` covers crowns, amulets, weapons, anchors and consumables. The options combine and each works alone. |
 | `/randombuild` | Rolls a random build from the Echo items and the items of eternals currently in rotation: one crown, one amulet and two different weapons. Only you see the result. |
 | `/glossary [term]` | Defines a term. With no argument, lists all 79. |
-| `/createlobby <code> <region> [mode]` | Posts a lobby for an in-game invite code, with you as host. See [Lobbies](#lobbies). |
-| `/lobbies [region] [mode]` | Lists open lobbies, most recently active first, with their mode and links to their posts. `region:` and `mode:` filter the list and combine; lobbies with no mode don't match a `mode:` filter. |
+| `/createlobby <code> <region> [mode] [description]` | Posts a lobby for an in-game invite code, with you as host. See [Lobbies](#lobbies). |
+| `/lobbies [region] [mode]` | Lists open lobbies, most recently active first, with their region and mode (each left out when the list is filtered to one) and links to their posts. `region:` and `mode:` filter the list and combine; lobbies with no mode don't match a `mode:` filter. |
 | `/lobbyadd <player>` | Host only. Adds a server member to the lobby you're hosting, unless they're already in a lobby. |
 | `/lobbykick <player>` | Host only. Removes a player from the lobby you're hosting; `player:` autocompletes against your own roster. |
 
-`/socials`, `/eternals`, `/item` and `/glossary term:` reply so only you see them, with a
-**Post to channel** button that posts the same embeds publicly, marked with who shared them. The
-post is a plain message rather than a reply, since a reply would point at the private one and
-read as deleted once it's dismissed, so the bot needs to be able to send messages and embed links
-in that channel. The button comes off the private reply once the post goes through.
+`/help` replies so only you see it. `/faq`, `/socials`, `/eternals`, `/item` and
+`/glossary term:` do too, with a **Post to channel** button that posts the same embeds publicly,
+marked with who shared them. The post is a plain message rather than a reply, since a reply would
+point at the private one and read as deleted once it's dismissed, so the bot needs to be able to
+send messages and embed links in that channel. The button comes off the private reply once the
+post goes through.
 
 `/eternals name:`, `/item eternal:` / `slot:` and the lobby `region:` / `mode:` options are
 pick-lists. `/item name:`, `/glossary term:`, `/faq topic:` and `/help command:` use
@@ -117,9 +118,11 @@ commands. A throttled click gets a reply only the clicker can see.
 `/createlobby code:DX89EE region:Europe` posts a lobby in the lobby channel (`LOBBY_CHANNEL_ID`;
 unset, any channel works). Codes are six letters or digits and are stored in capitals, so
 `dx89ee` works too. Regions are North America, South America, Europe and Asia. The optional
-`mode:` is Ascension or Spires, and shows on the post and in `/lobbies` when set.
+`mode:` is Ascension or Spires, and shows on the post and in `/lobbies` when set. The optional
+`description:` is a note of up to 100 characters, like `Casual, all welcome`, and shows on the
+post only.
 
-The post shows the region, the mode if one was given, when the lobby expires, and the numbered roster with the host
+The post shows the region, the mode and description if given, when the lobby expires, and the numbered roster with the host
 marked 👑. It has three buttons:
 
 - **Join** — adds you to the lobby. Joining moves you out of any other lobby, since nobody can
@@ -128,8 +131,16 @@ marked 👑. It has three buttons:
 - **Leave** — removes you from the lobby; clicking it while not in the lobby gets an ephemeral
   error. If the host leaves, whoever has been in the lobby longest takes over. When the last
   player leaves, the lobby closes.
-- **Close Lobby** — visible to everyone, but only works for the host; anyone else gets an
-  ephemeral error. Deletes the post immediately.
+- **⚙️** — opens a **Lobby Management** panel only the host can see; anyone else is told only
+  the host can manage the lobby. The panel has two buttons:
+  - **Bump** — reposts the lobby as the channel's latest message and deletes the old post, so it
+    isn't buried under chat. Counts as activity, so it pushes back expiry too. The new post is
+    a plain message rather than a reply, so like **Post to channel** it needs the bot to be able
+    to send messages and embed links in the lobby channel. The new post goes up before the old
+    one comes down, so a failed bump leaves the lobby where it was.
+  - **Close Lobby** — closes the lobby and deletes the post immediately.
+
+  If the host leaves after opening the panel, its buttons stop working for them.
 
 The host adds players with `/lobbyadd player:`, picking any member of the server. Unlike
 **Join**, adding never moves anyone: someone already in another lobby has to leave it first,
@@ -147,13 +158,20 @@ is deleted.
 
 ### Expiry
 
-A lobby expires 2 hours after anyone last joined, left, or was added or kicked. The post's expiry time
+A lobby expires 1 hour after anyone last joined, left, or was added or kicked, or the host last bumped it. The post's expiry time
 uses a Discord timestamp, so it counts down on its own without the bot editing the post.
+
+10 minutes before a lobby expires, the bot DMs its host that the lobby is expiring soon, asking
+them to bump it if it's still active or close it if not, with a **Go to lobby** link to the post.
+The post's ⚙️ panel does both, and the post shows the current expiry even if someone has joined
+since the DM went out. Any activity resets the clock, so a host is warned again only if the
+lobby goes quiet again. A host who doesn't
+accept DMs from server members gets no warning, and the lobby still expires on time.
 
 Each lobby stores when it was last active, and that alone decides whether it's open. Every
 click and command checks it first, so an expired lobby can't be joined or listed even a second
 late. A once-a-minute sweep then deletes the posts of lobbies that expired while nobody was
-looking. It only tidies up, so nothing goes wrong if it runs late. Per-lobby timers were
+looking, and sends the expiry warnings, so a warning arrives 9 to 10 minutes before expiry. It only tidies up, so nothing goes wrong if it runs late. Per-lobby timers were
 avoided because codes are reused: a timer left running for a closed lobby could fire later and
 delete a new lobby with the same code. Every button also carries its lobby's unique id, so a
 button left on an old post can't act on a newer lobby with the same code.
@@ -313,8 +331,9 @@ request and push to `main`, alongside typecheck, lint and build. None of them ta
 the logic is tested as plain functions, and the rest checks the content against what Discord
 will accept.
 
-- **Logic.** `lobbies.test.ts`, `rateLimit.test.ts`, `search.test.ts` and `share.test.ts` cover
-  the lobby rules (hosting, joining, adding, kicking, expiry), the sliding-window limits, lookup
+- **Logic.** `lobbies.test.ts`, `lobbyMessages.test.ts`, `rateLimit.test.ts`, `search.test.ts`
+  and `share.test.ts` cover the lobby rules (hosting, joining, adding, kicking, expiry), the
+  host's ⚙️ panel and its Bump and Close Lobby buttons, the expiry DM, the sliding-window limits, lookup
   ranking and typo tolerance, and the Post to channel button. The lobby store and the rate limiter both take the current time as an
   argument, so expiry and windows are tested by passing timestamps rather than waiting.
 - **Content.** `data.test.ts` checks the JSON: unique ids, each eternal carrying a crown, an
@@ -339,7 +358,7 @@ src/
   config.ts    Env vars, with defaults for the optional ones
   rateLimit.ts Sliding-window throttling, bot-wide and per user
   lobbies.ts   Lobby state and rules: joining, leaving, adding, kicking, expiry
-  lobbyMessages.ts  Lobby post buttons and clicks, post updates, and the expiry sweep
+  lobbyMessages.ts  Lobby post buttons, the host's panel, clicks, post updates, the expiry sweep and DM
   share.ts     The Post to channel button on private replies, and its click
   data.ts      Loads and validates the JSON files
   types.ts     Command and the content types: Eternal, Item, GlossaryEntry, FaqTopic, SocialLink

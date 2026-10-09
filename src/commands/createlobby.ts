@@ -3,7 +3,16 @@ import { InteractionContextType, SlashCommandBuilder } from 'discord.js';
 import { config } from '../config.js';
 import { ephemeral, ephemeralError } from '../embeds/general.js';
 import { switchedLobbiesEmbed } from '../embeds/lobbies.js';
-import { CODE_LENGTH, CODE_PATTERN, lobbyStore, MAX_LOBBIES, MODE_CHOICES, MODES, REGION_CHOICES } from '../lobbies.js';
+import {
+  CODE_LENGTH,
+  CODE_PATTERN,
+  lobbyStore,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_LOBBIES,
+  MODE_CHOICES,
+  MODES,
+  REGION_CHOICES,
+} from '../lobbies.js';
 import type { Region } from '../lobbies.js';
 import { lobbyPost, playerFrom, syncPost } from '../lobbyMessages.js';
 import type { Command } from '../types.js';
@@ -32,9 +41,18 @@ export const lobbyCreateCommand: Command = {
         .setDescription('Which game mode')
         .addChoices(...MODE_CHOICES),
     )
+    .addStringOption((option) =>
+      option.setName('description')
+        .setDescription('A note for players, shown on the lobby post')
+        .setMaxLength(MAX_DESCRIPTION_LENGTH),
+    )
     .toJSON(),
-  usage: '/createlobby <code> <region> [mode]',
-  examples: ['/createlobby code:DX89EE region:Europe', '/createlobby code:DX89EE region:Europe mode:Spires'],
+  usage: '/createlobby <code> <region> [mode] [description]',
+  examples: [
+    '/createlobby code:DX89EE region:Europe',
+    '/createlobby code:DX89EE region:Europe mode:Spires',
+    '/createlobby code:DX89EE region:Europe description:Casual, all welcome',
+  ],
 
   async execute(interaction) {
     if (!interaction.inGuild()) {
@@ -61,6 +79,7 @@ export const lobbyCreateCommand: Command = {
       code,
       region,
       mode,
+      description: interaction.options.getString('description')?.trim() || undefined,
       host: playerFrom(interaction),
       guildId: interaction.guildId,
       channelId: interaction.channelId,

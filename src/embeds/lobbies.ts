@@ -17,21 +17,23 @@ export function lobbyEmbed(lobby: Lobby) {
     `Lobby Code: ${lobby.code}`,
     `**Region:** ${lobby.region}\n` +
       (lobby.mode ? `**Mode:** ${lobby.mode}\n` : '') +
+      (lobby.description ? `**Description:** ${lobby.description}\n` : '') +
       `**Expires:** ${relativeTime(expiresAt(lobby))}\n\n` +
       `**Players (${lobby.players.length}/${MAX_PLAYERS})**\n${roster}`,
   );
 }
 
-function lobbyField(lobby: Lobby) {
+/** Leaves the region and mode out when the list is already filtered to one, since the title names it. */
+function lobbyField(lobby: Lobby, show: { region: boolean; mode: boolean }) {
   const url = postUrl(lobby);
   const parts = [
-    ...(lobby.mode ? [lobby.mode] : []),
+    ...(show.region ? [lobby.region] : []),
+    ...(lobby.mode && show.mode ? [lobby.mode] : []),
     `${lobby.players.length}/${MAX_PLAYERS} players`,
     `active ${relativeTime(lobby.lastActivityAt)}`,
-    ...(url ? [`[Go to lobby](${url})`] : []),
   ];
 
-  return { name: lobby.code, value: parts.join(' · ') };
+  return { name: lobby.code, value: parts.join(' · ') + (url ? `\n[Go to lobby](${url})` : '') };
 }
 
 /** /lobbies: the open lobbies, already narrowed by the region and mode options, or a note that there are none. */
@@ -51,7 +53,22 @@ export function lobbyListEmbed(open: Lobby[], region: string | null, mode: strin
       (unused.length ? ` Narrow it with ${unused.join(' or ')}.` : '');
   }
 
-  return baseEmbed(title).addFields(shown.map(lobbyField)).setFooter({ text: footer });
+  const show = { region: !region, mode: !mode };
+
+  return baseEmbed(title).addFields(shown.map((lobby) => lobbyField(lobby, show))).setFooter({ text: footer });
+}
+
+export function lobbyManageEmbed(lobby: Lobby, note?: string) {
+  return baseEmbed('Lobby Management', `Managing lobby **${lobby.code}**.` + (note ? `\n\n${note}` : ''));
+}
+
+export function expiryWarningEmbed(lobby: Lobby) {
+  return baseEmbed(
+    'Lobby expiring soon',
+    `The lobby you are hosting with code **${lobby.code}** is expiring soon. If the lobby is still active, give it a bump. ` +
+      'Otherwise, please close the lobby. ' +
+      `If no action is taken, the lobby will automatically close ${relativeTime(expiresAt(lobby))}.`,
+  );
 }
 
 /** Hosting or joining a lobby moves a player out of the one they were in. */
