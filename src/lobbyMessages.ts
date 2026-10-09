@@ -18,9 +18,8 @@ import {
   lobbyManageEmbed,
   switchedLobbiesEmbed,
 } from './embeds/lobbies.js';
-import { expiresAt, isHost, lobbyStore } from './lobbies.js';
+import { isHost, lobbyStore } from './lobbies.js';
 import type { Lobby, Player } from './lobbies.js';
-import { relativeTime } from './utils/general.js';
 import { postUrl } from './utils/lobbies.js';
 
 /** Every lobby button id starts with this. We don't need it now but if we add buttons in the future it'll help */
