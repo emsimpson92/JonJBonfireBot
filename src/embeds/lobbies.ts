@@ -1,4 +1,4 @@
-import { expiresAt, MAX_PLAYERS } from '../lobbies.js';
+import { closesAtMaxAge, expiresAt, MAX_LOBBY_AGE_MS, MAX_PLAYERS } from '../lobbies.js';
 import type { Lobby, Player } from '../lobbies.js';
 import { relativeTime } from '../utils/general.js';
 import { postUrl } from '../utils/lobbies.js';
@@ -6,6 +6,8 @@ import { baseEmbed } from './general.js';
 
 /** An embed holds at most 25 fields, one per lobby. */
 const MAX_LISTED = 25;
+
+const HOUR_MS = 60 * 60 * 1000;
 
 /** The embed on a lobby's post. lobbyMessages.ts puts the Join, Leave and Close buttons under it. */
 export function lobbyEmbed(lobby: Lobby) {
@@ -63,6 +65,14 @@ export function lobbyManageEmbed(lobby: Lobby, note?: string) {
 }
 
 export function expiryWarningEmbed(lobby: Lobby) {
+  if (closesAtMaxAge(lobby)) {
+    return baseEmbed(
+      'Lobby expiring soon',
+      `The lobby you are hosting with code **${lobby.code}** has been open for almost ${MAX_LOBBY_AGE_MS / HOUR_MS} hours, ` +
+        `the longest a lobby can stay open. It will automatically close ${relativeTime(expiresAt(lobby))}.`,
+    );
+  }
+
   return baseEmbed(
     'Lobby expiring soon',
     `The lobby you are hosting with code **${lobby.code}** is expiring soon. If the lobby is still active, give it a bump. ` +

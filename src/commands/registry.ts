@@ -1,3 +1,4 @@
+import { config } from '../config.js';
 import type { Command } from '../types.js';
 import { eternalsCommand } from './eternals.js';
 import { faqCommand } from './faq.js';
@@ -26,8 +27,33 @@ export const commands: Command[] = [
   socialsCommand,
 ];
 
+const lobbyCommands = new Set<Command>([lobbyCreateCommand, lobbiesCommand, lobbyAddCommand, lobbyKickCommand]);
+
+const everywhere = commands.filter((command) => !lobbyCommands.has(command));
+
 const commandsByName = new Map(commands.map((command) => [command.data.name, command]));
 
-export function findCommand(name: string): Command | undefined {
-  return commandsByName.get(name);
+export function commandsIn(guildId: string | null): Command[] {
+  return guildId !== null && guildId === config.lobbyGuildId ? commands : everywhere;
+}
+
+export function findCommand(name: string, guildId: string | null): Command | undefined {
+  const command = commandsByName.get(name);
+
+  return command && commandsIn(guildId).includes(command) ? command : undefined;
+}
+
+export function registrations(guildId: string | undefined, lobbyGuildId: string | undefined): Map<string | undefined, Command[]> {
+  const targets = new Map<string | undefined, Command[]>();
+  for (const command of commands) {
+    const isLobby = lobbyCommands.has(command);
+    if (isLobby && !lobbyGuildId) {
+      continue;
+    }
+
+    const target = isLobby ? lobbyGuildId : guildId;
+    targets.set(target, [...(targets.get(target) ?? []), command]);
+  }
+
+  return targets;
 }

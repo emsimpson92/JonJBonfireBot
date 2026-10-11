@@ -2,7 +2,7 @@ import { MessageFlags, MessageFlagsBitField } from 'discord.js';
 import type { ActionRowBuilder, ButtonBuilder, MessageComponentInteraction } from 'discord.js';
 import { describe, expect, it, vi } from 'vitest';
 
-import { expiresAt, lobbyStore } from '../src/lobbies.js';
+import { EXPIRY_WARNING_MS, expiresAt, lobbyStore, MAX_LOBBY_AGE_MS } from '../src/lobbies.js';
 import type { Lobby } from '../src/lobbies.js';
 import { expiryWarning, handleLobbyComponent, lobbyPost, managePanel } from '../src/lobbyMessages.js';
 import { relativeTime } from '../src/utils/general.js';
@@ -183,6 +183,17 @@ describe('expiry DM', () => {
       `The lobby you are hosting with code **${lobby.code}** is expiring soon. If the lobby is still active, give it a bump. ` +
         'Otherwise, please close the lobby. ' +
         `If no action is taken, the lobby will automatically close ${relativeTime(expiresAt(lobby))}.`,
+    );
+  });
+
+  // Bumping can't keep it open by then, so asking for one would only mislead the host.
+  it("tells the host a lobby near its maximum age will close, rather than asking for a bump", () => {
+    const lobby = openLobby();
+    lobby.createdAt -= MAX_LOBBY_AGE_MS - EXPIRY_WARNING_MS;
+
+    expect(expiryWarning(lobby).embeds[0]?.data.description).toBe(
+      `The lobby you are hosting with code **${lobby.code}** has been open for almost 6 hours, ` +
+        `the longest a lobby can stay open. It will automatically close ${relativeTime(expiresAt(lobby))}.`,
     );
   });
 

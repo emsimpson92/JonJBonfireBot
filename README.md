@@ -6,7 +6,7 @@ builds, a glossary, and player-run lobbies.
 Content is populated from the [Arkheron Wiki](https://arkheron.wiki.gg/): 12 eternals, 72 items
 (48 eternal-specific plus Echo crowns, amulets and weapons, anchors and consumables), and 79
 glossary terms, with wiki icons and portraits on the embeds. The only remaining placeholders are
-the channel IDs and bot token in `.env`. See [Editing the content](#editing-the-content).
+the server and channel IDs and bot token in `.env`. See [Editing the content](#editing-the-content).
 
 The commands cross-reference each other: `/eternals` names an eternal's four items, `/item`
 gives one item's abilities and tier upgrades, and the ability tags on both are glossary terms,
@@ -27,6 +27,9 @@ so `/glossary term:crushing` explains them.
 | `/lobbies [region] [mode]` | Lists open lobbies, most recently active first, with their region and mode (each left out when the list is filtered to one) and links to their posts. `region:` and `mode:` filter the list and combine; lobbies with no mode don't match a `mode:` filter. |
 | `/lobbyadd <player>` | Host only. Adds a server member to the lobby you're hosting, unless they're already in a lobby. |
 | `/lobbykick <player>` | Host only. Removes a player from the lobby you're hosting; `player:` autocompletes against your own roster. |
+
+The four lobby commands exist only in the lobby server; every other server, and DMs with the bot,
+get the rest, and `/help` there leaves the lobby commands out. See [Lobbies](#lobbies).
 
 `/help` replies so only you see it. `/faq`, `/socials`, `/eternals`, `/item` and
 `/glossary term:` do too, with a **Post to channel** button that posts the same embeds publicly,
@@ -61,8 +64,8 @@ at the command that lists everything.
    ```sh
    cp .env.example .env
    ```
-   Fill in `DISCORD_TOKEN`, then `GUILD_ID` and `LOBBY_CHANNEL_ID`
-   (enable *Settings → Advanced → Developer Mode* in Discord, then right-click → *Copy ID*).
+   Fill in `DISCORD_TOKEN`, `LOBBY_GUILD_ID` and `LOBBY_CHANNEL_ID`, plus `GUILD_ID` for local
+   testing (enable *Settings → Advanced → Developer Mode* in Discord, then right-click → *Copy ID*).
    The [rate limits](#rate-limiting) have working defaults and can be left alone.
 5. **Run**:
    ```sh
@@ -72,52 +75,85 @@ at the command that lists everything.
    npm test        # see Testing
    ```
 
-Commands register themselves on startup — there is no separate deploy step. With `GUILD_ID`
-set they register to that server and appear immediately; without it they register globally,
-which Discord can take up to an hour to propagate. Use `GUILD_ID` while developing.
+Commands register themselves on startup — there is no separate deploy step. Without `GUILD_ID`
+they register globally, which Discord can take up to an hour to propagate; with it set they
+register to that server instead and appear immediately, so use it while developing and leave it
+unset in production.
+
+Either way, the lobby commands register only to `LOBBY_GUILD_ID`, which falls back to `GUILD_ID`
+when unset, so no other server ever sees them. With neither set they aren't registered anywhere,
+and the bot logs a warning on startup.
 
 ## Rate limiting
 
-Commands are throttled by a **sliding window** one minute wide, in
+Commands and button clicks are throttled by a **sliding window** one minute wide, in
 [src/rateLimit.ts](src/rateLimit.ts). Each bucket keeps the timestamp of every request still
 inside its window, so the window moves continuously instead of resetting on a clock boundary —
 5 requests at 0:59 do not let another 5 through at 1:00.
 
 | Variable | Default | Scope |
 | --- | --- | --- |
-| `MAX_REQUESTS_PER_MINUTE` | 50 | Every command the bot handles, from anyone. |
-| `MAX_REQUESTS_PER_USER_PER_MINUTE` | 5 | One person's commands. |
+| `MAX_REQUESTS_PER_MINUTE` | 500 | Every command the bot handles, from every server and DM together. |
+| `MAX_REQUESTS_PER_SERVER_PER_MINUTE` | 50 | Every command in one server, from anyone. |
+| `MAX_REQUESTS_PER_USER_PER_MINUTE` | 10 | One person's commands, wherever they run them. |
+| `MAX_BUTTON_CLICKS_PER_MINUTE` | 750 | Every button click (the lobby ones and **Post to channel**), from every server and DM together. |
+| `MAX_BUTTON_CLICKS_PER_SERVER_PER_MINUTE` | 75 | Every button click in one server, from anyone. |
+| `MAX_BUTTON_CLICKS_PER_USER_PER_MINUTE` | 10 | One person's button clicks, wherever they click them. |
 
-Both must be whole and positive; anything else falls back to the default rather than leaving the
-bot unthrottled. The per-user limit is checked first, and a request that is turned away consumes
-nothing — being throttled never eats into the budget it was just denied.
+Each must be whole and positive; anything else falls back to the default rather than leaving the
+bot unthrottled. Button clicks are counted separately from commands, since a busy lobby can see
+dozens of joins in a minute and those shouldn't lock everyone out of commands.
 
-When a limit is hit the command does not run, and the notice goes where only the people
-concerned will see it:
+The per-server limits keep one busy server from using up every other server's share, and the
+bot-wide limits are a safety cap above them all. DMs have no server, so only the per-user and
+bot-wide limits count them. The narrowest limit is checked first — the person, then their
+server, then the bot as a whole — and a request that is turned away consumes nothing from any of
+them, so being throttled never eats into the budget it was just denied.
 
-- **Bot-wide limit** — a visible reply in the channel: *The message limit has been reached.
-  Please wait and try again.* Everyone is affected, so everyone sees why.
-- **Per-user limit** — the same notice as a **DM**, keeping one person's spam out of the
-  channel. Discord still needs the interaction acknowledged or it shows a failure to the whole
-  channel, so it is deferred privately and withdrawn once the DM is away. If their DMs are
-  closed the notice falls back to an ephemeral reply only they can see.
+When a limit is hit the command or click does nothing, and the bot replies with the same notice
+whichever limit it was: **Slow down** — *Please wait a moment and try again.* It never says which
+limit was hit. The only difference is who sees it:
+
+- **Per-server command limit** — a visible reply in the channel, since everyone there is held back.
+- **Every other limit** — an ephemeral reply only that person can see, keeping one person's spam
+  out of the channel, and keeping one busy server's traffic out of every other server's channels.
+
+Anything else that turns someone away for going too fast uses the same notice, so it can't be
+told apart from a rate limit.
 
 Autocomplete is deliberately **not** throttled: it fires on every keystroke, it cannot be
 replied to, and it runs entirely from data already in memory.
 
-Both windows live in the bot's process, so restarting clears them and a second instance would
+The windows live in the bot's process, so restarting clears them and a second instance would
 count separately.
 
-Buttons (the lobby ones and **Post to channel**) have budgets of their own, separate from
-commands: per user the same size as for commands, and bot-wide twice `MAX_REQUESTS_PER_MINUTE`.
-A busy lobby can see dozens of joins in a minute, and those shouldn't lock everyone out of
-commands. A throttled click gets a reply only the clicker can see.
+## Logs
+
+Every slash command logs one line to the console (Railway's deploy logs), with the command as
+typed, who ran it (name and user id) and where (channel, then server name and id), ending in how
+it went:
+
+```
+/createlobby code:DX89EE region:Europe description:"Casual, all welcome" from steve (284716395027349504) in #lobbies on "JonJ Bonfire" (1180412563857285120): done in 212ms
+/item eternal:Dahla from alex (190553828741234688) in #general on Arkheron (1093476218840539156): throttled (server limit, 41s until a slot frees up)
+/lobbykick player:301958274610384896 from steve (284716395027349504) in #lobbies on "JonJ Bonfire" (1180412563857285120): failed after 35ms
+```
+
+Done lines go to stdout, throttled ones as warnings and failures as errors with the stack after
+them. Option values and server names with spaces or punctuation are quoted, so free text like a
+lobby description can't pass for the rest of the line. Autocomplete and button clicks aren't
+logged, except when a click is throttled or either one fails; those lines name the channel and
+server too.
 
 ## Lobbies
 
+Lobbies are for one server only. `/createlobby`, `/lobbies`, `/lobbyadd` and `/lobbykick` are
+registered to `LOBBY_GUILD_ID` alone, so no other server can see or run them; see
+[Setup](#setup).
+
 `/createlobby code:DX89EE region:Europe` posts a lobby in the lobby channel (`LOBBY_CHANNEL_ID`;
-unset, any channel works). Codes are six letters or digits and are stored in capitals, so
-`dx89ee` works too. Regions are North America, South America, Europe and Asia. The optional
+unset, any channel in the lobby server works). Codes are six letters or digits and are stored
+in capitals, so `dx89ee` works too. Regions are North America, South America, Europe and Asia. The optional
 `mode:` is Ascension or Spires, and shows on the post and in `/lobbies` when set. The optional
 `description:` is a note of up to 100 characters, like `Casual, all welcome`, and shows on the
 post only.
@@ -134,7 +170,8 @@ marked 👑. It has three buttons:
 - **⚙️** — opens a **Lobby Management** panel only the host can see; anyone else is told only
   the host can manage the lobby. The panel has two buttons:
   - **Bump** — reposts the lobby as the channel's latest message and deletes the old post, so it
-    isn't buried under chat. Counts as activity, so it pushes back expiry too. The new post is
+    isn't buried under chat. Counts as activity, so it pushes back expiry too, up to the 6 hour
+    limit (see [Expiry](#expiry)). The new post is
     a plain message rather than a reply, so like **Post to channel** it needs the bot to be able
     to send messages and embed links in the lobby channel. The new post goes up before the old
     one comes down, so a failed bump leaves the lobby where it was.
@@ -158,17 +195,20 @@ is deleted.
 
 ### Expiry
 
-A lobby expires 1 hour after anyone last joined, left, or was added or kicked, or the host last bumped it. The post's expiry time
+A lobby expires 1 hour after anyone last joined, left, or was added or kicked, or the host last bumped it,
+or 6 hours after it was created, whichever comes first. Nothing keeps a lobby open past 6 hours, so
+nobody can hold a code or a slot in the pool indefinitely. The post's expiry time
 uses a Discord timestamp, so it counts down on its own without the bot editing the post.
 
 10 minutes before a lobby expires, the bot DMs its host that the lobby is expiring soon, asking
 them to bump it if it's still active or close it if not, with a **Go to lobby** link to the post.
 The post's ⚙️ panel does both, and the post shows the current expiry even if someone has joined
 since the DM went out. Any activity resets the clock, so a host is warned again only if the
-lobby goes quiet again. A host who doesn't
+lobby goes quiet again. Near the 6 hour limit, when a bump can no longer help, the DM instead tells
+the host the lobby is about to close, and is sent once however busy the lobby is. A host who doesn't
 accept DMs from server members gets no warning, and the lobby still expires on time.
 
-Each lobby stores when it was last active, and that alone decides whether it's open. Every
+Each lobby stores when it was created and last active, and those alone decide whether it's open. Every
 click and command checks it first, so an expired lobby can't be joined or listed even a second
 late. A once-a-minute sweep then deletes the posts of lobbies that expired while nobody was
 looking, and sends the expiry warnings, so a warning arrives 9 to 10 minutes before expiry. It only tidies up, so nothing goes wrong if it runs late. Per-lobby timers were
@@ -313,7 +353,9 @@ syncs.** Wiki edits will not propagate, so re-check them when the game patches.
 
 1. Create `src/commands/yourCommand.ts` exporting a `Command` (see [src/types.ts](src/types.ts)).
    Give it a `SlashCommandBuilder` as `data`, plus `usage` and `examples` for /help.
-2. Add it to the `commands` array in [src/commands/registry.ts](src/commands/registry.ts).
+2. Add it to the `commands` array in [src/commands/registry.ts](src/commands/registry.ts). If
+   it's part of the lobby feature, add it to `lobbyCommands` there too, so it's registered only
+   to the lobby server.
 
 `/help` reads that array, so the new command documents itself. The tests read it too, and check
 that its `usage` and `examples` name it and that it has an `autocomplete` handler if any option
@@ -331,10 +373,10 @@ request and push to `main`, alongside typecheck, lint and build. None of them ta
 the logic is tested as plain functions, and the rest checks the content against what Discord
 will accept.
 
-- **Logic.** `lobbies.test.ts`, `lobbyMessages.test.ts`, `rateLimit.test.ts`, `search.test.ts`
-  and `share.test.ts` cover the lobby rules (hosting, joining, adding, kicking, expiry), the
+- **Logic.** `lobbies.test.ts`, `lobbyMessages.test.ts`, `rateLimit.test.ts`, `search.test.ts`,
+  `share.test.ts` and `logging.test.ts` cover the lobby rules (hosting, joining, adding, kicking, expiry), the
   host's ⚙️ panel and its Bump and Close Lobby buttons, the expiry DM, the sliding-window limits, lookup
-  ranking and typo tolerance, and the Post to channel button. The lobby store and the rate limiter both take the current time as an
+  ranking and typo tolerance, the Post to channel button, and how commands appear in the logs. The lobby store and the rate limiter both take the current time as an
   argument, so expiry and windows are tested by passing timestamps rather than waiting.
 - **Content.** `data.test.ts` checks the JSON: unique ids, each eternal carrying a crown, an
   amulet and two weapons, every image path existing, every ability tag having a glossary
@@ -343,7 +385,9 @@ will accept.
 - **Embeds.** `embeds.test.ts` renders every embed the bot can send from the real data, every
   `/item eternal: slot:` combination, a full lobby and a full `/lobbies` list. It fails if one
   would break Discord's limits or have its text cut short. `commands.test.ts` checks that every
-  command registers and documents itself as described in [Adding a command](#adding-a-command).
+  command registers and documents itself as described in [Adding a command](#adding-a-command),
+  and that the lobby commands are registered to, run in and listed by `/help` in the lobby server
+  only.
 
 After a content edit, a failure names the entry to fix: an alias that's another item's name, a
 tag missing from the glossary, an ability too long for its embed.
@@ -356,7 +400,7 @@ images/        Item icons and eternal portraits
 src/
   index.ts     Client setup, command registration, interaction dispatch, shutdown
   config.ts    Env vars, with defaults for the optional ones
-  rateLimit.ts Sliding-window throttling, bot-wide and per user
+  rateLimit.ts Sliding-window throttling, bot-wide, per server and per user
   lobbies.ts   Lobby state and rules: joining, leaving, adding, kicking, expiry
   lobbyMessages.ts  Lobby post buttons, the host's panel, clicks, post updates, the expiry sweep and DM
   share.ts     The Post to channel button on private replies, and its click
@@ -369,5 +413,6 @@ src/
                (truncation, timestamps, message limits) in general.ts
     search.ts  Name/alias matching with typo tolerance, lookup replies, autocomplete
     images.ts  Image paths to their GitHub URLs
+    logging.ts The one-line description of a command in the logs
 tests/         Vitest tests, one file per area; see Testing
 ```

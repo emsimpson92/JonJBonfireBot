@@ -18,6 +18,12 @@ export function errorEmbed(title: string, description: string): EmbedBuilder {
   return new EmbedBuilder().setColor(0x992d22).setTitle(title).setDescription(truncate(description, MAX_DESCRIPTION));
 }
 
+export function slowDown(where: 'channel' | 'ephemeral') {
+  const embed = errorEmbed('Slow down', 'Please wait a moment and try again.');
+
+  return where === 'channel' ? { embeds: [embed] } : ephemeral(embed);
+}
+
 export function ephemeral(...embeds: EmbedBuilder[]): { embeds: EmbedBuilder[]; flags: MessageFlags.Ephemeral } {
   return { embeds, flags: MessageFlags.Ephemeral as const };
 }

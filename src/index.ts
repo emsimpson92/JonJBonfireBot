@@ -1,35 +1,47 @@
-import { Client, Events, GatewayIntentBits, MessageFlags } from 'discord.js';
+import { Client, Events, GatewayIntentBits } from 'discord.js';
 import type { ChatInputCommandInteraction, MessageComponentInteraction } from 'discord.js';
-import { commands, findCommand } from './commands/registry.js';
+import { findCommand, registrations } from './commands/registry.js';
 import { config } from './config.js';
-import { ephemeral, ephemeralError, errorEmbed } from './embeds/general.js';
+import { ephemeralError, slowDown } from './embeds/general.js';
 import { handleLobbyComponent, isLobbyComponent, startLobbySweep } from './lobbyMessages.js';
 import { RateLimiter } from './rateLimit.js';
 import { handleShare, isShareComponent } from './share.js';
-
-const RATE_LIMITED_MESSAGE = 'The message limit has been reached. Please wait and try again.';
+import { describeCommand, describePlace } from './utils/logging.js';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-const rateLimiter = new RateLimiter(config.maxRequests, config.maxRequestsPerUser);
-const componentRateLimiter = new RateLimiter(config.maxRequests * 2, config.maxRequestsPerUser);
+const commandRateLimiter = new RateLimiter({
+  global: config.maxRequests,
+  perServer: config.maxRequestsPerServer,
+  perUser: config.maxRequestsPerUser,
+});
+const buttonRateLimiter = new RateLimiter({
+  global: config.maxButtonClicks,
+  perServer: config.maxButtonClicksPerServer,
+  perUser: config.maxButtonClicksPerUser,
+});
 
 client.once(Events.ClientReady, async (ready) => {
-  const payload = commands.map((command) => command.data);
-
-  try {
-    if (config.guildId) {
-      // Guild commands appear immediately; global ones can take up to an hour.
-      const guild = await ready.guilds.fetch(config.guildId);
-      await guild.commands.set(payload);
-      console.log(`Registered ${payload.length} commands to ${guild.name}.`);
-    }
-    else {
-      await ready.application.commands.set(payload);
-      console.log(`Registered ${payload.length} commands globally (may take up to an hour to appear).`);
-    }
+  if (!config.lobbyGuildId) {
+    console.warn('LOBBY_GUILD_ID is not set, so the lobby commands are not registered anywhere.');
   }
-  catch (error) {
-    console.error('Failed to register commands:', error);
+
+  for (const [guildId, list] of registrations(config.guildId, config.lobbyGuildId)) {
+    const payload = list.map((command) => command.data);
+
+    try {
+      if (guildId) {
+        const guild = await ready.guilds.fetch(guildId);
+        await guild.commands.set(payload);
+        console.log(`Registered ${payload.length} commands to ${guild.name}.`);
+      }
+      else {
+        await ready.application.commands.set(payload);
+        console.log(`Registered ${payload.length} commands globally (may take up to an hour to appear).`);
+      }
+    }
+    catch (error) {
+      console.error(`Failed to register commands ${guildId ? `to server ${guildId}` : 'globally'}:`, error);
+    }
   }
 
   startLobbySweep(ready);
@@ -38,12 +50,12 @@ client.once(Events.ClientReady, async (ready) => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isAutocomplete()) {
-    const command = findCommand(interaction.commandName);
+    const command = findCommand(interaction.commandName, interaction.guildId);
     try {
       await command?.autocomplete?.(interaction);
     }
     catch (error) {
-      console.error(`Autocomplete for "${interaction.commandName}" failed:`, error);
+      console.error(`Autocomplete for "${interaction.commandName}" in ${describePlace(interaction)} failed:`, error);
     }
     
     return;
@@ -58,30 +70,32 @@ client.on(Events.InteractionCreate, async (interaction) => {
     return;
   }
 
-  const command = findCommand(interaction.commandName);
+  // Lobby commands only exist in the lobby server, so they aren't found anywhere else
+  const command = findCommand(interaction.commandName, interaction.guildId);
   if (!command) {
     return;
   }
 
-  const limit = rateLimiter.check(interaction.user.id);
+  // Every command gets one line, ending in how it went
+  const described = describeCommand(interaction);
+
+  const limit = commandRateLimiter.check(interaction.user.id, interaction.guildId);
   if (!limit.allowed) {
     const seconds = Math.ceil(limit.retryAfterMs / 1000);
-    console.warn(
-      `Throttled /${interaction.commandName} from ${interaction.user.tag} ` +
-        `(${limit.scope} limit, ${seconds}s until a slot frees up).`,
-    );
-    
-    // If the user is over their personal limit, DM them instead of posting in the channel.
-    await (limit.scope === 'user' ? warnUser(interaction) : warnChannel(interaction));
+    console.warn(`${described}: throttled (${limit.scope} limit, ${seconds}s until a slot frees up)`);
+
+    await warnThrottled(interaction, limit.scope === 'server' ? 'channel' : 'ephemeral');
 
     return;
   }
 
+  const started = Date.now();
   try {
     await command.execute(interaction);
+    console.log(`${described}: done in ${Date.now() - started}ms`);
   }
   catch (error) {
-    console.error(`Command "${interaction.commandName}" failed:`, error);
+    console.error(`${described}: failed after ${Date.now() - started}ms`, error);
     await replyWithFailure(interaction, 'That command failed. Try again in a moment.');
   }
 });
@@ -98,21 +112,20 @@ function componentHandler(id: string) {
   return undefined;
 }
 
-/** Lobby and Post to channel buttons. Only the clicker needs to know they were throttled, so they're told privately. */
+/** Lobby and Post to channel buttons. Only the clicker needs to know they were throttled, so they're told privately, whichever limit it was. */
 async function handleComponent(interaction: MessageComponentInteraction): Promise<void> {
   const handler = componentHandler(interaction.customId);
   if (!handler) {
     return;
   }
 
-  const limit = componentRateLimiter.check(interaction.user.id);
+  const limit = buttonRateLimiter.check(interaction.user.id, interaction.guildId);
   if (!limit.allowed) {
     console.warn(
-      `Throttled a button click from ${interaction.user.tag} ` +
-        `(${Math.ceil(limit.retryAfterMs / 1000)}s until a slot frees up).`,
+      `Throttled a button click from ${interaction.user.tag} in ${describePlace(interaction)} ` +
+        `(${limit.scope} limit, ${Math.ceil(limit.retryAfterMs / 1000)}s until a slot frees up).`,
     );
-    await interaction.reply(ephemeralError('Slow down', RATE_LIMITED_MESSAGE))
-      .catch((error: unknown) => console.error('Failed to warn a rate limited user:', error));
+    await warnThrottled(interaction, 'ephemeral');
 
     return;
   }
@@ -121,7 +134,7 @@ async function handleComponent(interaction: MessageComponentInteraction): Promis
     await handler(interaction);
   }
   catch (error) {
-    console.error(`Button "${interaction.customId}" failed:`, error);
+    console.error(`Button "${interaction.customId}" in ${describePlace(interaction)} failed:`, error);
     await replyWithFailure(interaction, 'That didn\'t work. Try again in a moment.');
   }
 }
@@ -137,34 +150,12 @@ async function replyWithFailure(
   ).catch(() => undefined);
 }
 
-/** The bot as a whole is over its limit, so everyone in the channel should see why. */
-async function warnChannel(interaction: ChatInputCommandInteraction): Promise<void> {
-  await interaction.reply({ embeds: [errorEmbed('Slow down', RATE_LIMITED_MESSAGE)] })
-    .catch((error: unknown) => console.error('Failed to post the rate limit notice:', error));
-}
-
-/** If the user is over their personal limit, DM them instead of posting in the channel. */
-async function warnUser(interaction: ChatInputCommandInteraction): Promise<void> {
-  const embed = errorEmbed('Slow down', RATE_LIMITED_MESSAGE);
-
-  try {
-    await interaction.user.send({ embeds: [embed] });
-  }
-  catch {
-    // DMs closed, or no shared server any more — fall back to a reply only they can see.
-    await interaction.reply(ephemeral(embed))
-      .catch((error: unknown) => console.error('Failed to warn a rate limited user:', error));
-
-    return;
-  }
-
-  try {
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-    await interaction.deleteReply();
-  }
-  catch (error: unknown) {
-    console.error('Failed to dismiss a rate limited interaction:', error);
-  }
+async function warnThrottled(
+  interaction: ChatInputCommandInteraction | MessageComponentInteraction,
+  where: 'channel' | 'ephemeral',
+): Promise<void> {
+  await interaction.reply(slowDown(where))
+    .catch((error: unknown) => console.error('Failed to send the slow down notice:', error));
 }
 
 /** Die gracefully */

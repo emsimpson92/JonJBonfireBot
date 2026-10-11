@@ -127,6 +127,8 @@ function busyLobby(code: string): Lobby {
     mode: 'Ascension',
     description: 'x'.repeat(MAX_DESCRIPTION_LENGTH),
     players: Array.from({ length: MAX_PLAYERS }, (_, n) => ({ id: snowflake(n), name: `Player ${n}` })),
+    ownerId: snowflake(0),
+    createdAt: Date.now(),
     lastActivityAt: Date.now(),
     guildId: snowflake(1),
     channelId: snowflake(2),

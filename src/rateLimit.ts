@@ -41,63 +41,69 @@ class SlidingWindow {
   }
 }
 
-type RateLimitResult = | { allowed: true } | { allowed: false; scope: 'user' | 'global'; retryAfterMs: number };
+type Scope = 'user' | 'server' | 'global';
+
+type RateLimitResult = | { allowed: true } | { allowed: false; scope: Scope; retryAfterMs: number };
+
+interface Limits {
+  global: number;
+  perServer: number;
+  perUser: number;
+}
+
+function windowFor(windows: Map<string, SlidingWindow>, rateIdentifier: string, limit: number): SlidingWindow {
+  let window = windows.get(rateIdentifier);
+  if (!window) {
+    window = new SlidingWindow(limit);
+    windows.set(rateIdentifier, window);
+  }
+
+  return window;
+}
 
 class RateLimiter {
   private readonly global: SlidingWindow;
+  private readonly perServer = new Map<string, SlidingWindow>();
   private readonly perUser = new Map<string, SlidingWindow>();
   private lastSweep = 0;
 
-  constructor(
-    maxRequests: number,
-    private readonly maxRequestsPerUser: number,
-  ) {
-    this.global = new SlidingWindow(maxRequests);
+  constructor(private readonly limits: Limits) {
+    this.global = new SlidingWindow(limits.global);
   }
 
-  /**
-   * Consumes a slot for `userId`, or reports which limit stopped it. A rejected request
-   * costs nothing, so being throttled never eats into the budget it was denied.
-   *
-   * The per-user limit is checked first: one person spamming should hear about it in a DM
-   * instead of pushing the channel-wide notice out to everyone.
-   */
-  check(userId: string, now: number = Date.now()): RateLimitResult {
+  check(userId: string, serverId: string | null, now: number = Date.now()): RateLimitResult {
     this.sweep(now);
 
-    const user = this.userWindow(userId);
-    if (user.isFull(now)) {
-      return { allowed: false, scope: 'user', retryAfterMs: user.retryAfterMs(now) };
-    }
-    else if (this.global.isFull(now)) {
-      return { allowed: false, scope: 'global', retryAfterMs: this.global.retryAfterMs(now) };
+    const windows: { scope: Scope; window: SlidingWindow }[] = [
+      { scope: 'user', window: windowFor(this.perUser, userId, this.limits.perUser) },
+      ...(serverId ? [{ scope: 'server' as const, window: windowFor(this.perServer, serverId, this.limits.perServer) }] : []),
+      { scope: 'global', window: this.global },
+    ];
+
+    const full = windows.find(({ window }) => window.isFull(now));
+    if (full) {
+      return { allowed: false, scope: full.scope, retryAfterMs: full.window.retryAfterMs(now) };
     }
 
-    user.record(now);
-    this.global.record(now);
+    for (const { window } of windows) {
+      window.record(now);
+    }
+
     return { allowed: true };
   }
 
-  private userWindow(userId: string): SlidingWindow {
-    let window = this.perUser.get(userId);
-    if (!window) {
-      window = new SlidingWindow(this.maxRequestsPerUser);
-      this.perUser.set(userId, window);
-    }
-    
-    return window;
-  }
-
-  /** Without this the per-user map would grow by one entry per person, forever. */
+  /** Without this the per-user and per-server maps would grow by one entry per person and server, forever. */
   private sweep(now: number): void {
     if (now - this.lastSweep < WINDOW_MS) {
       return;
     }
-    
+
     this.lastSweep = now;
-    for (const [userId, window] of this.perUser) {
-      if (window.isIdle(now)) {
-        this.perUser.delete(userId);
+    for (const windows of [this.perUser, this.perServer]) {
+      for (const [key, window] of windows) {
+        if (window.isIdle(now)) {
+          windows.delete(key);
+        }
       }
     }
   }

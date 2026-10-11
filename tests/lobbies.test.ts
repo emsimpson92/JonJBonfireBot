@@ -1,6 +1,15 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { EXPIRY_WARNING_MS, isHost, LOBBY_TTL_MS, LobbyStore, MAX_LOBBIES, MAX_PLAYERS } from '../src/lobbies.js';
+import {
+  EXPIRY_WARNING_MS,
+  isHost,
+  LOBBY_TTL_MS,
+  LobbyStore,
+  MAX_LOBBIES,
+  MAX_LOBBY_AGE_MS,
+  MAX_OWNED_LOBBIES,
+  MAX_PLAYERS,
+} from '../src/lobbies.js';
 import type { Lobby, Player } from '../src/lobbies.js';
 
 const host: Player = { id: 'host', name: 'Host' };
@@ -22,6 +31,23 @@ function open(code = 'DX89EE', by: Player = host, now = 0): Lobby {
   return result.lobby;
 }
 
+/** Opens `count` lobbies as the host, each left with a player in it so it stays open once the host moves on. */
+function openOwned(count: number): Lobby[] {
+  return Array.from({ length: count }, (_, n) => {
+    const lobby = open(`OWNED${n}`);
+    expect(store.join(lobby, player(n + 1), 0).ok).toBe(true);
+
+    return lobby;
+  });
+}
+
+/** Bumps the lobby every half hour from when it opened until `until`, so only its age can close it. */
+function keepBusy(lobby: Lobby, until: number): void {
+  for (let at = 0; at <= until; at += LOBBY_TTL_MS / 2) {
+    store.bump(lobby, at);
+  }
+}
+
 /** Adds players 1 to `count` to the lobby. */
 function fill(lobby: Lobby, count: number): void {
   for (let n = 1; n <= count; n += 1) {
@@ -30,9 +56,10 @@ function fill(lobby: Lobby, count: number): void {
 }
 
 describe('create', () => {
-  it('makes the creator the host', () => {
-    const lobby = open();
+  it('makes the creator the host and owner', () => {
+    const lobby = open('DX89EE', host, 1000);
 
+    expect(lobby).toMatchObject({ ownerId: host.id, createdAt: 1000, lastActivityAt: 1000 });
     expect(lobby.players).toEqual([host]);
     expect(isHost(lobby, host.id)).toBe(true);
     expect(store.hostedBy(host.id, 0)).toBe(lobby);
@@ -91,6 +118,40 @@ describe('create', () => {
 
     expect(first.closed).toBe(true);
     expect(store.list(0).map((lobby) => lobby.code)).toEqual(['SECOND']);
+  });
+});
+
+describe('owner limit', () => {
+  // Creating a lobby, handing it off and moving on would otherwise let one player fill the pool.
+  it(`refuses a player who created ${MAX_OWNED_LOBBIES} lobbies that are still open, even ones they no longer host`, () => {
+    const owned = openOwned(MAX_OWNED_LOBBIES);
+    const current = owned[MAX_OWNED_LOBBIES - 1];
+
+    expect(owned.filter((lobby) => isHost(lobby, host.id))).toEqual([current]);
+    expect(store.create({ code: 'ONEMOR', region: 'Europe', host, guildId: 'g', channelId: 'c' }, 0))
+      .toEqual({ ok: false, reason: 'owner-limit' });
+    expect(store.lobbyOf(host.id, 0)).toBe(current);
+  });
+
+  it('lets them open another once one closes', () => {
+    const [first] = openOwned(MAX_OWNED_LOBBIES);
+    store.close(first!);
+
+    expect(store.create({ code: 'ONEMOR', region: 'Europe', host, guildId: 'g', channelId: 'c' }, 0).ok).toBe(true);
+  });
+
+  it("doesn't count a lobby that opening another closes", () => {
+    openOwned(MAX_OWNED_LOBBIES - 1);
+    const alone = open('ALONE1');
+
+    expect(store.create({ code: 'ONEMOR', region: 'Europe', host, guildId: 'g', channelId: 'c' }, 0).ok).toBe(true);
+    expect(alone.closed).toBe(true);
+  });
+
+  it("doesn't hold back anyone else", () => {
+    openOwned(MAX_OWNED_LOBBIES);
+
+    expect(store.create({ code: 'ONEMOR', region: 'Europe', host: player(9), guildId: 'g', channelId: 'c' }, 0).ok).toBe(true);
   });
 });
 
@@ -256,6 +317,15 @@ describe('expiry', () => {
     expect(store.list(later + LOBBY_TTL_MS)).toEqual([]);
   });
 
+  it(`closes a lobby ${MAX_LOBBY_AGE_MS / LOBBY_TTL_MS} hours after it opened, however active`, () => {
+    const lobby = open();
+    keepBusy(lobby, MAX_LOBBY_AGE_MS - 1);
+
+    expect(store.list(MAX_LOBBY_AGE_MS - 1)).toEqual([lobby]);
+    expect(store.list(MAX_LOBBY_AGE_MS)).toEqual([]);
+    expect(lobby.closed).toBe(true);
+  });
+
   it('applies to every lookup, not only the sweep', () => {
     const lobby = open();
 
@@ -314,6 +384,18 @@ describe('expiry warning', () => {
 
     expect(store.warningsPending(2 * warnAt - 1)).toEqual([]);
     expect(store.warningsPending(2 * warnAt)).toEqual([lobby]);
+  });
+
+  it('is due once before a lobby reaches its maximum age, however active', () => {
+    const lobby = open();
+    const finalWarnAt = MAX_LOBBY_AGE_MS - EXPIRY_WARNING_MS;
+    keepBusy(lobby, finalWarnAt - 1);
+
+    expect(store.warningsPending(finalWarnAt - 1)).toEqual([]);
+    expect(store.warningsPending(finalWarnAt)).toEqual([lobby]);
+
+    store.join(lobby, player(1), finalWarnAt + 1);
+    expect(store.warningsPending(finalWarnAt + 2)).toEqual([]);
   });
 
   it('is never due for a lobby that has expired', () => {
