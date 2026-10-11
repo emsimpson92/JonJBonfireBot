@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { RateLimiter } from '../src/rateLimit.js';
+import { Cooldown, RateLimiter } from '../src/rateLimit.js';
 
 const MINUTE = 60_000;
 
@@ -115,5 +115,39 @@ describe('RateLimiter', () => {
 
     expect([...limiter['perUser'].keys()]).toEqual(['c']);
     expect([...limiter['perServer'].keys()]).toEqual(['u']);
+  });
+});
+
+describe('Cooldown', () => {
+  it('lets a key through once, then again once its cooldown is over', () => {
+    const cooldown = new Cooldown();
+
+    expect(cooldown.assign('s', MINUTE, 0)).toBe(true);
+    expect(cooldown.assign('s', MINUTE, MINUTE - 1)).toBe(false);
+    expect(cooldown.assign('s', MINUTE, MINUTE)).toBe(true);
+  });
+
+  it('keeps each key to its own cooldown', () => {
+    const cooldown = new Cooldown();
+    cooldown.assign('s', MINUTE, 0);
+
+    expect(cooldown.assign('t', MINUTE, 0)).toBe(true);
+  });
+
+  // Otherwise refusals would keep pushing it back, and a busy key would never come off cooldown.
+  it('starts nothing for a refused key', () => {
+    const cooldown = new Cooldown();
+    cooldown.assign('s', MINUTE, 0);
+    cooldown.assign('s', MINUTE, 30_000);
+
+    expect(cooldown.assign('s', MINUTE, MINUTE)).toBe(true);
+  });
+
+  it('forgets keys that cooled down long ago', () => {
+    const cooldown = new Cooldown();
+    cooldown.assign('s', 1000, 0);
+    cooldown.assign('t', 1000, MINUTE);
+
+    expect([...cooldown['readyAt'].keys()]).toEqual(['t']);
   });
 });

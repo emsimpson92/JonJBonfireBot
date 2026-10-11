@@ -4,11 +4,15 @@ import { findCommand, registrations } from './commands/registry.js';
 import { config } from './config.js';
 import { ephemeralError, slowDown } from './embeds/general.js';
 import { handleLobbyComponent, isLobbyComponent, startLobbySweep } from './lobbyMessages.js';
-import { RateLimiter } from './rateLimit.js';
+import { Cooldown, RateLimiter } from './rateLimit.js';
 import { handleShare, isShareComponent } from './share.js';
 import { describeCommand, describePlace } from './utils/logging.js';
 
+/** Don't let bad things happen. The show must go on */
+process.on('unhandledRejection', (reason) => console.error('Unhandled promise rejection:', reason));
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+client.on(Events.Error, (error) => console.error('Discord client error:', error));
 const commandRateLimiter = new RateLimiter({
   global: config.maxRequests,
   perServer: config.maxRequestsPerServer,
@@ -19,6 +23,10 @@ const buttonRateLimiter = new RateLimiter({
   perServer: config.maxButtonClicksPerServer,
   perUser: config.maxButtonClicksPerUser,
 });
+
+/** One public Slow down notice per server per minute, so a raid can't turn the notices into spam of their own. */
+const CHANNEL_NOTICE_COOLDOWN_MS = 60_000;
+const channelNotices = new Cooldown();
 
 client.once(Events.ClientReady, async (ready) => {
   if (!config.lobbyGuildId) {
@@ -84,7 +92,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
     const seconds = Math.ceil(limit.retryAfterMs / 1000);
     console.warn(`${described}: throttled (${limit.scope} limit, ${seconds}s until a slot frees up)`);
 
-    await warnThrottled(interaction, limit.scope === 'server' ? 'channel' : 'ephemeral');
+    const inChannel = limit.scope === 'server' && interaction.guildId !== null &&
+      channelNotices.assign(interaction.guildId, CHANNEL_NOTICE_COOLDOWN_MS);
+    await warnThrottled(interaction, inChannel ? 'channel' : 'ephemeral');
 
     return;
   }

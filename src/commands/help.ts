@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 
 import { ephemeral, ephemeralError } from '../embeds/general.js';
 import { helpDetailEmbed, helpOverviewEmbed } from '../embeds/help.js';
-import { respondWithMatches } from '../utils/search.js';
+import { MAX_QUERY_LENGTH, respondWithMatches } from '../utils/search.js';
 import type { Command } from '../types.js';
 // Circular with registry.ts by design: registry imports every command module,
 // including this one. Only call `commandsIn` inside a handler, never at module scope.
@@ -15,7 +15,7 @@ export const helpCommand: Command = {
     .setName('help')
     .setDescription('Lists commands, or explains one.')
     .addStringOption((option) =>
-      option.setName('command').setDescription('The command to explain').setAutocomplete(true),
+      option.setName('command').setDescription('The command to explain').setAutocomplete(true).setMaxLength(MAX_QUERY_LENGTH),
     )
     .toJSON(),
   usage: '/help [command]',

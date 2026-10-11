@@ -3,7 +3,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import { faq } from '../data.js';
 import { faqListEmbed, faqTopicEmbed } from '../embeds/faq.js';
 import { shareable } from '../share.js';
-import { keysOf, replyWithBest, respondWithMatches } from '../utils/search.js';
+import { keysOf, MAX_QUERY_LENGTH, replyWithBest, respondWithMatches } from '../utils/search.js';
 import type { Command, FaqTopic } from '../types.js';
 
 export const keys = (entry: FaqTopic) => keysOf(entry, entry.topic);
@@ -11,7 +11,7 @@ export const keys = (entry: FaqTopic) => keysOf(entry, entry.topic);
 export const faqCommand: Command = {
   data: new SlashCommandBuilder().setName('faq').setDescription('Lists FAQ topics, or answers one.')
     .addStringOption((option) =>
-      option.setName('topic').setDescription('The topic to show').setAutocomplete(true),
+      option.setName('topic').setDescription('The topic to show').setAutocomplete(true).setMaxLength(MAX_QUERY_LENGTH),
     ).toJSON(),
   usage: '/faq [topic]',
   examples: ['/faq', '/faq topic:playtest'],

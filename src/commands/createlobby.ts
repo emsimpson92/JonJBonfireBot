@@ -21,14 +21,15 @@ import { postUrl } from '../utils/lobbies.js';
 
 function createError(result: Exclude<CreateResult, { ok: true }>, code: string) {
   switch (result.reason) {
-    case 'duplicate':
+    case 'duplicate': {
       const url = postUrl(result.existing);
       return ephemeralError('Code taken', `Lobby **${code}** is already open${url ? `: [go to it](${url})` : '.'}`);
-    
-      case 'limit':
+    }
+
+    case 'limit':
       return ephemeralError('Too many lobbies', `There are already ${MAX_LOBBIES} open lobbies. Try again once one closes.`);
 
-      case 'owner-limit':
+    case 'owner-limit':
       return slowDown('ephemeral');
   }
 }

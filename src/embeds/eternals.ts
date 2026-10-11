@@ -1,6 +1,7 @@
 import { itemsOf } from '../data.js';
 import { publicUrl } from '../utils/images.js';
 import type { Eternal } from '../types.js';
+import { MAX_FIELD_VALUE } from '../utils/discordLimits.js';
 import { truncate } from '../utils/general.js';
 import { baseEmbed } from './general.js';
 
@@ -27,7 +28,7 @@ export function eternalDetailEmbed(eternal: Eternal) {
   // Item list. Item abilities can be found using /item
   const itemLines = itemsOf(eternal).map((item) => `\`${item.slot}\` **${item.name}**`);
   if (itemLines.length) {
-    embed.addFields({ name: 'Items', value: truncate(itemLines.join('\n'), 1024) });
+    embed.addFields({ name: 'Items', value: truncate(itemLines.join('\n'), MAX_FIELD_VALUE) });
   }
 
   if (eternal.imageUrl) {

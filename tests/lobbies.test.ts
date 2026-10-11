@@ -219,6 +219,16 @@ describe('add', () => {
 
     expect(store.add(lobby, player(MAX_PLAYERS), 0)).toEqual({ ok: false, reason: 'full' });
   });
+
+  // Asking them to leave their lobby first would be pointless, since there'd still be no room.
+  it('says the lobby is full before saying the player is in another', () => {
+    const other = open('OTHER1', player(MAX_PLAYERS));
+    const lobby = open();
+    fill(lobby, MAX_PLAYERS - 1);
+
+    expect(store.add(lobby, player(MAX_PLAYERS), 0)).toEqual({ ok: false, reason: 'full' });
+    expect(store.lobbyOf(player(MAX_PLAYERS).id, 0)).toBe(other);
+  });
 });
 
 describe('leave', () => {

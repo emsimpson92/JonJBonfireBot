@@ -109,4 +109,33 @@ class RateLimiter {
   }
 }
 
-export { RateLimiter };
+/** Lets each key through at most once per cooldown, e.g. one public notice per server per minute. */
+class Cooldown {
+  private readonly readyAt = new Map<string, number>();
+  private lastSweep = 0;
+
+  assign(key: string, ms: number, now: number = Date.now()): boolean {
+    this.sweep(now);
+    if ((this.readyAt.get(key) ?? 0) > now) {
+      return false;
+    }
+
+    this.readyAt.set(key, now + ms);
+    return true;
+  }
+
+  private sweep(now: number): void {
+    if (now - this.lastSweep < WINDOW_MS) {
+      return;
+    }
+
+    this.lastSweep = now;
+    for (const [key, readyAt] of this.readyAt) {
+      if (readyAt <= now) {
+        this.readyAt.delete(key);
+      }
+    }
+  }
+}
+
+export { Cooldown, RateLimiter };

@@ -69,11 +69,14 @@ export type CreateResult =
   | { ok: false; reason: 'duplicate'; existing: Lobby }
   | { ok: false; reason: 'limit' | 'owner-limit' };
 
-type JoinResult = { ok: true; left?: Lobby } | { ok: false; reason: 'already-in' | 'full' };
+
+type Refusal = 'already-in' | 'full';
+
+type JoinResult = { ok: true; left?: Lobby } | { ok: false; reason: Refusal };
 
 export type AddResult =
   | { ok: true }
-  | { ok: false; reason: 'already-in' | 'full' }
+  | { ok: false; reason: Refusal }
   | { ok: false; reason: 'in-other'; other: Lobby };
 
 export class LobbyStore {
@@ -138,11 +141,9 @@ export class LobbyStore {
   }
 
   join(lobby: Lobby, player: Player, now: number = Date.now()): JoinResult {
-    if (this.playerLobbies.get(player.id) === lobby) {
-      return { ok: false, reason: 'already-in' };
-    }
-    else if (lobby.players.length >= MAX_PLAYERS) {
-      return { ok: false, reason: 'full' };
+    const refusal = this.refusalReason(lobby, player.id);
+    if (refusal) {
+      return { ok: false, reason: refusal };
     }
 
     const left = this.removeFromCurrent(player.id, now);
@@ -151,17 +152,16 @@ export class LobbyStore {
     return { ok: true, left };
   }
 
-  /** Host adds a player to a lobby if  they aren't in one already */
+  /** Host adds a player to a lobby if they aren't in one already */
   add(lobby: Lobby, player: Player, now: number = Date.now()): AddResult {
+    const refusal = this.refusalReason(lobby, player.id);
+    if (refusal) {
+      return { ok: false, reason: refusal };
+    }
+
     const current = this.playerLobbies.get(player.id);
-    if (current === lobby) {
-      return { ok: false, reason: 'already-in' };
-    }
-    else if (current) {
+    if (current) {
       return { ok: false, reason: 'in-other', other: current };
-    }
-    else if (lobby.players.length >= MAX_PLAYERS) {
-      return { ok: false, reason: 'full' };
     }
 
     this.addPlayer(lobby, player, now);
@@ -211,6 +211,17 @@ export class LobbyStore {
     }
 
     return due;
+  }
+
+  private refusalReason(lobby: Lobby, userId: string): Refusal | undefined {
+    if (this.playerLobbies.get(userId) === lobby) {
+      return 'already-in';
+    }
+    else if (lobby.players.length >= MAX_PLAYERS) {
+      return 'full';
+    }
+
+    return undefined;
   }
 
   private ownedBy(userId: string): number {

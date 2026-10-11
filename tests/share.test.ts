@@ -1,4 +1,4 @@
-import { MessageFlags } from 'discord.js';
+import { MessageFlags, PermissionFlagsBits, PermissionsBitField } from 'discord.js';
 import type { MessageComponentInteraction } from 'discord.js';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -7,22 +7,38 @@ import { handleShare, isShareComponent, shareable } from '../src/share.js';
 
 const embeds = [baseEmbed('Socials', 'Links').toJSON()];
 
+const { EmbedLinks, SendMessages, SendMessagesInThreads } = PermissionFlagsBits;
+
 let messageId = 0;
 
+interface ClickOptions {
+  sendable?: boolean;
+  /** The clicker's permissions in the channel, or null for a DM, which has none. */
+  permissions?: bigint[] | null;
+  thread?: boolean;
+}
+
 /** A click on a Post to channel button, on a new reply showing `embeds`. */
-function click(sendable = true) {
+function click({ sendable = true, permissions = null, thread = false }: ClickOptions = {}) {
   messageId += 1;
 
   return {
     user: { id: '1' },
+    memberPermissions: permissions && new PermissionsBitField(permissions),
     message: { id: String(messageId), embeds },
-    channel: { isSendable: () => sendable, send: vi.fn() },
+    channel: {
+      isSendable: () => sendable,
+      isThread: () => thread,
+      send: vi.fn(),
+    },
     reply: vi.fn(),
     deferUpdate: vi.fn(),
     followUp: vi.fn(),
     editReply: vi.fn(),
   };
 }
+
+const share = (interaction: ReturnType<typeof click>) => handleShare(interaction as unknown as MessageComponentInteraction);
 
 describe('Post to channel', () => {
   it('starts as a private reply carrying a button the handler recognizes', () => {
@@ -66,10 +82,34 @@ describe('Post to channel', () => {
   });
 
   it('says so privately when the channel takes no posts', async () => {
-    const interaction = click(false);
-    await handleShare(interaction as unknown as MessageComponentInteraction);
+    const interaction = click({ sendable: false });
+    await share(interaction);
 
     expect(interaction.reply.mock.calls[0]?.[0].flags).toBe(MessageFlags.Ephemeral);
     expect(interaction.channel.send).not.toHaveBeenCalled();
+  });
+});
+
+// The bot does the posting, so without these checks the button would get around the channel's rules.
+describe('Post to channel permissions', () => {
+  it.each([
+    ['send messages', [EmbedLinks]],
+    ['embed links', [SendMessages]],
+  ])('refuses someone who cannot %s in the channel', async (_, permissions) => {
+    const interaction = click({ permissions });
+    await share(interaction);
+
+    expect(interaction.reply.mock.calls[0]?.[0].flags).toBe(MessageFlags.Ephemeral);
+    expect(interaction.channel.send).not.toHaveBeenCalled();
+  });
+
+  it('asks for Send Messages in Threads in a thread', async () => {
+    const inThread = click({ thread: true, permissions: [SendMessagesInThreads, EmbedLinks] });
+    const outsideOnly = click({ thread: true, permissions: [SendMessages, EmbedLinks] });
+    await share(inThread);
+    await share(outsideOnly);
+
+    expect(inThread.channel.send).toHaveBeenCalledTimes(1);
+    expect(outsideOnly.channel.send).not.toHaveBeenCalled();
   });
 });

@@ -35,8 +35,8 @@ get the rest, and `/help` there leaves the lobby commands out. See [Lobbies](#lo
 `/glossary term:` do too, with a **Post to channel** button that posts the same embeds publicly,
 marked with who shared them. The post is a plain message rather than a reply, since a reply would
 point at the private one and read as deleted once it's dismissed, so the bot needs to be able to
-send messages and embed links in that channel. The button comes off the private reply once the
-post goes through.
+send messages and embed links in that channel. So does whoever clicks it: the bot only posts what
+they could have posted themselves. The button comes off the private reply once the post goes through.
 
 `/eternals name:`, `/item eternal:` / `slot:` and the lobby `region:` / `mode:` options are
 pick-lists. `/item name:`, `/glossary term:`, `/faq topic:` and `/help command:` use
@@ -96,7 +96,7 @@ inside its window, so the window moves continuously instead of resetting on a cl
 | `MAX_REQUESTS_PER_MINUTE` | 500 | Every command the bot handles, from every server and DM together. |
 | `MAX_REQUESTS_PER_SERVER_PER_MINUTE` | 50 | Every command in one server, from anyone. |
 | `MAX_REQUESTS_PER_USER_PER_MINUTE` | 10 | One person's commands, wherever they run them. |
-| `MAX_BUTTON_CLICKS_PER_MINUTE` | 750 | Every button click (the lobby ones and **Post to channel**), from every server and DM together. |
+| `MAX_BUTTON_CLICKS_PER_MINUTE` | 1000 | Every button click (the lobby ones and **Post to channel**), from every server and DM together. |
 | `MAX_BUTTON_CLICKS_PER_SERVER_PER_MINUTE` | 75 | Every button click in one server, from anyone. |
 | `MAX_BUTTON_CLICKS_PER_USER_PER_MINUTE` | 10 | One person's button clicks, wherever they click them. |
 
@@ -115,6 +115,8 @@ whichever limit it was: **Slow down** — *Please wait a moment and try again.* 
 limit was hit. The only difference is who sees it:
 
 - **Per-server command limit** — a visible reply in the channel, since everyone there is held back.
+  Only the first in a minute is public, and the rest are ephemeral, so a raid can't turn the
+  notices themselves into spam.
 - **Every other limit** — an ephemeral reply only that person can see, keeping one person's spam
   out of the channel, and keeping one busy server's traffic out of every other server's channels.
 
@@ -410,7 +412,8 @@ src/
   embeds/      The embeds, one file per concept (eternals, items, lobbies…), with the shared
                builders in general.ts
   utils/       Helpers that aren't embeds, one file per concept, with the shared ones
-               (truncation, timestamps, message limits) in general.ts
+               (truncation, normalizing, timestamps) in general.ts
+    discordLimits.ts  Discord's embed, message and autocomplete limits, in one place
     search.ts  Name/alias matching with typo tolerance, lookup replies, autocomplete
     images.ts  Image paths to their GitHub URLs
     logging.ts The one-line description of a command in the logs

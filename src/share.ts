@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } from 'discord.js';
 import type { EmbedBuilder, MessageComponentInteraction } from 'discord.js';
 
 import { ephemeral, ephemeralError } from './embeds/general.js';
@@ -23,6 +23,13 @@ export async function handleShare(interaction: MessageComponentInteraction): Pro
   const { channel, message } = interaction;
   if (!channel?.isSendable()) {
     await interaction.reply(ephemeralError("Can't post here", "I can't post in this channel."));
+
+    return;
+  }
+
+  const send = channel.isThread() ? PermissionFlagsBits.SendMessagesInThreads : PermissionFlagsBits.SendMessages;
+  if (interaction.memberPermissions && !interaction.memberPermissions.has([send, PermissionFlagsBits.EmbedLinks])) {
+    await interaction.reply(ephemeralError("Can't post here", "You don't have permission to post embeds in this channel."));
 
     return;
   }

@@ -1,10 +1,10 @@
-/** Shared name-or-alias lookup for the commands that search their data, and for autocomplete. */
-
 import type { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
-
 import { ephemeral, ephemeralError, multipleMatchesEmbed } from '../embeds/general.js';
 import { shareable } from '../share.js';
-import { truncate } from './general.js';
+import { MAX_CHOICE_NAME, MAX_CHOICES } from './discordLimits.js';
+import { normalize, truncate } from './general.js';
+
+export const MAX_QUERY_LENGTH = 100;
 
 interface IndexedKey {
   text: string;
@@ -14,10 +14,6 @@ interface IndexedKey {
 interface IndexedItem<T> {
   item: T;
   keys: IndexedKey[];
-}
-
-function normalize(value: string): string {
-  return value.toLowerCase().trim().replace(/\s+/g, ' ');
 }
 
 /** Levenshtein distance algorithm for fuzzy matching so typos don't matter 
@@ -215,10 +211,10 @@ export async function respondWithMatches<T>(
   keys: (item: T) => string[],
   toChoice: (item: T) => { name: string; value: string },
 ): Promise<void> {
-  const matches = rankMatches(interaction.options.getFocused(), items, keys, 25);
+  const matches = rankMatches(interaction.options.getFocused(), items, keys, MAX_CHOICES);
   await interaction.respond(matches.map((item) => {
       const { name, value } = toChoice(item);
-      return { name: truncate(name, 100), value };
+      return { name: truncate(name, MAX_CHOICE_NAME), value };
     }),
   );
 }
