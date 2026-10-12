@@ -3,7 +3,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import { glossary } from '../data.js';
 import { ephemeral } from '../embeds/general.js';
 import { glossaryListEmbed, glossaryTermEmbed } from '../embeds/glossary.js';
-import { keysOf, replyWithBest, respondWithMatches } from '../utils/search.js';
+import { keysOf, MAX_QUERY_LENGTH, replyWithBest, respondWithMatches } from '../utils/search.js';
 import type { Command, GlossaryEntry } from '../types.js';
 
 export const keys = (entry: GlossaryEntry) => keysOf(entry, entry.term);
@@ -11,7 +11,7 @@ export const keys = (entry: GlossaryEntry) => keysOf(entry, entry.term);
 export const glossaryCommand: Command = {
   data: new SlashCommandBuilder().setName('glossary').setDescription('Defines a game term.')
     .addStringOption((option) =>
-      option.setName('term').setDescription('The term to define').setAutocomplete(true),
+      option.setName('term').setDescription('The term to define').setAutocomplete(true).setMaxLength(MAX_QUERY_LENGTH),
     ).toJSON(),
   usage: '/glossary [term]',
   examples: ['/glossary term:fortitude', '/glossary term:crushing', '/glossary'],

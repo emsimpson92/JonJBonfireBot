@@ -1,9 +1,12 @@
 import { eternals, type OwnedItem } from '../data.js';
 import { publicUrl } from '../utils/images.js';
 import type { ItemAbility, Stats } from '../types.js';
-import { embedLength, MAX_EMBEDS, MAX_MESSAGE_CHARS, truncate } from '../utils/general.js';
+import { embedLength, MAX_FIELD_VALUE, MAX_MESSAGE_CHARS } from '../utils/discordLimits.js';
+import { truncate } from '../utils/general.js';
 import { itemUrl, restates } from '../utils/items.js';
 import { baseEmbed } from './general.js';
+
+const MAX_EMBEDS = 3;
 
 /** Weapons bind two abilities; crown and amulet abilities have no input to label. */
 function inputLabel(ability: ItemAbility): string | undefined {
@@ -65,7 +68,7 @@ function abilityField(ability: ItemAbility) {
   const label = inputLabel(ability);
   return {
     name: label ? `${label} · ${ability.name}` : ability.name,
-    value: truncate(abilityBlock(ability), 1024),
+    value: truncate(abilityBlock(ability), MAX_FIELD_VALUE),
   };
 }
 

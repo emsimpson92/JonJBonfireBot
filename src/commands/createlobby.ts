@@ -1,7 +1,7 @@
 import { InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
 import { config } from '../config.js';
-import { ephemeral, ephemeralError } from '../embeds/general.js';
+import { ephemeral, ephemeralError, slowDown } from '../embeds/general.js';
 import { switchedLobbiesEmbed } from '../embeds/lobbies.js';
 import {
   CODE_LENGTH,
@@ -9,14 +9,30 @@ import {
   lobbyStore,
   MAX_DESCRIPTION_LENGTH,
   MAX_LOBBIES,
+  MAX_OWNED_LOBBIES,
   MODE_CHOICES,
   MODES,
   REGION_CHOICES,
 } from '../lobbies.js';
-import type { Region } from '../lobbies.js';
+import type { CreateResult, Region } from '../lobbies.js';
 import { lobbyPost, playerFrom, syncPost } from '../lobbyMessages.js';
 import type { Command } from '../types.js';
 import { postUrl } from '../utils/lobbies.js';
+
+function createError(result: Exclude<CreateResult, { ok: true }>, code: string) {
+  switch (result.reason) {
+    case 'duplicate': {
+      const url = postUrl(result.existing);
+      return ephemeralError('Code taken', `Lobby **${code}** is already open${url ? `: [go to it](${url})` : '.'}`);
+    }
+
+    case 'limit':
+      return ephemeralError('Too many lobbies', `There are already ${MAX_LOBBIES} open lobbies. Try again once one closes.`);
+
+    case 'owner-limit':
+      return slowDown('ephemeral');
+  }
+}
 
 export const lobbyCreateCommand: Command = {
   data: new SlashCommandBuilder()
@@ -86,11 +102,10 @@ export const lobbyCreateCommand: Command = {
     });
 
     if (!result.ok) {
-      const url = result.reason === 'duplicate' ? postUrl(result.existing) : undefined;
-      const description = result.reason === 'duplicate'
-        ? `Lobby **${code}** is already open${url ? `: [go to it](${url})` : '.'}`
-        : `There are already ${MAX_LOBBIES} open lobbies. Try again once one closes.`;
-      await interaction.reply(ephemeralError(result.reason === 'duplicate' ? 'Code taken' : 'Too many lobbies', description));
+      if (result.reason === 'owner-limit') {
+        console.warn(`Refused /createlobby from ${interaction.user.tag}: they created ${MAX_OWNED_LOBBIES} lobbies that are still open.`);
+      }
+      await interaction.reply(createError(result, code));
 
       return;
     }

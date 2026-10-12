@@ -3,6 +3,7 @@ import type {
   APIInteractionDataResolvedGuildMember,
   APIInteractionGuildMember,
   BaseInteraction,
+  ChatInputCommandInteraction,
   Client,
   EmbedBuilder,
   GuildMember,
@@ -15,6 +16,7 @@ import {
   expiryWarningEmbed,
   lobbyClosedEmbed,
   lobbyEmbed,
+  lobbyFullEmbed,
   lobbyManageEmbed,
   switchedLobbiesEmbed,
 } from './embeds/lobbies.js';
@@ -27,9 +29,9 @@ const PREFIX = 'lobby';
 
 const SWEEP_INTERVAL_MS = 60_000;
 
-const NOT_HOST = 'Only the host can manage the lobby.';
-
 type Action = 'join' | 'leave' | 'manage' | 'bump' | 'close';
+
+const HOST_ACTIONS = new Set<string>(['manage', 'bump', 'close'] satisfies Action[]);
 
 /** Lobbies with a bump in flight. Each click is its own interaction, so a double click would otherwise post twice */
 const bumping = new Set<string>();
@@ -51,6 +53,15 @@ export function toPlayer(user: User, member: GuildMember | APIInteractionGuildMe
 
 export function playerFrom(interaction: BaseInteraction): Player {
   return toPlayer(interaction.user, interaction.member);
+}
+
+export async function requireHostedLobby(interaction: ChatInputCommandInteraction): Promise<Lobby | undefined> {
+  const lobby = lobbyStore.hostedBy(interaction.user.id);
+  if (!lobby) {
+    await interaction.reply(ephemeralError('Not hosting', 'You are not the lobby host.'));
+  }
+
+  return lobby;
 }
 
 /** The lobby's embed with its buttons, which live here beside the handler that reads their ids. */
@@ -152,13 +163,19 @@ async function deleteClickedPost(interaction: MessageComponentInteraction, note:
 }
 
 export async function handleLobbyComponent(interaction: MessageComponentInteraction): Promise<void> {
-  const [, action, code = '', id = ''] = interaction.customId.split(':');
+  const [, action = '', code = '', id = ''] = interaction.customId.split(':');
   const lobby = lobbyStore.find(code, id);
 
   if (!lobby) {
     await (isPanel(interaction) ?
       interaction.update(endPanel(lobbyClosedEmbed('This lobby is closed.'))) :
       deleteClickedPost(interaction, 'This lobby is closed.'));
+    return;
+  }
+
+  if (HOST_ACTIONS.has(action) && !isHost(lobby, interaction.user.id)) {
+    const embed = errorEmbed('Lobby Management', 'Only the host can manage the lobby.');
+    await (isPanel(interaction) ? interaction.update(endPanel(embed)) : interaction.reply(ephemeral(embed)));
     return;
   }
 
@@ -186,7 +203,7 @@ async function join(interaction: MessageComponentInteraction, lobby: Lobby): Pro
   if (!result.ok) {
     await interaction.reply(result.reason === 'already-in'
       ? ephemeralError('Already joined', `You're already in lobby ${lobby.code}.`)
-      : ephemeralError('Lobby full', `Lobby ${lobby.code} is full.`));
+      : ephemeral(lobbyFullEmbed(lobby)));
     return;
   }
 
@@ -210,19 +227,11 @@ async function leave(interaction: MessageComponentInteraction, lobby: Lobby): Pr
 }
 
 async function manage(interaction: MessageComponentInteraction, lobby: Lobby): Promise<void> {
-  await interaction.reply(isHost(lobby, interaction.user.id) ?
-    { ...managePanel(lobby), flags: MessageFlags.Ephemeral } :
-    ephemeralError('Lobby Management', NOT_HOST));
+  await interaction.reply({ ...managePanel(lobby), flags: MessageFlags.Ephemeral });
 }
 
 /** Reposts the lobby as the channel's latest message and pushes back its expiry. */
 async function bump(interaction: MessageComponentInteraction, lobby: Lobby): Promise<void> {
-  // The host can change after the panel opens, if they leave
-  if (!isHost(lobby, interaction.user.id)) {
-    await interaction.update(endPanel(errorEmbed('Lobby Management', NOT_HOST)));
-    return;
-  }
-
   if (bumping.has(lobby.id)) {
     await interaction.deferUpdate();
     return;
@@ -255,11 +264,6 @@ async function bump(interaction: MessageComponentInteraction, lobby: Lobby): Pro
 }
 
 async function close(interaction: MessageComponentInteraction, lobby: Lobby): Promise<void> {
-  if (!isHost(lobby, interaction.user.id)) {
-    await interaction.update(endPanel(errorEmbed('Lobby Management', NOT_HOST)));
-    return;
-  }
-
   lobbyStore.close(lobby);
   await interaction.update(endPanel(lobbyClosedEmbed(`Lobby ${lobby.code} is closed.`)));
   await syncPost(interaction.client, lobby);

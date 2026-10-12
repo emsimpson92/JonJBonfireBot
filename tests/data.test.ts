@@ -7,12 +7,11 @@ import { keys as faqKeys } from '../src/commands/faq.js';
 import { keys as glossaryKeys } from '../src/commands/glossary.js';
 import { itemCommand, keys as itemKeys } from '../src/commands/item.js';
 import { eternals, faq, filterItems, glossary, items, itemsOf } from '../src/data.js';
-import { findBest } from '../src/utils/search.js';
+import { normalize } from '../src/utils/general.js';
+import { findBest, MAX_QUERY_LENGTH } from '../src/utils/search.js';
 import { choicesOf } from './helpers.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-
-const normalize = (text: string) => text.toLowerCase().trim().replace(/\s+/g, ' ');
 
 function duplicates(values: string[]): string[] {
   return values.filter((value, index) => values.indexOf(value) !== index);
@@ -89,6 +88,13 @@ describe('lookups', () => {
       expect(findBest(key, faq, faqKeys)).toEqual([topic]);
     },
   );
+
+  // The lookup options cap what can be typed, so a longer key could never be typed in full.
+  it(`every key fits in ${MAX_QUERY_LENGTH} characters`, () => {
+    const keys = [...items.flatMap(itemKeys), ...glossary.flatMap(glossaryKeys), ...faq.flatMap(faqKeys)];
+
+    expect(keys.filter((key) => key.length > MAX_QUERY_LENGTH)).toEqual([]);
+  });
 
   // The eternal embed's footer promises that /glossary explains any tag.
   it('every ability tag is a glossary term or alias', () => {

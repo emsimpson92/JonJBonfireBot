@@ -1,10 +1,11 @@
 import type { FaqTopic } from '../types.js';
+import { MAX_FIELD_NAME } from '../utils/discordLimits.js';
 import { truncate } from '../utils/general.js';
 import { baseEmbed } from './general.js';
 
 export function faqTopicEmbed(entry: FaqTopic) {
   return baseEmbed(entry.topic).addFields(
-    entry.entries.map((qa, index) => ({ name: truncate(`${index + 1}. ${qa.question}`, 256), value: qa.answer })),
+    entry.entries.map((qa, index) => ({ name: truncate(`${index + 1}. ${qa.question}`, MAX_FIELD_NAME), value: qa.answer })),
   );
 }
 

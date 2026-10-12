@@ -4,7 +4,7 @@ import { ephemeral, ephemeralError } from '../embeds/general.js';
 import { lobbyKickEmbed } from '../embeds/lobbies.js';
 import { lobbyStore } from '../lobbies.js';
 import type { Player } from '../lobbies.js';
-import { syncPost } from '../lobbyMessages.js';
+import { requireHostedLobby, syncPost } from '../lobbyMessages.js';
 import { respondWithMatches } from '../utils/search.js';
 import type { Command } from '../types.js';
 
@@ -30,10 +30,8 @@ export const lobbyKickCommand: Command = {
   },
 
   async execute(interaction) {
-    const lobby = lobbyStore.hostedBy(interaction.user.id);
+    const lobby = await requireHostedLobby(interaction);
     if (!lobby) {
-      await interaction.reply(ephemeralError('Not hosting', "You are not the lobby host."));
-
       return;
     }
 

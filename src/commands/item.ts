@@ -4,7 +4,7 @@ import { eternals, filterItems, items, type OwnedItem } from '../data.js';
 import { ephemeral, ephemeralError } from '../embeds/general.js';
 import { itemDetailEmbeds, itemListEmbed, itemsOverviewEmbed } from '../embeds/items.js';
 import { shareable } from '../share.js';
-import { findBest, keysOf, respondWithMatches } from '../utils/search.js';
+import { findBest, keysOf, MAX_QUERY_LENGTH, respondWithMatches } from '../utils/search.js';
 import type { Command } from '../types.js';
 
 /** Searchable by item name, its aliases, the abilities it grants, and its owner. */
@@ -34,7 +34,7 @@ export const itemCommand: Command = {
         .setDescription('Which slot')
         .addChoices(...SLOTS.map((slot) => ({ name: slot, value: slot.toLowerCase() }))),
     ).addStringOption((option) =>
-      option.setName('name').setDescription('Item or ability name').setAutocomplete(true),
+      option.setName('name').setDescription('Item or ability name').setAutocomplete(true).setMaxLength(MAX_QUERY_LENGTH),
     ).toJSON(),
   usage: '/item [eternal] [slot] [name]',
   examples: ['/item eternal:dahla slot:crown', '/item eternal:rynshi slot:weapon', '/item name:ringblade'],

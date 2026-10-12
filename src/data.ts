@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import type { Eternal, FaqTopic, GlossaryEntry, Item, SocialLink } from './types.js';
+import { MAX_FIELD_VALUE, MAX_MESSAGE_CHARS } from './utils/discordLimits.js';
 
 const dataDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'data');
 
@@ -29,14 +30,14 @@ for (const { topic, entries } of faq) {
   }
 
   for (const { question, answer } of entries) {
-    if (answer.length > 1024) {
-      throw new Error(`FAQ answer to "${question}" is ${answer.length} characters; the limit is 1024.`);
+    if (answer.length > MAX_FIELD_VALUE) {
+      throw new Error(`FAQ answer to "${question}" is ${answer.length} characters; the limit is ${MAX_FIELD_VALUE}.`);
     }
   }
 
   const length = entries.reduce((total, qa, index) => total + `${index + 1}. ${qa.question}`.length + qa.answer.length, topic.length);
-  if (length > 6000) {
-    throw new Error(`FAQ topic "${topic}" is ${length} characters; one topic must fit in 6000.`);
+  if (length > MAX_MESSAGE_CHARS) {
+    throw new Error(`FAQ topic "${topic}" is ${length} characters; one topic must fit in ${MAX_MESSAGE_CHARS}.`);
   }
 }
 

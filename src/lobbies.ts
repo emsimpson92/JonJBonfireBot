@@ -17,9 +17,13 @@ export const MAX_DESCRIPTION_LENGTH = 100;
 
 export const MAX_PLAYERS = 45;
 export const MAX_LOBBIES = 50;
+export const MAX_OWNED_LOBBIES = 3;
 
 /** A lobby closes after an hour with nobody joining, leaving or being kicked, and the host not bumping it. */
 export const LOBBY_TTL_MS = 60 * 60 * 1000;
+
+/** No lobby lives forever */
+export const MAX_LOBBY_AGE_MS = 6 * 60 * 60 * 1000;
 
 export const EXPIRY_WARNING_MS = 10 * 60 * 1000;
 
@@ -36,33 +40,43 @@ export interface Lobby {
   mode?: Mode;
   description?: string;
   players: Player[];
+  ownerId: string;
+  createdAt: number;
   lastActivityAt: number;
   guildId: string;
   channelId: string;
   messageId?: string;
   closed?: boolean;
-  /** The lastActivityAt the host was warned about, so any activity since sets up a fresh warning. */
+  /** The expiry the host was warned about, so activity that pushes it back sets up a fresh warning. */
   warnedFor?: number;
 }
 
 export function expiresAt(lobby: Lobby): number {
-  return lobby.lastActivityAt + LOBBY_TTL_MS;
+  return Math.min(lobby.lastActivityAt + LOBBY_TTL_MS, lobby.createdAt + MAX_LOBBY_AGE_MS);
+}
+
+/** True once the lobby's age, not its activity, decides when it closes, so a bump can't keep it open. */
+export function closesAtMaxAge(lobby: Lobby): boolean {
+  return expiresAt(lobby) === lobby.createdAt + MAX_LOBBY_AGE_MS;
 }
 
 export function isHost(lobby: Lobby, userId: string): boolean {
   return lobby.players[0]?.id === userId;
 }
 
-type CreateResult =
+export type CreateResult =
   | { ok: true; lobby: Lobby; left?: Lobby }
   | { ok: false; reason: 'duplicate'; existing: Lobby }
-  | { ok: false; reason: 'limit' };
+  | { ok: false; reason: 'limit' | 'owner-limit' };
 
-type JoinResult = { ok: true; left?: Lobby } | { ok: false; reason: 'already-in' | 'full' };
+
+type Refusal = 'already-in' | 'full';
+
+type JoinResult = { ok: true; left?: Lobby } | { ok: false; reason: Refusal };
 
 export type AddResult =
   | { ok: true }
-  | { ok: false; reason: 'already-in' | 'full' }
+  | { ok: false; reason: Refusal }
   | { ok: false; reason: 'in-other'; other: Lobby };
 
 export class LobbyStore {
@@ -111,8 +125,15 @@ export class LobbyStore {
     }
 
     const { host, ...rest } = details;
+    // Creating moves the host out of their current lobby, which closes it if they're alone in it
+    const current = this.playerLobbies.get(host.id);
+    const closing = current?.ownerId === host.id && current.players.length === 1 ? 1 : 0;
+    if (this.ownedBy(host.id) - closing >= MAX_OWNED_LOBBIES) {
+      return { ok: false, reason: 'owner-limit' };
+    }
+
     const left = this.removeFromCurrent(host.id, now);
-    const lobby: Lobby = { id: randomUUID(), ...rest, players: [host], lastActivityAt: now };
+    const lobby: Lobby = { id: randomUUID(), ...rest, players: [host], ownerId: host.id, createdAt: now, lastActivityAt: now };
     this.lobbies.set(lobby.code, lobby);
     this.playerLobbies.set(host.id, lobby);
 
@@ -120,11 +141,9 @@ export class LobbyStore {
   }
 
   join(lobby: Lobby, player: Player, now: number = Date.now()): JoinResult {
-    if (this.playerLobbies.get(player.id) === lobby) {
-      return { ok: false, reason: 'already-in' };
-    }
-    else if (lobby.players.length >= MAX_PLAYERS) {
-      return { ok: false, reason: 'full' };
+    const refusal = this.refusalReason(lobby, player.id);
+    if (refusal) {
+      return { ok: false, reason: refusal };
     }
 
     const left = this.removeFromCurrent(player.id, now);
@@ -133,17 +152,16 @@ export class LobbyStore {
     return { ok: true, left };
   }
 
-  /** Host adds a player to a lobby if  they aren't in one already */
+  /** Host adds a player to a lobby if they aren't in one already */
   add(lobby: Lobby, player: Player, now: number = Date.now()): AddResult {
+    const refusal = this.refusalReason(lobby, player.id);
+    if (refusal) {
+      return { ok: false, reason: refusal };
+    }
+
     const current = this.playerLobbies.get(player.id);
-    if (current === lobby) {
-      return { ok: false, reason: 'already-in' };
-    }
-    else if (current) {
+    if (current) {
       return { ok: false, reason: 'in-other', other: current };
-    }
-    else if (lobby.players.length >= MAX_PLAYERS) {
-      return { ok: false, reason: 'full' };
     }
 
     this.addPlayer(lobby, player, now);
@@ -187,12 +205,27 @@ export class LobbyStore {
   warningsPending(now: number = Date.now()): Lobby[] {
     this.expire(now);
     const due = [...this.lobbies.values()].filter((lobby) =>
-      now >= expiresAt(lobby) - EXPIRY_WARNING_MS && lobby.warnedFor !== lobby.lastActivityAt);
+      now >= expiresAt(lobby) - EXPIRY_WARNING_MS && lobby.warnedFor !== expiresAt(lobby));
     for (const lobby of due) {
-      lobby.warnedFor = lobby.lastActivityAt;
+      lobby.warnedFor = expiresAt(lobby);
     }
 
     return due;
+  }
+
+  private refusalReason(lobby: Lobby, userId: string): Refusal | undefined {
+    if (this.playerLobbies.get(userId) === lobby) {
+      return 'already-in';
+    }
+    else if (lobby.players.length >= MAX_PLAYERS) {
+      return 'full';
+    }
+
+    return undefined;
+  }
+
+  private ownedBy(userId: string): number {
+    return [...this.lobbies.values()].filter((lobby) => lobby.ownerId === userId).length;
   }
 
   private expire(now: number): void {

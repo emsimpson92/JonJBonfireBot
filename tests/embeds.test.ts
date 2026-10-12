@@ -16,7 +16,7 @@ import { lobbyEmbed, lobbyListEmbed } from '../src/embeds/lobbies.js';
 import { socialsEmbed } from '../src/embeds/socials.js';
 import { MAX_DESCRIPTION_LENGTH, MAX_LOBBIES, MAX_PLAYERS } from '../src/lobbies.js';
 import type { Lobby } from '../src/lobbies.js';
-import { embedLength, MAX_MESSAGE_CHARS } from '../src/utils/general.js';
+import { embedLength, MAX_EMBED_DESCRIPTION, MAX_FIELD_NAME, MAX_FIELD_VALUE, MAX_MESSAGE_CHARS } from '../src/utils/discordLimits.js';
 import { choicesOf } from './helpers.js';
 
 /** truncate() cuts text to exactly its limit and ends it with "…", so text like that lost its end. */
@@ -34,11 +34,11 @@ function problems(...embeds: EmbedBuilder[]): string[] {
   }
 
   for (const { data } of embeds) {
-    if (cutShort(data.description, 4096)) {
+    if (cutShort(data.description, MAX_EMBED_DESCRIPTION)) {
       found.push(`"${data.title}" description cut short`);
     }
     for (const field of data.fields ?? []) {
-      if (cutShort(field.name, 256) || cutShort(field.value, 1024)) {
+      if (cutShort(field.name, MAX_FIELD_NAME) || cutShort(field.value, MAX_FIELD_VALUE)) {
         found.push(`"${data.title}" field "${field.name}" cut short`);
       }
     }
@@ -127,6 +127,8 @@ function busyLobby(code: string): Lobby {
     mode: 'Ascension',
     description: 'x'.repeat(MAX_DESCRIPTION_LENGTH),
     players: Array.from({ length: MAX_PLAYERS }, (_, n) => ({ id: snowflake(n), name: `Player ${n}` })),
+    ownerId: snowflake(0),
+    createdAt: Date.now(),
     lastActivityAt: Date.now(),
     guildId: snowflake(1),
     channelId: snowflake(2),
@@ -150,5 +152,12 @@ describe('lobby embeds', () => {
 
     expect(lobbyEmbed(lobby).data.description).toContain(lobby.description);
     expect(JSON.stringify(lobbyListEmbed([lobby], null, null).toJSON())).not.toContain(lobby.description);
+  });
+
+  // The post is the bot's, so a player's description mustn't dress up a link as something else on it.
+  it('show the description as typed, with no formatting or disguised links', () => {
+    const lobby = { ...busyLobby('DX89EE'), description: '**Free** [nitro](https://example.com)' };
+
+    expect(lobbyEmbed(lobby).data.description).toContain('\\*\\*Free\\*\\* \\[nitro](https://example.com)');
   });
 });

@@ -1,9 +1,10 @@
 import { InteractionContextType, MessageFlags, SlashCommandBuilder } from 'discord.js';
 
-import { ephemeralError } from '../embeds/general.js';
+import { ephemeral, ephemeralError } from '../embeds/general.js';
+import { lobbyFullEmbed } from '../embeds/lobbies.js';
 import { lobbyStore } from '../lobbies.js';
 import type { AddResult, Lobby } from '../lobbies.js';
-import { syncPost, toPlayer } from '../lobbyMessages.js';
+import { requireHostedLobby, syncPost, toPlayer } from '../lobbyMessages.js';
 import type { Command } from '../types.js';
 
 function addError(result: Exclude<AddResult, { ok: true }>, userId: string, lobby: Lobby) {
@@ -13,7 +14,7 @@ function addError(result: Exclude<AddResult, { ok: true }>, userId: string, lobb
     case 'in-other':
       return ephemeralError('In another lobby', `<@${userId}> is in lobby **${result.other.code}**. They need to leave it before you can add them.`);
     case 'full':
-      return ephemeralError('Lobby full', `Lobby ${lobby.code} is full.`);
+      return ephemeral(lobbyFullEmbed(lobby));
   }
 }
 
@@ -32,10 +33,8 @@ export const lobbyAddCommand: Command = {
   examples: ['/lobbyadd player:@Steve'],
 
   async execute(interaction) {
-    const lobby = lobbyStore.hostedBy(interaction.user.id);
+    const lobby = await requireHostedLobby(interaction);
     if (!lobby) {
-      await interaction.reply(ephemeralError('Not hosting', 'You are not the lobby host.'));
-
       return;
     }
 
